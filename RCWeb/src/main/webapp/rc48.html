@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			
+			function test1(){//get
+				//console.log('rc49.jsp?max=' + $('#max').val());
+				$('#id1').load('rc49.jsp?max=' + $('#max').val());//存load
+			}
+			function test2(){//get呼叫方式:jQery與後端講話使用get(URL,function)
+				$.get('rc49.jsp?max=' + $('#max').val(),function(data,status){
+					if (status == 'success'){
+						$('#id1').html(data);//改變畫面=inner概念
+					}
+				});
+			}
+			function test3(){//post呼叫方式:(url,物件{"物件名稱":屬性},function
+					$.post('rc50.jsp',{
+						"max":$('#max').val()
+					},
+					function(data,status){
+						$('#id1').html(data);
+					}
+				);
+			}
+			function test4(){//綜合get呼叫ajax方法:
+				$.ajax({
+					url: 'rc49.jsp?max=' + $('#max').val(),
+					method: 'get',
+					success: function(data){
+						$('#id1').html(data);
+					}
+				});
+			}
+			function test5(){//綜合post呼叫ajax方法:
+				$.ajax({
+					url: 'rc50.jsp',
+					method: 'post',
+					data: {
+						"max":$('#max').val()
+					},
+					success: function(data){
+						$('#id1').html(data);
+					}
+				});
+			}
+		
+		
+		</script>
+	</head>
+	<body>
+	Lottery: <span id='id1'></span><hr />
+	Max: <input type="number" id="max" /><hr />
+	<input type="button" onclick="test1()" value="Test1" ><br />
+	<input type="button" onclick="test2()" value="Test2" ><br />
+	<input type="button" onclick="test3()" value="Test3" ><br />
+	<input type="button" onclick="test4()" value="Test4" ><br />
+	<input type="button" onclick="test5()" value="Test5" ><br />
+	
+	</body>
+</html>
