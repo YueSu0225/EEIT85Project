@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 public class HelloTag extends SimpleTagSupport{
@@ -19,10 +20,21 @@ public class HelloTag extends SimpleTagSupport{
 		JspContext jsp = getJspContext();
 		JspWriter out = jsp.getOut();
 		
-		out.print(String.format("Hello, %s", name));
+		
+		if(name != null) {
+			out.print(String.format("Hello, %s", name));
 	
+		}else {
+			out.print(String.format("Hello, %s", "world"));
+		}
+	
+		JspFragment body = getJspBody();
+		if(body != null ) {
+			
+			out.print("I am body");
+			body.invoke(out);
+		}
+		
 	}
-	
-	
 	
 }
