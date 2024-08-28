@@ -3,7 +3,6 @@ package tw.rc.websocket;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 import javax.websocket.OnClose;
@@ -21,6 +20,7 @@ import tw.rc.apis.WSClient;
 public class mycenter {
 	private static HashSet<Session> sessions;
 	private static HashMap<String, WSClient> users ; // <id, client>
+	private static boolean hasClient1; // boolean 預設為false
 	
 	public mycenter() {//物件初始化
 		System.out.println("MyServer");
@@ -48,8 +48,17 @@ public class mycenter {
 		JSONObject root = new JSONObject(mesg);
 		if (root.getBoolean("isInit")) {
 			if (root.getBoolean("isClient1")) {
+				if (!hasClient1) {
+				hasClient1 = true;
 				users.get(session.getId()).setClient1(true);
 				System.out.println("isClient1");
+				}else {
+					System.out.println("remove");
+					try {
+						session.close();
+					} catch (IOException e) {
+					}
+				}
 			}else {
 				users.get(session.getId()).setClient1(false);
 				System.out.println("isClient2");
