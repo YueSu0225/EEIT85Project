@@ -35,6 +35,7 @@
 			<th>Account</th>
 			<th>Name</th>
 			<th>icon</th>
+			<th>AddIcon</th>
 			<th>Delete</th>
 			<th>Edit</th>
 			
@@ -48,7 +49,14 @@
 				<td>${row.account }</td>
 				<td>${row.name }</td>
 				<td><img src="iconouttest?id=${row.id }" width="50" height="50" /></td>
-				<td><a href="?delid=${row.id }" onclick="return isDel('${row.name }');">Delete</a></td>
+				<td>
+    			<form action="addicontest" method="post" enctype="multipart/form-data">
+        				<input type="file" name="icon" />
+        				<input type="hidden" name="id" value="${row.id }" />     				
+        				<input type="submit" value="AddIcon" />      				
+   					</form>
+				</td>
+				<td><a href="?delid=${row.id }" onclick="return isDel('${row.name}');">Delete</a></td>
 				<td><a href="editMember.jsp?editid=${row.id }" >Edit</a></td>
 				
 				

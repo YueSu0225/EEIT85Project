@@ -1,6 +1,7 @@
 package tw.rc.javaee;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -40,27 +41,30 @@ public class iconouttest extends HttpServlet {
 	}
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		 String id = request.getParameter("id");
-
-	        
-	        PreparedStatement stmt = null;
-	        ResultSet rs = null;
-	        OutputStream out = response.getOutputStream();
+		 String id = request.getParameter("id");	        	        
 	        try {	                        
 	            String sql = "SELECT icon FROM member WHERE id = ?";
-	            stmt = conn.prepareStatement(sql);
+	            PreparedStatement stmt = conn.prepareStatement(sql);
 	            stmt.setString(1, id);
-	            rs = stmt.executeQuery();
+	            ResultSet rs = stmt.executeQuery();
 
 	            if (rs.next()) {            	
-	                byte[] imgData = rs.getBytes("icon"); 
-	                response.setContentType("image/png"); 
-	                out.write(imgData); 
+	            	InputStream in = rs.getBinaryStream("icon");
+	                if (in != null) {
+	                    response.setContentType("image/jpeg");
+	                    OutputStream out = response.getOutputStream();
+	                    byte[] buf = new byte[1024];
+	                    int Read;
+	                    while ((Read = in.read(buf)) != -1) {
+	                        out.write(buf, 0, Read);
+	                    }
+	                    out.flush(); 
+	                }
 	            }
-	        } catch (Exception e) {
+	            } catch (Exception e) {
 	            e.printStackTrace();
 	        } 
-	    }
-
-
+	    
+	
+	}
 }
