@@ -8,7 +8,7 @@ window.onload = function(){
 	let webSocket;//先宣告
 	
 	start.addEventListener('click', function(){//使用者觸發事件;
-		connect("ws://10.0.100.136:8080/RCWeb/myserver");//建立websocket連線,如果有ssl就用wss
+		connect("ws://localhost:8080/RCWeb/myserver");//建立websocket連線,如果有ssl就用wss
 	});
 	
 	send.addEventListener('click', function(){//使用者觸發事件;
