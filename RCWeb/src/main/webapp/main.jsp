@@ -60,8 +60,7 @@
 				</td>
 				<td><a href="?delid=${row.id }" onclick="return isDel('${row.name}');">Delete</a></td>
 				<td><a href="editMember.jsp?editid=${row.id }" >Edit</a></td>
-				
-				
+			
 			</tr>
 		</c:forEach>
 		
