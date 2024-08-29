@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class iconouttest extends HttpServlet {
 	private static final String USER = "root";//固定常數
 	private static final String PASSWD = "root";
-	private static final String URL = "jdbc:mysql://127.0.0.1:3306/iii";
+	private static final String URL = "jdbc:mysql://localhost:3306/iii";
 	private Connection conn;
 	
 	

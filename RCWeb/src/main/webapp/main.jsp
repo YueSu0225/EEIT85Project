@@ -3,6 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>    
 
+<c:if test="${empty member.account }">
+	<c:redirect url="login.jsp"></c:redirect>
+</c:if> 
 <sql:setDataSource
 	driver="com.mysql.cj.jdbc.Driver"
 	url="jdbc:mysql://localhost:3306/iii"	
@@ -15,9 +18,7 @@
 		<sql:param>${param.delid }</sql:param>
 	</sql:update>
 </c:if>	
-<c:if test="${empty member.account }">
-	<c:redirect url="login.jsp"></c:redirect>
-</c:if>   
+  
 <!DOCTYPE html>
 <html>
 	<head>
@@ -25,7 +26,8 @@
 		<title>Insert title here</title>
 	</head>
 	<body>
-	Welcome, ${member.name }
+	Welcome, ${member.name }<br />
+	<img src="data:image/png; base64, ${member.icon }" />	<hr />
 	<a href = "logout.jsp"><input type='submit' value='Logout' /></a>
 	<a href = "addMember.jsp"><input type='submit' value='Addmember' /></a>
 	<hr />
