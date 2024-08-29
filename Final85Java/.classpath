@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/EEIT85JAVA/RCJava/dir1/json-20240303.jar"/>
-	<classpathentry kind="lib" path="/RCWeb/src/main/webapp/WEB-INF/lib/mysql-connector-j-9.0.0.jar"/>
+	<classpathentry kind="lib" path="dir/json-20240303.jar"/>
+	<classpathentry kind="lib" path="dir/mysql-connector-j-9.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
