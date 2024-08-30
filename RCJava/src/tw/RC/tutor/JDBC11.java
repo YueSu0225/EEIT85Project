@@ -21,7 +21,7 @@ public class JDBC11 {//更新圖檔到mysql
 		try {
 			Connection conn = DriverManager.getConnection(URL, prop);
 			PreparedStatement pstmt = conn.prepareStatement(SQL_UPDATE);
-			FileInputStream fin = new FileInputStream("dir1/ball3.png");
+			FileInputStream fin = new FileInputStream("dir1/ball3.png");//blob檔
 			pstmt.setBinaryStream(1, fin);
 			pstmt.setInt(2, 1);
 			if (pstmt.executeUpdate() > 0) {
