@@ -13,10 +13,11 @@
 	<body>
 	Login Page
 	<hr />
-		<form action='checkAccount.jsp' method='post'>
+		<form action='checkAccount2.jsp' method='post'>
 			Account:  <input name='account' /><br />
 			Password: <input type='password' name='passwd' /><br />
 			<input type='submit' value='Login' />
+			
 		</form>
 	</body>
 </html>
