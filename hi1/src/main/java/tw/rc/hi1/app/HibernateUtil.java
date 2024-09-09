@@ -9,7 +9,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.cfg.JdbcSettings;
 
+import tw.rc.h1.model.Account;
 import tw.rc.h1.model.Bike;
+import tw.rc.h1.model.Cart;
 import tw.rc.h1.model.Member;
 import tw.rc.h1.model.MemberInfo;
 import tw.rc.h1.model.User;
@@ -29,6 +31,9 @@ public class HibernateUtil {
 			conf.addAnnotatedClass(User.class);
 			conf.addAnnotatedClass(Bike.class);
 			
+			conf.addAnnotatedClass(Account.class);
+			conf.addAnnotatedClass(Cart.class);
+
 			registry = new StandardServiceRegistryBuilder()
 						.applySettings(conf.getProperties())
 						.build();
@@ -57,6 +62,10 @@ public class HibernateUtil {
 			conf.addAnnotatedClass(MemberInfo.class);
 			conf.addAnnotatedClass(User.class);
 			conf.addAnnotatedClass(Bike.class);
+			
+			conf.addAnnotatedClass(Account.class);
+			conf.addAnnotatedClass(Cart.class);
+
 			
 			registry = new StandardServiceRegistryBuilder()
 						.applySettings(conf.getProperties())
