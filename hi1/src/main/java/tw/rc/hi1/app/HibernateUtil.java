@@ -12,8 +12,10 @@ import org.hibernate.cfg.JdbcSettings;
 import tw.rc.h1.model.Account;
 import tw.rc.h1.model.Bike;
 import tw.rc.h1.model.Cart;
+import tw.rc.h1.model.Course;
 import tw.rc.h1.model.Member;
 import tw.rc.h1.model.MemberInfo;
+import tw.rc.h1.model.Student;
 import tw.rc.h1.model.User;
 
 // static always here
@@ -33,6 +35,9 @@ public class HibernateUtil {
 			
 			conf.addAnnotatedClass(Account.class);
 			conf.addAnnotatedClass(Cart.class);
+			
+			conf.addAnnotatedClass(Student.class);
+			conf.addAnnotatedClass(Course.class);
 
 			registry = new StandardServiceRegistryBuilder()
 						.applySettings(conf.getProperties())
@@ -66,6 +71,8 @@ public class HibernateUtil {
 			conf.addAnnotatedClass(Account.class);
 			conf.addAnnotatedClass(Cart.class);
 
+			conf.addAnnotatedClass(Student.class);
+			conf.addAnnotatedClass(Course.class);
 			
 			registry = new StandardServiceRegistryBuilder()
 						.applySettings(conf.getProperties())
