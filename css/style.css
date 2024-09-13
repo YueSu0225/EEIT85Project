@@ -8640,7 +8640,7 @@ h1, h2, h3, h4, h5,
 
 
   .product-category li a {
-    color: #9FB3A7;
+    color: #000000;
     padding: 5px 20px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -8753,7 +8753,7 @@ h1, h2, h3, h4, h5,
         color: #000000; }
     .product .text p.price {
       margin-bottom: 0;
-      color: #9FB3A7;
+      color: #000000;
       font-weight: 400; }
       .product .text p.price span.price-dc {
         text-decoration: line-through;
