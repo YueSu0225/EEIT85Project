@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google 登录示例</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+  <!-- Google 登录按钮 -->
+  <div id="g_id_onload"
+       data-client_id="YOUR_GOOGLE_CLIENT_ID"
+       data-login_uri="http://localhost:YOUR_BACKEND_ENDPOINT"
+       data-auto_prompt="false">
+  </div>
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-size="large"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-shape="rectangular"
+       data-logo_alignment="left">
+  </div>
+
+  <script>
+    // 处理 Google 登录响应
+    function handleCredentialResponse(response) {
+      console.log("Encoded JWT ID token: " + response.credential);
+      // 你可以将响应发送到服务器来进行身份验证
+    }
+
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID',
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.querySelector('.g_id_signin'), // 按钮显示的位置
+        { theme: 'outline', size: 'large' }   // 自定义按钮的样式
+      );
+      google.accounts.id.prompt();  // 自动提示用户登录
+    };
+  </script>
+
+</body>
+</html>
