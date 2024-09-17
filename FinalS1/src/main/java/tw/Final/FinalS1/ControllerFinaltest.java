@@ -1,5 +1,8 @@
 package tw.Final.FinalS1;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,19 +26,19 @@ public class ControllerFinaltest {
     private UserInfoRepository userInfoRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
-        // 创建用户
+    public ResponseEntity<Map<String, String>> registerUser(@RequestBody RegisterRequest request) {
+        // 創建使用者
         finalUserModel user = new finalUserModel();
         user.setAccount(request.getAccount());
         user.setPassword(request.getPassword());
         user.setEmail(request.getEmail());
         user.setProvider_id(null);
-        user.setGoogleId(null); // 如果不使用 Google 登录
+        user.setGoogleId(null); // 如果不使用 Google 登陸
 
         // 保存用户
         finalUserRepository.save(user);
 
-        // 创建购物车和愿望清单
+        // 創建購物車與喜愛清單
         cartModel cart = new cartModel();
         cart.setUser(user);
         cartRepository.save(cart);
@@ -44,7 +47,7 @@ public class ControllerFinaltest {
         wishList.setUser(user);
         wishListRepository.save(wishList);
 
-        // 创建用户信息
+        // 創建使用者資訊
         userInfoMedel userInfo = new userInfoMedel();
         userInfo.setUser(user);
         userInfo.setName(request.getName());
@@ -54,7 +57,11 @@ public class ControllerFinaltest {
         userInfo.setBirthday(request.getBirthday());
         userInfoRepository.save(userInfo);
 
-        return ResponseEntity.ok().body("Registration successful");
+        Map<String, String> response = new HashMap<>();
+        response.put("success", "true"); // 使用字符串表示成功
+        response.put("message", "Registration successful");
+        return ResponseEntity.ok(response);
+
     }
     
     @PostMapping("/checkaccount")

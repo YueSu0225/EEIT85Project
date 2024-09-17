@@ -43,13 +43,15 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
+            if (data.success === "true") {
+				console.log("註冊成功1");
                 // 注册成功
                 alert('註冊成功');
                 // 重定向到登录页面或其他页面
                 window.location.href = '/Home.html';
             } else {
                 // 显示错误信息
+				console.log("註冊成功2");
                 alert(data.message || '註冊失敗');
             }
         })

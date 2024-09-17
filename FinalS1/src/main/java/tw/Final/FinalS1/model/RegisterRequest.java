@@ -74,7 +74,7 @@ public class RegisterRequest {
     public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
-    
+    // 確認信箱有無註冊model
     public class AccountCheckResponse {
         private boolean exists;
 

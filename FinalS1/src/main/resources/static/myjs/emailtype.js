@@ -1,13 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     const emailInput = document.getElementById('email');
     const errorMessage = document.getElementById('errormesg');
-
+	const correctMessage = document.getElementById('correctmesg');
     if (!emailInput || !errorMessage) {
         console.error('Email input or error message element not found.');
         return;
     }
 
     emailInput.addEventListener('blur', function() {
+		//清空信息
+		errorMessage.textContent = '';
+		correctMessage.textContent = '';
+		
         const emailInputValue = this.value;
 
         // 简单的 email 正则表达式检查
@@ -34,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				if (data) {
 				               errorMessage.textContent = '此 EMAIL 已經註冊過了';
 				           } else {
-				               errorMessage.textContent = '此 EMAIL 可以使用';
+				               correctMessage.textContent = '此 EMAIL 可以使用';
 				           }
 				       })
 			.catch(error => {
