@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script>
+	function test1(){
+		fetch('/test/01')
+			.then(response => {
+				if (!response.ok){
+					throw new Error('Error: test1()');
+				}
+				return response.json();
+			})
+			.then(data => {
+				console.log(data);
+			})
+			.catch(error => {
+				console.error('err:',error);
+			});
+	}
+	function test2(){
+		let idValue = document.getElementById('id').value;
+		let nameValue = document.getElementById('name').value;
+		let data = {
+				id : idValue,
+				name : nameValue				
+		};
+		console.log(JSON.stringify(data));
+		
+		fetch('/test/02',{
+			method: 'Post',
+			headers: {
+				'Content-Type': 'application/json'
+				},			
+				body: JSON.stringify(data)
+			})		
+			.then(response => {
+				if (!response.ok){
+					throw new Error('Error: test()');
+				}
+				return response.json();
+			})
+			.then(data => {
+				console.log('Success: ', data);
+				window.location.href = '/main';
+				})
+			.catch(error =>{
+				console.log('err:', error);
+			});
+	}
+	
+	window.onload = function(){
+		document.getElementById('uploadForm').addEventListener('submit', function(event){
+			let formData = new FormData();
+			let uploadFile = document.getElementById('uploadFile').files[0]; //支援多檔上船在[幾個]
+			let id = document.getElementById('id').value
+			let name = document.getElementById('name').value
+			
+			formData.append('uploadFile', uploadFile);
+			formData.append('id', id);
+			formData.append('name', name);
+			
+			fetch('/test/05',{
+					method:'POST',
+					body: formData
+				})
+				.then(data => {
+					console.log('Success');
+				})
+				.catch(error => {
+					console.log('error');
+				});
+			
+			
+			
+		})
+	}
+	
+</script>
+<div th:include="header"></div>
+	Hello, World
+	<hr />
+	<button onclick="test1()">Test1</button>
+	<hr />
+	Id: <input id="id" /><br />
+	Name: <input id="name" /><br />
+	<button onclick="test2()">Test2</button>
+	<hr />
+	
+	<form id="uploadForm">
+		<input type ="file" id="uploadFile" name="uploadFile">
+		<button type="submit">Upload</button>
+	</form>
+	
+	
+<div th:include="footer"></div>
