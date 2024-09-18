@@ -8,12 +8,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById('password').value;
         const checkPassword = document.getElementById('checkPassword').value;
         const name = document.querySelector('input[placeholder="姓名"]').value;
-        const gender = document.querySelector('input[name="gender"]:checked').value;
-        const phone = document.querySelector('input[placeholder="手機"]').value;
+        const phone = document.querySelector('input[placeholder="請輸入手機號碼"]').value;
         const street = document.getElementById('street').value;
         const birthday = document.querySelector('input[type="date"]').value;
+		const addressPattern = /.+[路街].+號/; // 至少包含“XX路X號”的格式
+		const phonePattern = /^09\d{8}$/; // 驗證手機號碼格式：09開頭，後面8個數字
 		
-        // 表单验证
+        // 表單驗證
         if (password.length < 6 || password.length > 20) {
             document.getElementById('passwordError').textContent = '密碼長度需為 6-20 字元';
             return;
@@ -23,8 +24,23 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('checkPasswordError').textContent = '密碼與確認密碼不一致';
             return;
         }
-
-        // 发送数据到后端
+		
+		// 地址格式驗證
+		if (!addressPattern.test(street)) {
+			document.getElementById('streeterrormesg').textContent = '請輸入完整的地址，ex: 中山路1號。';
+			return;
+		} else {
+			document.getElementById('streeterrormesg').textContent = ''; // 清除錯誤信息
+		}
+		
+		// 手機號碼格式驗證
+		if (!phonePattern.test(phone)) {
+		    document.getElementById('phoneerrormesg').textContent = '請輸入有效的手機號碼，格式：09xxxxxxxx';
+		    return;
+		} else {
+		    document.getElementById('phoneerrormesg').textContent = ''; // 清除错误信息
+		}
+        // 發送數據到後端
         fetch('/final/register', {
             method: 'POST',
             headers: {
@@ -35,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 password: password,
                 name: name,
 				email: account,
-                gender: gender,
                 phone: phone,
                 street: street,
                 birthday: birthday
@@ -43,21 +58,18 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success === "true") {
-				console.log("註冊成功1");
-                // 注册成功
-                alert('註冊成功');
-                // 重定向到登录页面或其他页面
-                window.location.href = '/Home.html';
-            } else {
-                // 显示错误信息
-				console.log("註冊成功2");
-                alert(data.message || '註冊失敗');
-            }
+			if (data.success) {
+			        console.log("註冊成功1");
+			        alert('註冊成功');
+			        window.location.href = '/Home.html';
+			    } else {
+			        console.log("註冊失敗2");
+			        alert(data.message || '註冊失敗');
+			    }
         })
         .catch(error => {
             console.error('錯誤:', error);
-            alert('註冊失敗');
+            alert('註冊失敗1');
         });
     });
 });

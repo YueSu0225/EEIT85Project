@@ -102,10 +102,12 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-control" placeholder="會員信箱">
+                            <input type="email" class="form-control" placeholder="會員信箱" id="loginaccount" name="loginaccount" required />
+                            <span id="erroaccountmesg" style="color: red;"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="會員密碼">
+                            <input type="password" class="form-control" placeholder="會員密碼" id="loginpassword" name="loginpassword" required />
+                            <span id="erropasswordmesg" style="color: red;"></span>
                         </div>
                         <div class="form-group">
                             <div style="text-align: center;">
@@ -113,7 +115,7 @@
                             </div>
                         </div>
                         <div class="form-group" style="text-align: center;">
-                            <input type="submit" value="登入" class="btn btn-primary py-3 px-5">
+                            <button type="button" id="loginButton" class="btn btn-primary py-3 px-5">登入</button>
                         </div>
                         <div class="form-group">
                             <div class="form-group" style="text-align: center;">
@@ -236,7 +238,7 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
     <script src="js/google-map.js"></script>
     <script src="js/main.js"></script>
-
+	<script src="myjs/login.js"></script>
 </body>
 
 </html>

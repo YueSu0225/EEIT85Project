@@ -15,7 +15,6 @@ public class userInfoMedel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
-	private String gander;
 	private int phone_number;
 	private String address;
 	private String birthday;
@@ -46,14 +45,6 @@ public class userInfoMedel {
 	}
 
 
-	public String getGander() {
-		return gander;
-	}
-
-
-	public void setGander(String gander) {
-		this.gander = gander;
-	}
 
 
 	public int getPhone_number() {

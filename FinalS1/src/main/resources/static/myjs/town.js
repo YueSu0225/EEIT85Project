@@ -108,9 +108,9 @@
 		    const districtSelect = document.getElementById('district');
 		    const addressInput = document.querySelector('input[placeholder="請輸入街道名門牌號"]');
 		    const errorMessageSpan = document.getElementById('streeterrormesg');
-		    const addressPattern = /.+路.+號/; // 至少包含“XX路X號”的格式
+		    const addressPattern = /.+[路街].+號/; // 至少包含“XX路X號”的格式
 
-		    // 填充縣市選項
+		    // 縣市選項
 		    for (const city in taiwanCities) {
 		        const option = document.createElement('option');
 		        option.value = city;
@@ -121,11 +121,10 @@
 		    // 更新區域
 		    citySelect.addEventListener('change', function() {
 		        const selectedCity = citySelect.value;
-
-		        // 清空之前的區域列表
+		        
 		        districtSelect.innerHTML = '<option value="" disabled selected>選擇區域</option>';
 
-		        // 動態填充區域選項
+		        // 動態內容
 		        if (taiwanCities[selectedCity]) {
 		            for (const district in taiwanCities[selectedCity]) {
 		                const option = document.createElement('option');
@@ -133,23 +132,21 @@
 		                option.textContent = district;
 		                districtSelect.appendChild(option);
 		            }
-		        }
-
-		        // 验证地址输入框的内容
+		        }		    
 		        updateAddressInput();
 		    });
 
-		    // 更新地址输入框
+		    // 更新地址輸入
 		    districtSelect.addEventListener('change', function() {
 		        addressInput.value = `${citySelect.value} ${districtSelect.value} `; // 更新地址输入框的值
 		        updateAddressInput();
 		    });
 
-		    // 输入框事件处理
+		    // 輸入框事件處理
 		    addressInput.addEventListener('input', updateAddressInput);
 
 		    function updateAddressInput() {
-		        // 验证地址输入框的内容
+		        // 驗證地址輸入框內容
 		        if (addressInput.value && !addressPattern.test(addressInput.value)) {
 		            errorMessageSpan.textContent = '請輸入完整的地址，ex: 中山路1號。';
 		        } else {
