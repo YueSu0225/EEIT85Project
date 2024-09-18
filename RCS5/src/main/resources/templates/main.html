@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script>
+	function logout(){
+		fetch('/test/04',{
+			method:'POST',
+			headers: {
+				'Content-Type' : 'application/json'
+			}
+		})
+			.then(response =>{
+				window.location.href='/';
+			});
+	}
+	function checkLogin(){
+		//檢查後端 session 有無傳回,如果沒有 拉回去index
+		fetch('/test/03',{
+			method: 'POST',
+			headers: {
+				'Content-Type' : 'application/json'
+			}
+		})
+			.then(response => {
+				if (!response.ok){
+					throw new Error('Error: test()');
+				}
+				return response.json();
+			})
+			.then(data => {//接收session物件
+				console.log(data);
+				if (data.code == 0){
+					//在session裡面的資料
+					document.getElementById('username').innerHTML = data.myTest.name;
+				}else{
+					console.log("xxx");
+					window.location.href='/';
+				}
+			})
+			.catch(error => {
+				console.log('err:', error);
+			});
+	}
+	checkLogin();
+</script>
+
+<div th:include="header"></div>
+	Main Page
+	<hr />
+	<div>Welcome, <span id='username'></span></div>
+	<hr />
+	<button onclick='logout()'>Logout</button>
+<div th:include="footer"></div>

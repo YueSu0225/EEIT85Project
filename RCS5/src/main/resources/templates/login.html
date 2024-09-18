@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<script>
+	function login(){
+		let account = document.getElementById('account').value;
+		let passwd = document.getElementById('passwd').value;
+		let data = {
+				account : account,
+				passwd : passwd,			
+		};
+	
+		fetch('/user/login',{
+			method: 'Post',
+			headers: {
+				'Content-Type': 'application/json'
+				},			
+				body: JSON.stringify(data)
+			})		
+			.then(response => {
+				if (!response.ok){
+					throw new Error('Error: test()');
+				}
+				return response.json();
+			})
+			.then(data => {
+				console.log('Success: ', data);
+				//window.location.href = '/main';
+				})
+			.catch(error =>{
+				console.log('err:', error);
+			});
+	}
+</script>
+
+<div th:include="header"></div>
+	Login Page
+	<hr />
+	Account: <input id="account" /><br />
+	Password: <input type="password" id="passwd" /><br />
+	<button onclick="login()">Login</button>
+	
+	
+	<div>Welcome, <span id='username'></span></div>
+	<hr />
+	<button onclick='logout()'>Logout</button>
+<div th:include="footer"></div>
