@@ -1,5 +1,8 @@
 package tw.Final.FinalS1;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ public class ControllerFinaltest {
 //
 //    @Autowired
 //    private UserInfoRepository userInfoRepository;
+
 
 //    @PostMapping("/register")
 //    public ResponseEntity<String> registerUser(@RequestBody RegisterRequest request) {
@@ -66,6 +70,8 @@ public class ControllerFinaltest {
 	public ResponseEntity<String> register(@RequestBody RegisterRequest request){
 		return finalUserService.registerUser(request);
 	}
+
+ 
     
     @PostMapping("/checkaccount")
     public ResponseEntity<Boolean> checkaccount(@RequestBody RegisterRequest request) {

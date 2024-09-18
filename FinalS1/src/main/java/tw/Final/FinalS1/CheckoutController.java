@@ -26,10 +26,10 @@ public class CheckoutController {
     public String checkout() {
     	
         AioCheckOutOneTime obj = new AioCheckOutOneTime();
-        obj.setMerchantTradeNo("TestOrder06621");
+        obj.setMerchantTradeNo("EEIT85766");
         obj.setMerchantTradeDate("2024/09/12 15:45:30");
         obj.setTotalAmount("1000");
-        obj.setTradeDesc("Test Transaction");
+        obj.setTradeDesc("EEIT專案");
         obj.setItemName("Test Product");
         obj.setReturnURL("https://your-website.com/payment-return");
         obj.setClientBackURL("https://your-website.com/back");
