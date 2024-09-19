@@ -1,4 +1,4 @@
-package tw.Final.FinalS1;
+package tw.Final.FinalS1.controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

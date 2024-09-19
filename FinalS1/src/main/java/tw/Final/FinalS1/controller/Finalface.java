@@ -1,4 +1,4 @@
-package tw.Final.FinalS1;
+package tw.Final.FinalS1.controller;
 
 import java.util.List;
 

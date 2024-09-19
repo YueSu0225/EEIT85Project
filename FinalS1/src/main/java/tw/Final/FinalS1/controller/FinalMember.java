@@ -1,4 +1,4 @@
-package tw.Final.FinalS1;
+package tw.Final.FinalS1.controller;
 	import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
