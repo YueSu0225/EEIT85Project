@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    <p>Item 1: $50</p>
+    <p>Item 2: $30</p>
+    <h2>Total: $80</h2>
+    <form action="/checkout/create" method="post">
+        <input type="hidden" name="totalAmount" value="80">
+        <button type="submit">Proceed to Payment</button>
+    </form>
+</body>
+</html>
