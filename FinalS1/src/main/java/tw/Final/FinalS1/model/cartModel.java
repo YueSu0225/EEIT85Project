@@ -8,7 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-
+// 定義類別
 @Entity	
 @Table(name = "carts")
 public class cartModel {
