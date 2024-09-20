@@ -23,11 +23,7 @@ public class ControllerFinaltest {
 	public ResponseEntity<Map<String, Object>> register(@RequestBody RegisterRequest request){
 		return finalUserService.registerUser(request);
 	}
-  
-    @PostMapping("/checkaccount")
-    public ResponseEntity<Boolean> checkaccount(@RequestBody RegisterRequest request) {
-        return finalUserService.checkaccount(request);
-    }
+
     @PostMapping("/login")
 	public ResponseEntity<Map<String, Object>> loginUser(@RequestBody RegisterRequest request) {
     	return finalUserService.loginUser(request);

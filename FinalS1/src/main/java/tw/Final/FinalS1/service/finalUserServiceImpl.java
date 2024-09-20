@@ -52,7 +52,7 @@ public class finalUserServiceImpl implements finalUserService{
 	        user.setAccount(request.getAccount());
 	        user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
 	        user.setEmail(request.getEmail());
-	        user.setProvider_id(null);
+	        user.setUuid(null);
 	        user.setGoogleId(null); // 如果不使用 Google 登錄
 
 	        // 保存用户
@@ -83,15 +83,6 @@ public class finalUserServiceImpl implements finalUserService{
 	        return ResponseEntity.ok(response);
 	}
 
-	@Override
-	public ResponseEntity<Boolean> checkaccount(RegisterRequest request) {
-        String account = request.getAccount();
-        if (account == null || account.isEmpty()) {
-            return ResponseEntity.badRequest().body(false); // 或者返回錯誤信息
-        }
-        boolean exists = userRepository.existsByAccount(account);
-        return ResponseEntity.ok(exists);
-    }
 
 	@Override
 	public ResponseEntity<Map<String, Object>> loginUser(RegisterRequest request) {

@@ -21,8 +21,8 @@ public class finalUserModel {
     private String account;
     private String password;
     private String email;
-    private String provider_id;
     private String googleId;
+    private String uuid;
     
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private cartModel cart;
@@ -32,12 +32,14 @@ public class finalUserModel {
 
     
     
-	public String getProvider_id() {
-		return provider_id;
+
+
+	public String getUuid() {
+		return uuid;
 	}
 
-	public void setProvider_id(String provider_id) {
-		this.provider_id = provider_id;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public int getId() {
