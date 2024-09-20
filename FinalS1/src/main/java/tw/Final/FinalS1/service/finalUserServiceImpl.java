@@ -9,6 +9,7 @@ import org.mindrot.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import tw.Final.FinalS1.model.RegisterRequest;
@@ -122,5 +123,51 @@ public class finalUserServiceImpl implements finalUserService{
         }
 
         return ResponseEntity.ok(response);
+	}
+
+
+	@Override
+	public void googleUser(OAuth2User oAuth2User) {
+        String email = oAuth2User.getAttribute("email"); // 獲取 Google 信箱
+        String name = oAuth2User.getAttribute("name");   // 獲取 Google 姓名
+        String googleId = oAuth2User.getAttribute("sub"); // 獲取 Google ID
+	    List<finalUserModel> existGoogleId = userRepository.findByAccount(googleId);
+	    if (!existGoogleId.isEmpty()) {
+	        System.out.println("User already exists: " );
+	       
+	    } else {
+		 finalUserModel user = new finalUserModel();
+	        user.setAccount(null);
+	        user.setPassword(null);
+	        user.setEmail(email);
+	        user.setUuid(null);
+	        user.setGoogleId(googleId); // 使用 Google 登錄
+	        userRepository.save(user);
+
+	        // 創建購物車
+	        cartModel cart = new cartModel();
+	        cart.setUser(user);
+	        cartRepository.save(cart);
+	        
+	        // 創建喜愛清單
+	        wishListModel wishList = new wishListModel();
+	        wishList.setUser(user);
+	        wishListRepository.save(wishList);
+
+	        // 創建用戶資訊
+	        userInfoMedel userInfo = new userInfoMedel();
+	        userInfo.setUser(user);
+	        userInfo.setName(name);
+	        userInfo.setPhone_number(0);
+	        userInfo.setAddress(null);
+	        userInfo.setBirthday(null);
+	        userInfoRepository.save(userInfo);
+
+        
+        System.out.println("User email: " + email);
+        System.out.println("User name: " + name);
+        System.out.println("User Google ID: " + googleId);
+    
+	    }
 	}	
 }
