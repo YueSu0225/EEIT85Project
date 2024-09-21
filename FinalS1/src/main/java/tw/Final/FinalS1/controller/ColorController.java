@@ -39,7 +39,7 @@ public class ColorController {
 
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<Color> addColor(@RequestBody Color color) {
-        System.out.println("Received color: " + color.getName()); // 打印接收到的color
+        
 
         Color newColor = colorService.addColor(color);
         return ResponseEntity.ok(newColor);
