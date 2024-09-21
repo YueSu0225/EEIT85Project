@@ -1,6 +1,10 @@
 package tw.Final.FinalS1.model;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "product_variant")
+@Table(name = "product_variants")
 public class ProductVariant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,18 +25,22 @@ public class ProductVariant {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @JsonManagedReference("product-variant")
     private Product product;
+
 
     @ManyToOne
     @JoinColumn(name = "color_id", nullable = false)
+    @JsonManagedReference(value = "color-productVariants")
     private Color color;
 
     @ManyToOne
     @JoinColumn(name = "size_id", nullable = false)
+   @JsonManagedReference(value = "size-productVariants")
     private Size size;
 
-    @Column(name = "price", nullable = false)
-    private Long price;
+    @Column(name = "price", nullable = false, precision = 10, scale = 0)
+ 	private BigDecimal  price;
 
     @Column(name = "stock", nullable = false)
     private int stock;
@@ -79,11 +87,11 @@ public class ProductVariant {
 		this.size = size;
 	}
 
-	public Long getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 

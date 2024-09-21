@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tw.Final.FinalS1.model.Color;
 
 @Repository
-public interface ColorRepository extends JpaRepository<Color, Integer> {
+public interface ColorRepository extends JpaRepository<Color, Long> {
 }
 

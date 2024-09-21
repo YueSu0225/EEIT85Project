@@ -2,6 +2,9 @@ package tw.Final.FinalS1.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +26,7 @@ public class Type {
 	private String name;
 	
 	@OneToMany(mappedBy = "type", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
     private List<Product> products;
 
 	public Long getId() {

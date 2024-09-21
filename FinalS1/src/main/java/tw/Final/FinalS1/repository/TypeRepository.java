@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import tw.Final.FinalS1.model.Type;
 
 @Repository
-public interface TypeRepository extends JpaRepository<Type, Integer> {
+public interface TypeRepository extends JpaRepository<Type, Long> {
 }
 

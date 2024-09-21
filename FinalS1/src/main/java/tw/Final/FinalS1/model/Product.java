@@ -2,8 +2,12 @@ package tw.Final.FinalS1.model;
 
 
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,26 +37,29 @@ public class Product {
 	 	
 	 	@ManyToOne
 	    @JoinColumn(name = "category_id", nullable = false)
+	 	//@JsonManagedReference(value = "category-products")
 	 	private Category category;
 	 	
 	 	@ManyToOne
 	    @JoinColumn(name = "type_id", nullable = false)
+	 	//@JsonManagedReference(value = "type-products")
 	 	private Type type;
 	 	
-	 	@Column(name = "price", nullable = false)
-	 	private Long price;
+	 	@Column(name = "price", nullable = false, precision = 10, scale = 0)
+	 	private BigDecimal  price;
 	 	
 	 	@Lob
 	 	@Column(name = "image", columnDefinition = "LONGTEXT")
 	 	private String image;
 	 	
 	 	@Column(name = "created_at", updatable = false)//創建紀錄不可被修改
-	 	private Timestamp createAt;
+	 	private Timestamp createdAt;
 	 	
 	 	@Column(name = "updated_at")
-	 	private Timestamp updateAt;
+	 	private Timestamp updatedAt;
 	 	
 	 	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	 	@JsonBackReference("product-variant")
 	 	private List<ProductVariant> productVariants;
 
 		public Long getId() {
@@ -95,11 +102,11 @@ public class Product {
 			this.type = type;
 		}
 
-		public Long getPrice() {
+		public BigDecimal getPrice() {
 			return price;
 		}
 
-		public void setPrice(Long price) {
+		public void setPrice(BigDecimal price) {
 			this.price = price;
 		}
 
@@ -111,20 +118,20 @@ public class Product {
 			this.image = image;
 		}
 
-		public Timestamp getCreateAt() {
-			return createAt;
+		public Timestamp getCreatedAt() {
+			return createdAt;
 		}
 
-		public void setCreateAt(Timestamp createAt) {
-			this.createAt = createAt;
+		public void setCreatedAt(Timestamp createdAt) {
+			this.createdAt = createdAt;
 		}
 
-		public Timestamp getUpdateAt() {
-			return updateAt;
+		public Timestamp getUpdatedAt() {
+			return updatedAt;
 		}
 
-		public void setUpdateAt(Timestamp updateAt) {
-			this.updateAt = updateAt;
+		public void setUpdatedAt(Timestamp updatedAt) {
+			this.updatedAt = updatedAt;
 		}
 
 		public List<ProductVariant> getProductVariants() {
