@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // 绑定表单提交事件
     document.querySelector('form').addEventListener('submit', function (event) {
         event.preventDefault(); // 防止默认的表单提交行为
-
+		
+		
         // 获取表单数据
         const account = document.getElementById('email').value;
         const password = document.getElementById('password').value;

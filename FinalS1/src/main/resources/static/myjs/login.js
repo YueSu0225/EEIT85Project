@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const emailInput = document.getElementById('loginaccount');
     const errorAccountMsg = document.getElementById('erroaccountmesg');
     const errorPasswordMsg = document.getElementById('erropasswordmesg');
+	const passwordInput = document.getElementById('loginpassword');
 
     emailInput.addEventListener('blur', function () {
         const email = emailInput.value;
@@ -26,7 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
-
+	
+	passwordInput.addEventListener('input', function () {
+	       errorPasswordMsg.textContent = ''; // 當用戶輸入時清空錯誤訊息
+	   });
+	
     function login() {
         let account = document.getElementById('loginaccount').value;
         let passwd = document.getElementById('loginpassword').value;
@@ -34,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
             account: account,
             password: passwd
         };
-
+		
         fetch('/final/login', {
             method: 'POST', 
             headers: {
@@ -51,13 +56,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('登入成功');
                 window.location.href = '/Home.html'; 
             } else {
-                errorPasswordMsg.textContent = '密碼錯誤'; // 顯示密碼錯誤
+				errorPasswordMsg.textContent = '密碼錯誤';
+                //alert('密碼錯誤'); // 顯示密碼錯誤
+				//window.location.href = '/SignIn.html'; 
             }
         })
         .catch(error => {
             console.log('err:', error);
         });
     }
-
     document.getElementById('loginButton').addEventListener('click', login);
 });

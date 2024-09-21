@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<finalUserModel, Integer> {
 	boolean existsByAccount(String account);
 
 	public List<finalUserModel> findByAccount(String account);
+	
+	public List<finalUserModel> findByGoogleId(String googleId);
 }
