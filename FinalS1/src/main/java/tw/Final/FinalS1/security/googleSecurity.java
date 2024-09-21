@@ -16,6 +16,9 @@ public class googleSecurity {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    http
+//	    .csrf(csrf -> csrf
+//                .ignoringRequestMatchers("/api/**") // 忽略 API 路徑下的所有請求的 CSRF 保護  使用postman tapi在解開
+//            )
 	        .authorizeHttpRequests(authorize -> authorize
 	            .requestMatchers("/**").permitAll() // 允許訪問登陸和 OAuth2 相關的 URL
 	            .anyRequest().authenticated() // 其餘需要驗證

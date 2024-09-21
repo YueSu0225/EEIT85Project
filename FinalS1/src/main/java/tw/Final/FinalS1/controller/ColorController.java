@@ -17,7 +17,7 @@ import tw.Final.FinalS1.model.Color;
 import tw.Final.FinalS1.service.ColorService;
 
 @RestController
-@RequestMapping("/colors")
+@RequestMapping("/api/colors")
 public class ColorController {
     @Autowired
     private ColorService colorService;

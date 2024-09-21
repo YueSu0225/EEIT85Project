@@ -25,7 +25,7 @@ import tw.Final.FinalS1.service.ProductVariantService;
 import tw.Final.FinalS1.service.SizeService;
 
 @RestController
-@RequestMapping("/product-variants")
+@RequestMapping("/api/product-variants")
 public class ProductVariantController {
 	
     @Autowired

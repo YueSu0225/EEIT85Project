@@ -17,7 +17,7 @@ import tw.Final.FinalS1.model.Category;
 import tw.Final.FinalS1.service.CategoryService;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/categories")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;

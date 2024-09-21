@@ -17,7 +17,7 @@ import tw.Final.FinalS1.model.Type;
 import tw.Final.FinalS1.service.TypeService;
 
 @RestController
-@RequestMapping("/types")
+@RequestMapping("/api/types")
 public class TypeController {
 	
     @Autowired

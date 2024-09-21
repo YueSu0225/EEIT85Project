@@ -17,7 +17,7 @@ import tw.Final.FinalS1.model.Size;
 import tw.Final.FinalS1.service.SizeService;
 
 @RestController
-@RequestMapping("/sizes")
+@RequestMapping("/api/sizes")
 public class SizeController {
 	
 	@Autowired

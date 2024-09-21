@@ -23,10 +23,10 @@ import tw.Final.FinalS1.service.ProductService;
 import tw.Final.FinalS1.service.TypeService;
 
 @RestController
-@RequestMapping("/products")
-public class ProductController {
+@RequestMapping("/api/products")
+public class ProductController {                                                      
 
-	
+	                                                                           
 	@Autowired
 	private ProductService productService;
 	
