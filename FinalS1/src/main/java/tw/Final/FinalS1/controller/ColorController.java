@@ -39,7 +39,6 @@ public class ColorController {
 
     @PostMapping(value = "/add", consumes = "application/json")
     public ResponseEntity<Color> addColor(@RequestBody Color color) {
-        
 
         Color newColor = colorService.addColor(color);
         return ResponseEntity.ok(newColor);
