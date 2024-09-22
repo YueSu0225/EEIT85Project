@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import tw.Final.FinalS1.model.RegisterRequest;
 
-public interface finalUserService {
+public interface UserService {
 	
 	public ResponseEntity<Map<String, Object>> registerUser(RegisterRequest request);
 		

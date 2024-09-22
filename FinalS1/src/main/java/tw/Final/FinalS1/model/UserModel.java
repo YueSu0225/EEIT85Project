@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 
 @Entity	
 @Table(name = "user")
-public class finalUserModel {
+public class UserModel {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class finalUserModel {
     private String uuid;
     
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private cartModel cart;
+    private CartModel cart;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private wishListModel wishList;
@@ -82,11 +82,11 @@ public class finalUserModel {
 		this.googleId = googleId;
 	}
 
-	public cartModel getCart() {
+	public CartModel getCart() {
 		return cart;
 	}
 
-	public void setCart(cartModel cart) {
+	public void setCart(CartModel cart) {
 		this.cart = cart;
 	}
 

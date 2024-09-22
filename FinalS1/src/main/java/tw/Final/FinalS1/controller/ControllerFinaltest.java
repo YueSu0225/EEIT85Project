@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import tw.Final.FinalS1.model.*;
-import tw.Final.FinalS1.service.finalUserService;
+import tw.Final.FinalS1.service.UserService;
 
 
 @RestController
@@ -21,7 +21,7 @@ public class ControllerFinaltest {
 
 	
 	@Autowired
-	private finalUserService finalUserService;
+	private UserService finalUserService;
 	
 	
 	@PostMapping("/register")

@@ -5,14 +5,14 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import tw.Final.FinalS1.model.finalUserModel;
+import tw.Final.FinalS1.model.UserModel;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<finalUserModel, Integer> {
+public interface UserRepository extends JpaRepository<UserModel, Integer> {
 	boolean existsByAccount(String account);
 
-	public List<finalUserModel> findByAccount(String account);
+	public List<UserModel> findByAccount(String account);
 	
-	public List<finalUserModel> findByGoogleId(String googleId);
+	public List<UserModel> findByGoogleId(String googleId);
 }

@@ -14,21 +14,21 @@ import org.springframework.stereotype.Service;
 
 import tw.Final.FinalS1.model.RegisterRequest;
 
-import tw.Final.FinalS1.model.cartModel;
-import tw.Final.FinalS1.model.finalUserModel;
+import tw.Final.FinalS1.model.CartModel;
+import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.model.userInfoMedel;
 import tw.Final.FinalS1.model.wishListModel;
 import tw.Final.FinalS1.repository.UserInfoRepository;
 import tw.Final.FinalS1.repository.UserRepository;
-import tw.Final.FinalS1.repository.cartRepository;
+import tw.Final.FinalS1.repository.CartRepository;
 import tw.Final.FinalS1.repository.wishListRepository;
 
 
 @Service
-public class finalUserServiceImpl implements finalUserService{
+public class finalUserServiceImpl implements UserService{
 
 	@Autowired
-	private cartRepository cartRepository;
+	private CartRepository cartRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -42,14 +42,14 @@ public class finalUserServiceImpl implements finalUserService{
 	public ResponseEntity<Map<String, Object>> registerUser(RegisterRequest request) {
 		
 		 // 檢查帳號是否已存在
-	    List<finalUserModel> existingUser = userRepository.findByAccount(request.getAccount());
+	    List<UserModel> existingUser = userRepository.findByAccount(request.getAccount());
 	    if (!existingUser.isEmpty()) {
 	        Map<String, Object> response = new HashMap<>();
 	        response.put("success", false);
 	        response.put("message", "信箱已被註冊");
 	        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	    }
-		 finalUserModel user = new finalUserModel();
+		 UserModel user = new UserModel();
 	        user.setAccount(request.getAccount());
 	        user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
 	        user.setEmail(request.getEmail());
@@ -60,7 +60,7 @@ public class finalUserServiceImpl implements finalUserService{
 	        userRepository.save(user);
 
 	        // 創建購物車
-	        cartModel cart = new cartModel();
+	        CartModel cart = new CartModel();
 	        cart.setUser(user);
 	        cartRepository.save(cart);
 	        
@@ -87,7 +87,7 @@ public class finalUserServiceImpl implements finalUserService{
 
 	@Override
 	public ResponseEntity<Map<String, Object>> loginUser(RegisterRequest request) {
-	    List<finalUserModel> existingUser = userRepository.findByAccount(request.getAccount());
+	    List<UserModel> existingUser = userRepository.findByAccount(request.getAccount());
 	    Map<String, Object> response = new HashMap<>();
 	    
 	    // 檢查帳號是否存在
@@ -97,7 +97,7 @@ public class finalUserServiceImpl implements finalUserService{
 	        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	    }
 	    
-	    finalUserModel user = existingUser.get(0); // 資料庫獲取用戶
+	    UserModel user = existingUser.get(0); // 資料庫獲取用戶
 	    
 	    // 檢查密碼是否正確
 	    if (BCrypt.checkpw(request.getPassword(), user.getPassword())) {
@@ -113,7 +113,7 @@ public class finalUserServiceImpl implements finalUserService{
 
 	@Override
 	public ResponseEntity<Map<String, Object>> logincheck(String account) {
-	    List<finalUserModel> user = userRepository.findByAccount(account);
+	    List<UserModel> user = userRepository.findByAccount(account);
         Map<String, Object> response = new HashMap<>();
         
         if (!user.isEmpty()) {
@@ -131,12 +131,12 @@ public class finalUserServiceImpl implements finalUserService{
         String email = oAuth2User.getAttribute("email"); // 獲取 Google 信箱
         String name = oAuth2User.getAttribute("name");   // 獲取 Google 姓名
         String googleId = oAuth2User.getAttribute("sub"); // 獲取 Google ID
-	    List<finalUserModel> existGoogleId = userRepository.findByAccount(googleId);
+	    List<UserModel> existGoogleId = userRepository.findByAccount(googleId);
 	    if (!existGoogleId.isEmpty()) {
 	        System.out.println("User already exists: " );
 	       
 	    } else {
-		 finalUserModel user = new finalUserModel();
+		 UserModel user = new UserModel();
 	        user.setAccount(null);
 	        user.setPassword(null);
 	        user.setEmail(email);
@@ -145,7 +145,7 @@ public class finalUserServiceImpl implements finalUserService{
 	        userRepository.save(user);
 
 	        // 創建購物車
-	        cartModel cart = new cartModel();
+	        CartModel cart = new CartModel();
 	        cart.setUser(user);
 	        cartRepository.save(cart);
 	        
