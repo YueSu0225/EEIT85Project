@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.mindrot.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import tw.Final.FinalS1.model.RegisterRequest;
 
 import tw.Final.FinalS1.model.CartModel;
@@ -86,7 +89,7 @@ public class finalUserServiceImpl implements UserService{
 
 
 	@Override
-	public ResponseEntity<Map<String, Object>> loginUser(RegisterRequest request) {
+	public ResponseEntity<Map<String, Object>> loginUser(RegisterRequest request, HttpServletRequest servletRequest) {
 	    List<UserModel> existingUser = userRepository.findByAccount(request.getAccount());
 	    Map<String, Object> response = new HashMap<>();
 	    
@@ -101,8 +104,21 @@ public class finalUserServiceImpl implements UserService{
 	    
 	    // 檢查密碼是否正確
 	    if (BCrypt.checkpw(request.getPassword(), user.getPassword())) {
+	    	
+			// 登入成功，插入 UUID 到資料庫
+			String uuid = UUID.randomUUID().toString();
+			// 使用方法userRepository 將 UUID 插入到資料庫
+			user.setUuid(uuid);
+			userRepository.save(user);
+			
+	        // 設置 session
+	        HttpSession session = servletRequest.getSession();
+	        session.setAttribute("userUUID", uuid); // 將 UUID 存儲在 session 中
+
+	    	
 	        response.put("success", true);
 	        response.put("message", "登入成功");
+	        response.put("userUUID", uuid);
 	        return ResponseEntity.status(HttpStatus.OK).body(response);
 	    } else {
 	        response.put("success", false);
@@ -169,5 +185,21 @@ public class finalUserServiceImpl implements UserService{
         System.out.println("User Google ID: " + googleId);
     
 	    }
-	}	
+	}
+
+
+	@Override
+	public ResponseEntity<Map<String, String>> sessionResponse(HttpSession session) {
+	    String userUUID = (String) session.getAttribute("userUUID");
+	    
+	    if (userUUID != null) {
+	        // 创建一个 Map 来存储返回的 UUID
+	        Map<String, String> response = new HashMap<>();
+	        response.put("userUUID", userUUID);
+	        return ResponseEntity.ok(response); // 返回 UUID
+	    } else {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 未登录
+	    }
+	}
+
 }

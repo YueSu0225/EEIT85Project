@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<UserModel, Integer> {
 	public List<UserModel> findByAccount(String account);
 	
 	public List<UserModel> findByGoogleId(String googleId);
+	
+	public List<UserModel> findByUuid(String uuid);
 }
