@@ -32,10 +32,21 @@ public class UserModel {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private wishListModel wishList;
+    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private userInfoMedel userInfoMedel;
 
     
     
 
+
+	public userInfoMedel getUserInfoMedel() {
+		return userInfoMedel;
+	}
+
+	public void setUserInfoMedel(userInfoMedel userInfoMedel) {
+		this.userInfoMedel = userInfoMedel;
+	}
 
 	public String getUuid() {
 		return uuid;

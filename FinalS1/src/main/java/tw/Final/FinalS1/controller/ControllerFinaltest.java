@@ -61,5 +61,10 @@ public class ControllerFinaltest {
     public ResponseEntity<Map<String, String>> sessionResponse(HttpSession session) {
     	
     	return finalUserService.sessionResponse(session);
-    }	
+    }
+    
+    @GetMapping("/userinfo")
+    public ResponseEntity<Map<String, Object>> userinfo(HttpSession session){
+    	return finalUserService.userinfo(session);
+    }
 }

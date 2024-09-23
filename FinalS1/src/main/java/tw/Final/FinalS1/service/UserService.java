@@ -22,5 +22,7 @@ public interface UserService {
 	public void googleUser(OAuth2User oAuth2User);
 	
 	public ResponseEntity<Map<String, String>> sessionResponse(HttpSession session);
+	
+	public ResponseEntity<Map<String, Object>> userinfo(HttpSession session);
 		
 }

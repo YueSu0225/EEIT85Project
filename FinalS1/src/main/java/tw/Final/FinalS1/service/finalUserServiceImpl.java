@@ -192,7 +192,7 @@ public class finalUserServiceImpl implements UserService{
 	    String userUUID = (String) session.getAttribute("userUUID");
 	    
 	    if (userUUID != null) {
-	        // 创建一个 Map 来存储返回的 UUID
+	        // 創建建一个 Map 来存返回的 UUID
 	        Map<String, String> response = new HashMap<>();
 	        response.put("userUUID", userUUID);
 	        return ResponseEntity.ok(response); // 返回 UUID
@@ -200,5 +200,31 @@ public class finalUserServiceImpl implements UserService{
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 未登录
 	    }
 	}
+
+
+	@Override
+	public ResponseEntity<Map<String, Object>> userinfo(HttpSession session) {
+	    String userUUID = (String) session.getAttribute("userUUID");
+	    
+	    // 根據 UUID 查詢用戶
+        UserModel user = userRepository.findByUuid(userUUID);
+        if (user == null) {
+            return ResponseEntity.status(404).body(Map.of("message", "User not found"));
+        }
+
+        // 查詢 userinfo
+        userInfoMedel userInfo = new userInfoMedel();
+        userInfo = userInfoRepository.findByUserId(user.getId());
+
+        // 構建返回數據
+        Map<String, Object> response = new HashMap<>();
+        response.put("userAccount", user.getAccount());
+        response.put("userInfoName", userInfo.getName());
+        response.put("userInfoAddress", userInfo.getAddress());
+        response.put("userInfoPhone", userInfo.getPhone_number());
+        response.put("userInfoBirthday", userInfo.getBirthday());
+
+        return ResponseEntity.ok(response);
+    }
 
 }
