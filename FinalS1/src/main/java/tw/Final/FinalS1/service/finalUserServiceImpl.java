@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import tw.Final.FinalS1.model.RegisterRequest;
-
+import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.CartModel;
 import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.model.userInfoMedel;

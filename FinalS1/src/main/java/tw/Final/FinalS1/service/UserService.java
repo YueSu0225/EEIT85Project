@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import tw.Final.FinalS1.model.RegisterRequest;
+import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.UserModel;
 
 public interface UserService {

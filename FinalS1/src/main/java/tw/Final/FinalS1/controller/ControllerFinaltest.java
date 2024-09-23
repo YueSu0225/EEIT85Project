@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.*;
 import tw.Final.FinalS1.service.UserService;
 

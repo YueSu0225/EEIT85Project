@@ -20,8 +20,8 @@ public class ShoppingCartService {
 	@Autowired
 	private ProductVariantRepository productVariantRepository;
 	
-	public CartModel addTocart(Long userId, Long variantId, int quantity) {
-		CartModel cart = cartRepository.findByUserId(userId).orElse(new CartModel());
+	public CartModel addTocart(Long cartId, Long variantId, int quantity) {
+		CartModel cart = cartRepository.findById(cartId).orElse(null);
 		ProductVariant productVariant = productVariantRepository.findById(variantId)
 							.orElseThrow(() -> new RuntimeException("Product not found"));
 	
@@ -34,7 +34,7 @@ public class ShoppingCartService {
 			}
 		}
 	
-		if(itemEsists) {
+		if(!itemEsists) {
 			CartItemsModel newItem = new CartItemsModel();
 			newItem.setCart(cart);
 			newItem.setProductVariant(productVariant);
@@ -45,23 +45,23 @@ public class ShoppingCartService {
 		return cartRepository.save(cart);
 	}
 	
-	public void removeFromcart(Long userId, Long variantId, int quantity) {
-		CartModel cart = cartRepository.findByUserId(userId)
+	public void removeFromcart(Long cartId, Long variantId, int quantity) {
+		CartModel cart = cartRepository.findById(cartId)
 				.orElseThrow(() -> new RuntimeException("Cart not found"));
 		
 		cart.getCartItems().removeIf(item -> item.getProductVariant().getId().equals(variantId));
 		cartRepository.save(cart);
 	}
 	
-	public List<CartItemsModel> getCartItems(Long userId){
-		CartModel cart = cartRepository.findByUserId(userId)
+	public List<CartItemsModel> getCartItems(Long cartId){
+		CartModel cart = cartRepository.findById(cartId)
 				.orElseThrow(() -> new RuntimeException("Cart not found"));
 		
 		return cart.getCartItems();
 	}
 	
-	public BigDecimal getTotalPrice(Long userID) {
-		CartModel cart = cartRepository.findByUserId(userID)
+	public BigDecimal getTotalPrice(Long cartId) {
+		CartModel cart = cartRepository.findById(cartId)
 				.orElseThrow(() -> new RuntimeException("Cart not found"));
 		
 		return cart.getCartItems().stream()

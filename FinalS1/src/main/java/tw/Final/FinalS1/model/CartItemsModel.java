@@ -2,14 +2,19 @@ package tw.Final.FinalS1.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "cart_items")
 public class CartItemsModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +22,11 @@ public class CartItemsModel {
 	
 	@ManyToOne
 	@JoinColumn(name = "cart_id")
+	@JsonBackReference
 	private CartModel cart;
 	
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "product_variant_id")
 	private ProductVariant productVariant;
 	

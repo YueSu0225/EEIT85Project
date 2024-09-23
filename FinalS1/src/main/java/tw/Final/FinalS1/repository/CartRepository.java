@@ -8,5 +8,5 @@ import tw.Final.FinalS1.model.CartModel;
 
 @Repository
 public interface CartRepository extends JpaRepository<CartModel, Long> {
-		Optional<CartModel> findByUserId(Long userId);
+		
 }

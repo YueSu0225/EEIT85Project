@@ -1,4 +1,4 @@
-package tw.Final.FinalS1.model;
+package tw.Final.FinalS1.dto;
 
 public class RegisterRequest {
     private String account;

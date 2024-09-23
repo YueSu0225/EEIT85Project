@@ -3,6 +3,9 @@ package tw.Final.FinalS1.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,6 +27,7 @@ public class CartModel {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private UserModel user;
     
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
