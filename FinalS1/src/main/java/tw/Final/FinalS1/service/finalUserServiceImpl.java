@@ -218,7 +218,7 @@ public class finalUserServiceImpl implements UserService{
 
         // 構建返回數據
         Map<String, Object> response = new HashMap<>();
-        response.put("userAccount", user.getAccount());
+        response.put("userAccount", user.getEmail());
         response.put("userInfoName", userInfo.getName());
         response.put("userInfoAddress", userInfo.getAddress());
         response.put("userInfoPhone", userInfo.getPhone_number());

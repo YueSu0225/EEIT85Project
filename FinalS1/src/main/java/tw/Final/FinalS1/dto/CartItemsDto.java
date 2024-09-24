@@ -1,17 +1,17 @@
 package tw.Final.FinalS1.dto;
 
 public class CartItemsDto {
-	    private Long id;           // 购物车 ID
+	    private Long cartId;           // 购物车 ID
 	    private Long variantId;    // 产品变体 ID
 	    private int quantity;      // 数量
 
 	    // Getters 和 Setters
 	    public Long getId() {
-	        return id;
+	        return cartId;
 	    }
 
-	    public void setId(Long id) {
-	        this.id = id;
+	    public void setId(Long cartId) {
+	        this.cartId = cartId;
 	    }
 
 	    public Long getVariantId() {

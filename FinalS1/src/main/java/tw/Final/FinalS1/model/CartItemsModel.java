@@ -26,21 +26,12 @@ public class CartItemsModel {
 	private CartModel cart;
 	
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "product_variant_id")
 	private ProductVariant productVariant;
 	
 	private int quantity;
 	private BigDecimal price;
-	
-//	public CartItemsModel() {}
-//	
-//	public CartItemsModel(CartModel cart, ProductVariant productVariant, int quantity) {
-//		this.cart = cart;
-//		this.productVariant = productVariant;
-//		this.quantity = quantity;
-//		this.price = productVariant.getPrice();
-//	}
 	
 	
 	public long getId() {

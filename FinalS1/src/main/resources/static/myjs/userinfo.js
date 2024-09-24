@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function (){
 			//console.log(data); 顯示後端傳回的json物件
 
 
-		    document.getElementById('userAccount').innerHTML = data.userAccount; // 用戶帳號
+		    document.getElementById('userAccount').innerHTML = data.userEmail; // 用戶帳號
 		    document.getElementById('userInfoAddress').innerHTML = data.userInfoAddress;
 			document.getElementById('userInfoAddress2').innerHTML = data.userInfoAddress; // 用戶地址
 		    document.getElementById('userInfoBirthday').innerHTML = data.userInfoBirthday; // 用戶生日
