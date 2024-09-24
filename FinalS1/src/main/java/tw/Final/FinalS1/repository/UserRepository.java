@@ -9,8 +9,7 @@ import tw.Final.FinalS1.model.UserModel;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<UserModel, Integer> {
-	boolean existsByAccount(String account);
+public interface UserRepository extends JpaRepository<UserModel, Integer> {	
 
 	public List<UserModel> findByAccount(String account);
 	

@@ -46,8 +46,8 @@ public class ControllerFinaltest {
     
 
     @GetMapping("/googlelogin/success")
-    public void loginSuccess(@AuthenticationPrincipal OAuth2User oAuth2User, HttpServletResponse response) throws IOException {
-        finalUserService.googleUser(oAuth2User);
+    public void loginSuccess(@AuthenticationPrincipal OAuth2User oAuth2User, HttpServletRequest request,HttpServletResponse response) throws IOException {
+        finalUserService.googleUser(oAuth2User,request);
         response.sendRedirect("/Home.html"); // 使用重定向到主頁
     }
     
@@ -66,5 +66,10 @@ public class ControllerFinaltest {
     @GetMapping("/userinfo")
     public ResponseEntity<Map<String, Object>> userinfo(HttpSession session){
     	return finalUserService.userinfo(session);
+    }
+    
+    @PutMapping("/updateUserInfo")
+    public ResponseEntity<Map<String, Object>> updateUser(@RequestBody Map<String, String> userInfo, HttpSession session) {
+        return finalUserService.updateUserInfo(userInfo, session);
     }
 }

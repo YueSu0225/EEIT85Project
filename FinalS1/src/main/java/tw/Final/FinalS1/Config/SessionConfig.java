@@ -11,7 +11,7 @@ public class SessionConfig {
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainer() {
         return factory -> factory.addContextCustomizers(context -> {
-            context.setSessionTimeout(1); // session 時間 30 分清除
+            context.setSessionTimeout(30); // session 時間 30 分清除
         });
     }
 	

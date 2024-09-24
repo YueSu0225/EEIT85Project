@@ -142,12 +142,18 @@ public class finalUserServiceImpl implements UserService{
 
 
 	@Override
-	public void googleUser(OAuth2User oAuth2User) {
+	public void googleUser(OAuth2User oAuth2User , HttpServletRequest request) {
         String email = oAuth2User.getAttribute("email"); // 獲取 Google 信箱
         String name = oAuth2User.getAttribute("name");   // 獲取 Google 姓名
         String googleId = oAuth2User.getAttribute("sub"); // 獲取 Google ID
-	    List<UserModel> existGoogleId = userRepository.findByAccount(googleId);
+	    List<UserModel> existGoogleId = userRepository.findByGoogleId(googleId);
+	    String uuid = UUID.randomUUID().toString(); // 生成新的 UUID
+
 	    if (!existGoogleId.isEmpty()) {
+	        // 用戶已存在，更新其 UUID
+	        UserModel user = existGoogleId.get(0);
+	        user.setUuid(uuid); // 設定新的 UUID
+	        userRepository.save(user); // 保存更改
 	        System.out.println("User already exists: " );
 	       
 	    } else {
@@ -155,7 +161,7 @@ public class finalUserServiceImpl implements UserService{
 	        user.setAccount(null);
 	        user.setPassword(null);
 	        user.setEmail(email);
-	        user.setUuid(null);
+	        user.setUuid(uuid);// 設定新的 UUID
 	        user.setGoogleId(googleId); // 使用 Google 登錄
 	        userRepository.save(user);
 
@@ -184,6 +190,10 @@ public class finalUserServiceImpl implements UserService{
         System.out.println("User Google ID: " + googleId);
     
 	    }
+	 // 將新的 UUID 存儲到 Session 中
+	    HttpSession session = request.getSession(); // 獲取 HttpSession;
+	    session.setAttribute("userUUID", uuid);
+	    System.out.println("User UUID: " + uuid);
 	}
 
 
@@ -218,7 +228,7 @@ public class finalUserServiceImpl implements UserService{
 
         // 構建返回數據
         Map<String, Object> response = new HashMap<>();
-        response.put("userAccount", user.getEmail());
+        response.put("userEmail", user.getEmail());
         response.put("userInfoName", userInfo.getName());
         response.put("userInfoAddress", userInfo.getAddress());
         response.put("userInfoPhone", userInfo.getPhone_number());
@@ -226,5 +236,34 @@ public class finalUserServiceImpl implements UserService{
 
         return ResponseEntity.ok(response);
     }
+
+
+	@Override
+	public ResponseEntity<Map<String, Object>> updateUserInfo(Map<String, String> userInfo, HttpSession session) {
+		 String userUUID = (String) session.getAttribute("userUUID");
+	        
+	        // 根據 UUID 查詢用戶
+	        UserModel user = userRepository.findByUuid(userUUID);
+	        if (user == null) {
+	            return ResponseEntity.status(404).body(Map.of("message", "User not found"));
+	        }
+
+	        // 更新用戶信息
+	        userInfoMedel existingUserInfo = userInfoRepository.findByUserId(user.getId());
+	        if (existingUserInfo != null) {
+	            existingUserInfo.setName(userInfo.get("name"));
+	            existingUserInfo.setAddress(userInfo.get("address"));
+	            existingUserInfo.setPhone_number(Integer.parseInt(userInfo.get("phone")));
+	            existingUserInfo.setBirthday(userInfo.get("birthday"));
+
+	            userInfoRepository.save(existingUserInfo); // 保存更改
+	        }
+
+	        return ResponseEntity.ok(Map.of("success", true));
+	    }
+	
+
+
+
 
 }
