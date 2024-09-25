@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tw.Final.FinalS1.model.OrderModel;
+import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.repository.OrderRepository;
 
 @Service
@@ -16,14 +17,13 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public OrderModel createOrder(Long userId, BigDecimal totalPrice) {
+    public OrderModel createOrder(UserModel user, BigDecimal totalPrice) {
         OrderModel order = new OrderModel();
-        order.setOrderId(userId);  // 使用 order_id 存儲用戶ID
+        order.setUser(user);  // 設置 user 關聯
         order.setTotalPrice(totalPrice);
         order.setStatus("CREATED");
         order.setCreatedAt(LocalDateTime.now());
         order.setUpdatedAt(LocalDateTime.now());
-
         return orderRepository.save(order);
     }
 
@@ -33,7 +33,7 @@ public class OrderService {
     }
 
     public List<OrderModel> getOrdersByUserId(Long userId) {
-        return orderRepository.findByOrderId(userId);  // 根據 userId 查詢訂單
+        return orderRepository.findByUserId(userId);  // 根據 user_id 查詢訂單
     }
 
     public OrderModel updateOrderStatus(Long orderId, String status) {

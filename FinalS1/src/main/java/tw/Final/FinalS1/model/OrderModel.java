@@ -3,11 +3,15 @@ package tw.Final.FinalS1.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,27 +22,29 @@ public class OrderModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "order_id")
-    private Long orderId;  // 存放用戶ID
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)  // 使用 user_id 而不是 order_id
+    @JsonIgnore  // 直接忽略 user 序列化
+    private UserModel user;  // 存放用戶ID
 
-    @Column(name = "total_price")
+    @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     // 無參構造函數（JPA要求）
     public OrderModel() {}
 
     // 全參構造函數，根據需要選擇是否使用
-    public OrderModel(Long orderId, BigDecimal totalPrice, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.orderId = orderId;
+    public OrderModel(UserModel user, BigDecimal totalPrice, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.user = user;
         this.totalPrice = totalPrice;
         this.status = status;
         this.createdAt = createdAt;
@@ -55,12 +61,12 @@ public class OrderModel {
         this.id = id;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public UserModel getUser() {
+        return user;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setUser(UserModel user) {
+        this.user = user;
     }
 
     public BigDecimal getTotalPrice() {

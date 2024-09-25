@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tw.Final.FinalS1.dto.OrderRequest;
 import tw.Final.FinalS1.model.OrderModel;
+import tw.Final.FinalS1.model.UserModel; // 確保這個導入
 import tw.Final.FinalS1.service.OrderService;
 
 @RestController
@@ -27,7 +28,10 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderModel> createOrder(@RequestBody OrderRequest orderRequest) {
-        OrderModel order = orderService.createOrder(orderRequest.getUserId(), orderRequest.getTotalPrice());
+        // 根據 userId 創建訂單
+        UserModel user = new UserModel();
+        user.setId(orderRequest.getUserId().intValue());  // 將 Long 轉換為 int
+        OrderModel order = orderService.createOrder(user, orderRequest.getTotalPrice());
         return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 
