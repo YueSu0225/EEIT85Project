@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,29 +23,38 @@ import tw.Final.FinalS1.service.ShoppingCartService;
 import tw.Final.FinalS1.service.ShoppingCartServiceDto;
 
 @RestController
-@RequestMapping("/add")
+@RequestMapping("/cart")
 public class ShoppingCartController {
 	@Autowired
 	private ShoppingCartService cartService;
 	@Autowired
 	private ShoppingCartServiceDto shoppingCartServiceDto;
-//	@PostMapping("/add")
-//	public ResponseEntity<CartModel> addTocart(@RequestParam Long id,
-//											   @RequestParam Long variantId,				
-//											   @RequestParam int quantity){
-//			CartModel updateCart = cartService.addTocart(id, variantId, quantity);
-//			
-//			return ResponseEntity.ok(updateCart);
-//	}
+	
 	@PostMapping("/add")
 	public ResponseEntity<CartModel> addTocart(@RequestBody CartItemsDto cartRequest) {
-	    CartModel updateCart = shoppingCartServiceDto.addTocart(cartRequest);
-	    return ResponseEntity.ok(updateCart);
+		try {
+			 CartModel updateCart = shoppingCartServiceDto.addTocart(cartRequest);
+			    return ResponseEntity.ok(updateCart);
+		}catch(RuntimeException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
 	}
 	
-	@PutMapping("/remove")
-	public ResponseEntity<CartModel> removeFromcart(@RequestBody CartItemsDto cartRequest){
-		shoppingCartServiceDto.removeFromcart(cartRequest);
+	@PostMapping("/update")
+	public ResponseEntity<CartModel> updateCart(@RequestBody CartItemsDto cartRequest) {
+		try {
+			 CartModel updateCart = shoppingCartServiceDto.updateCart(cartRequest);
+			    return ResponseEntity.ok(updateCart);
+		}catch(RuntimeException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
+	
+	
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<CartModel> delegteCart(@PathVariable Long id, CartItemsDto cartRequest){
+		shoppingCartServiceDto.deleteCartItem(cartRequest);
 			return ResponseEntity.noContent().build();
 	}
 	

@@ -30,7 +30,7 @@ public class CartModel {
     @JsonBackReference
     private UserModel user;
     
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CartItemsModel> cartItems = new ArrayList<>();
 
 	public Long getId() {

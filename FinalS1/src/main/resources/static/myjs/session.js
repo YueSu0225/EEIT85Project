@@ -1,7 +1,6 @@
 
 document.getElementById('sessionCheck').addEventListener('click', function(event) {
 	event.preventDefault(); // 阻止默認連接行為
-	//function checkLogin(){
 	// 使用 fetch 檢查 session 是否有效
 	fetch('/final/checksession', {
 		method: 'GET',
