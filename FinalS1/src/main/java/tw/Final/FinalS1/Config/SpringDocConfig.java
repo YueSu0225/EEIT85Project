@@ -18,7 +18,7 @@ public class SpringDocConfig {
 		OpenAPI openApi = new OpenAPI();
 		Components components = new Components();
 		Info info = new Info();
-		info.title("w2w API 文件").version("V.2024092301").description("TEST^API");
+		info.title("w2w API 文件").version("V.2024092301").description("API");
 		
 		
 		openApi
