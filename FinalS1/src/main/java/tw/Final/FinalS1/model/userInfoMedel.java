@@ -22,7 +22,7 @@ public class userInfoMedel {
 	
     @OneToOne
     @JoinColumn(name = "user_id")
-    private finalUserModel user;
+    private UserModel user;
 
 
 	public int getId() {
@@ -77,12 +77,12 @@ public class userInfoMedel {
 	}
 
 
-	public finalUserModel getUser() {
+	public UserModel getUser() {
 		return user;
 	}
 
 
-	public void setUser(finalUserModel user) {
+	public void setUser(UserModel user) {
 		this.user = user;
 	}
     

@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @Configuration
 @EnableWebSecurity
 public class googleSecurity {
@@ -20,8 +19,6 @@ public class googleSecurity {
 	    .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/**") // 忽略 API 路徑下的所有請求的 CSRF 保護  使用postman tapi在解開
             )
-	    			
-	    
 	        .authorizeHttpRequests(authorize -> authorize
 	            .requestMatchers("/**").permitAll() // 允許訪問登陸和 OAuth2 相關的 URL
 	            .anyRequest().authenticated() // 其餘需要驗證
@@ -42,8 +39,8 @@ public class googleSecurity {
 
 	    private ClientRegistration googleClientRegistration() {
 	        return ClientRegistration.withRegistrationId("google")
-	            .clientId("GOOGLE_CLIENT_ID")
-	            .clientSecret("GOOGLE_CLIENT_SECRET")
+	            .clientId("ID")
+	            .clientSecret("金鑰匙")
 	            .scope("profile", "email")
 	            .authorizationUri("https://accounts.google.com/o/oauth2/auth")
 	            .tokenUri("https://oauth2.googleapis.com/token")

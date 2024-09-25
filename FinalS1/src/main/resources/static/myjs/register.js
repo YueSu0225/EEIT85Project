@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		    document.getElementById('phoneerrormesg').textContent = '請輸入有效的手機號碼，格式：09xxxxxxxx';
 		    return;
 		} else {
-		    document.getElementById('phoneerrormesg').textContent = ''; // 清除错误信息
+		    document.getElementById('phoneerrormesg').textContent = ''; // 清除錯誤信息
 		}
         // 發送數據到後端
         fetch('/final/register', {

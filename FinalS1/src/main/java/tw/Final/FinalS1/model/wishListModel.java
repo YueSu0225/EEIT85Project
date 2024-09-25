@@ -17,7 +17,7 @@ public class wishListModel {
     
     @OneToOne
     @JoinColumn(name = "user_id")
-    private finalUserModel user;
+    private UserModel user;
 
 	public int getId() {
 		return id;
@@ -27,11 +27,11 @@ public class wishListModel {
 		this.id = id;
 	}
 
-	public finalUserModel getUser() {
+	public UserModel getUser() {
 		return user;
 	}
 
-	public void setUser(finalUserModel user) {
+	public void setUser(UserModel user) {
 		this.user = user;
 	}
     

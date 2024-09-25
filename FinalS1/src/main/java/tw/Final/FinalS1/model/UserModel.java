@@ -1,5 +1,7 @@
 package tw.Final.FinalS1.model;
 
+
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,10 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Entity	
 @Table(name = "user")
-public class finalUserModel {
+public class UserModel {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +28,25 @@ public class finalUserModel {
     private String uuid;
     
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private cartModel cart;
+    private CartModel cart;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private wishListModel wishList;
+    
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private userInfoMedel userInfoMedel;
 
     
     
 
+
+	public userInfoMedel getUserInfoMedel() {
+		return userInfoMedel;
+	}
+
+	public void setUserInfoMedel(userInfoMedel userInfoMedel) {
+		this.userInfoMedel = userInfoMedel;
+	}
 
 	public String getUuid() {
 		return uuid;
@@ -82,11 +96,11 @@ public class finalUserModel {
 		this.googleId = googleId;
 	}
 
-	public cartModel getCart() {
+	public CartModel getCart() {
 		return cart;
 	}
 
-	public void setCart(cartModel cart) {
+	public void setCart(CartModel cart) {
 		this.cart = cart;
 	}
 

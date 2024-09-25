@@ -54,11 +54,11 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 alert('登入成功');
+				console.log(data);
                 window.location.href = '/Home.html'; 
             } else {
 				errorPasswordMsg.textContent = '密碼錯誤';
-                //alert('密碼錯誤'); // 顯示密碼錯誤
-				//window.location.href = '/SignIn.html'; 
+
             }
         })
         .catch(error => {

@@ -7,3 +7,4 @@
 
     // 設置預設值為今天的日期
     document.getElementById('birthday').value = `${yyyy}-${mm}-${dd}`;
+

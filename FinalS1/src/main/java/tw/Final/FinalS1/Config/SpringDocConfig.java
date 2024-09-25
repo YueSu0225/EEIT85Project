@@ -1,5 +1,6 @@
 package tw.Final.FinalS1.Config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +18,7 @@ public class SpringDocConfig {
 		OpenAPI openApi = new OpenAPI();
 		Components components = new Components();
 		Info info = new Info();
-		info.title("w2w API 文件").version("V.2024092301").description("very good");
+		info.title("w2w API 文件").version("V.2024092301").description("API");
 		
 		
 		openApi
