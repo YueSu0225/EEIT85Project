@@ -36,11 +36,11 @@ public class ProductVariant {
 
     @ManyToOne
     @JoinColumn(name = "size_id", nullable = false)
-   @JsonManagedReference(value = "size-productVariants")
+    @JsonManagedReference(value = "size-productVariants")
     private Size size;
 
-    @Column(name = "price", nullable = false, precision = 10, scale = 0)
- 	private BigDecimal  price;
+    @Column(name = "price" )
+ 	private int  price;
 
     @Column(name = "stock", nullable = false)
     private int stock;
@@ -48,6 +48,16 @@ public class ProductVariant {
     @Lob
     @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
+    
+    @Lob
+    @Column(name = "image2", columnDefinition = "LONGTEXT")
+    private String image2;
+
+    
+    @Lob
+    @Column(name = "image3", columnDefinition = "LONGTEXT")
+    private String image3;
+
 
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
@@ -87,11 +97,11 @@ public class ProductVariant {
 		this.size = size;
 	}
 
-	public BigDecimal getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(BigDecimal price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 
@@ -105,6 +115,22 @@ public class ProductVariant {
 
 	public String getImage() {
 		return image;
+	}
+
+	public String getImage2() {
+		return image2;
+	}
+
+	public void setImage2(String image2) {
+		this.image2 = image2;
+	}
+
+	public String getImage3() {
+		return image3;
+	}
+
+	public void setImage3(String image3) {
+		this.image3 = image3;
 	}
 
 	public void setImage(String image) {

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品上架系統</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .image-preview img {
+            max-width: 150px;
+            max-height: 150px;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<form th:action="@{/products/add}" method="post" id="product-form" enctype="multipart/form-data">
+    <!-- 商品名稱 -->
+    <div class="form-group">
+        <label for="name">商品名稱:</label>
+        <input type="text" class="form-control" id="name" name="name" th:value="${product.name}" required>
+    </div>
+
+    <!-- 類別 -->
+    <div class="form-group">
+        <label for="category">類別:</label>
+        <select class="form-control" id="category" name="category" th:field="*{category}">
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">類別選擇</option>
+        </select>
+    </div>
+
+    <!-- 版型 -->
+    <div class="form-group">
+        <label for="type">版型:</label>
+        <select class="form-control" id="type" name="type" th:field="*{type}">
+            <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}">版型選擇</option>
+        </select>
+    </div>
+
+    <!-- 尺寸 -->
+    <div class="form-group">
+        <label for="size">尺寸:</label>
+        <select class="form-control" id="size" name="size" th:field="*{size}">
+            <option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.name}">尺寸選擇</option>
+        </select>
+    </div>
+
+    <!-- 顏色 -->
+    <div class="form-group">
+        <label for="color">顏色:</label>
+        <div class="input-group">
+            <select class="form-control" id="color" name="color" th:field="*{color}">
+                <option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.name}">顏色選擇</option>
+            </select>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addColorModal">
+                    新增顏色
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 價格 -->
+    <div class="form-group">
+        <label for="price">價格:</label>
+        <input type="number" class="form-control" id="price" name="price" th:value="${product.price}" required>
+    </div>
+
+    <!-- 庫存 -->
+    <div class="form-group">
+        <label for="stock">庫存:</label>
+        <input type="number" class="form-control" id="stock" name="stock" th:value="${product.stock}" required>
+    </div>
+
+    <!-- 介紹 -->
+    <div class="form-group">
+        <label for="description">介紹:</label>
+        <textarea class="form-control" id="description" name="description" rows="3" th:value="${product.description}" required></textarea>
+    </div>
+
+    <!-- 上傳圖片 -->
+    <div class="form-group">
+        <label for="image1">主商品圖:</label>
+        <input type="file" class="form-control-file" id="image1" name="image1">
+    </div>
+
+    <div class="form-group">
+        <label for="image2">商品圖2:</label>
+        <input type="file" class="form-control-file" id="image2" name="image2">
+    </div>
+
+    <div class="form-group">
+        <label for="image3">商品圖3:</label>
+        <input type="file" class="form-control-file" id="image3" name="image3">
+    </div>
+
+    <!-- 提交按鈕 -->
+    <button type="submit" class="btn btn-primary btn-block">上架商品</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/myjs/product_update.js"></script>
+
+</body>
+</html>
+

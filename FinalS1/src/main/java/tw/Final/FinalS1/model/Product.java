@@ -45,8 +45,8 @@ public class Product {
 	 	//@JsonManagedReference(value = "type-products")
 	 	private Type type;
 	 	
-	 	@Column(name = "price", nullable = false, precision = 10, scale = 0)
-	 	private BigDecimal  price;
+	 	@Column(name = "price")
+	 	private int  price;
 	 	
 	 	@Lob
 	 	@Column(name = "image", columnDefinition = "LONGTEXT")
@@ -102,11 +102,11 @@ public class Product {
 			this.type = type;
 		}
 
-		public BigDecimal getPrice() {
+		public int getPrice() {
 			return price;
 		}
 
-		public void setPrice(BigDecimal price) {
+		public void setPrice(int price) {
 			this.price = price;
 		}
 

@@ -1,10 +1,12 @@
 package tw.Final.FinalS1.controller;
 
-import java.math.BigDecimal;
+
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +27,7 @@ import tw.Final.FinalS1.service.ProductVariantService;
 import tw.Final.FinalS1.service.SizeService;
 
 @RestController
-@RequestMapping("/api/product-variants")
+@RequestMapping("/product-variants")
 public class ProductVariantController {
 	
     @Autowired
@@ -56,35 +58,59 @@ public class ProductVariantController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ProductVariant> addproductVariant(@RequestBody Map<String,Object> requestData ){
-    	
-    	Long productId  = Long.valueOf(requestData.get("product_id").toString());
-    	Long colorId = Long.valueOf(requestData.get("color_id").toString());
-    	Long sizeId = Long.valueOf(requestData.get("size_id").toString());
-	    BigDecimal price = new BigDecimal(requestData.get("price").toString()); 
-	    int stock = Integer.valueOf(requestData.get("stock").toString());
-	    
-	    Product product = productService.getProductById(productId);
-	    Color color = colorService.getColorById(colorId);
-	    Size size = sizeService.getSizeById(sizeId);
-	    
-	    if (product == null || color == null || size == null) {
-	        return ResponseEntity.badRequest().body(null);
-	    }
-	    
-	    ProductVariant newVariant = new ProductVariant();
-	    newVariant.setProduct(product);
-	    newVariant.setColor(color);
-	    newVariant.setSize(size);
-	    newVariant.setPrice(price);
-	    newVariant.setStock(stock);
-	    
-	    ProductVariant savedVariant = productVariantService.addProductVariant(newVariant);
+    public ResponseEntity<ProductVariant> addProductVariant(@RequestBody Map<String, Object> requestData) {
+        try {
+           
+            System.out.println("變體資料：" + requestData);
 
-	    return ResponseEntity.ok(savedVariant);
-    	
+            Long productId = requestData.get("product_id") != null ? Long.valueOf(requestData.get("product_id").toString()) : null;
+            Long colorId = requestData.get("color") != null ? Long.valueOf(requestData.get("color").toString()) : null;
+            Long sizeId = requestData.get("size") != null ? Long.valueOf(requestData.get("size").toString()) : null;
+            int price = requestData.get("price") != null ? Integer.parseInt(requestData.get("price").toString()) : 0;
+            int stock = requestData.get("stock") != null ? Integer.parseInt(requestData.get("stock").toString()) : 0;
+            String image1Base64 = (String) requestData.get("image1");
+            String image2Base64 = (String) requestData.get("image2");
+            String image3Base64 = (String) requestData.get("image3");
+           
+
+            
+           
+
+            
+            if (image1Base64 != null && image1Base64.startsWith("data:image")) {
+                image1Base64 = image1Base64.substring(image1Base64.indexOf(",") + 1);
+            }
+            if (image2Base64 != null && image2Base64.startsWith("data:image")) {
+                image2Base64 = image2Base64.substring(image2Base64.indexOf(",") + 1);
+            }
+            if (image3Base64 != null && image3Base64.startsWith("data:image")) {
+                image3Base64 = image3Base64.substring(image3Base64.indexOf(",") + 1);
+            }
+
+            
+            Product product = productService.getProductById(productId);
+            
+
+            // 創建新的 ProductVariant
+            ProductVariant variant = new ProductVariant();
+            variant.setProduct(product);
+            variant.setColor(colorService.getColorById(colorId));
+            variant.setSize(sizeService.getSizeById(sizeId));
+            variant.setPrice(price);
+            variant.setStock(stock);
+            variant.setImage(image1Base64);
+            variant.setImage2(image2Base64);
+            variant.setImage3(image3Base64);
+
+            
+            ProductVariant newVariant = productVariantService.addProductVariant(variant);
+            return ResponseEntity.ok(newVariant);
+        } catch (Exception e) {
+            System.out.println("錯誤: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
-    
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ProductVariant> updateProductVariant(@PathVariable Long id, @RequestBody Map<String, Object> variantDetails) {
@@ -93,11 +119,13 @@ public class ProductVariantController {
             return ResponseEntity.notFound().build();
         }
         
-        Long productId = Long.valueOf(variantDetails.get("product_id").toString());
-        Long colorId = Long.valueOf(variantDetails.get("color_id").toString());
-        Long sizeId = Long.valueOf(variantDetails.get("size_id").toString());
-	    BigDecimal price = new BigDecimal(variantDetails.get("price").toString()); 
-        int stock = Integer.valueOf(variantDetails.get("stock").toString());
+        Long productId  = Long.valueOf(variantDetails.get("product_id").toString());
+    	Long colorId = Long.valueOf(variantDetails.get("color_id").toString());
+    	Long sizeId = Long.valueOf(variantDetails.get("size_id").toString());
+	    int price = Integer.parseInt(variantDetails.get("price").toString());
+	    int stock = Integer.parseInt(variantDetails.get("stock").toString());
+	    String imageBase64 =(String) variantDetails.get("image");
+
         
         Product product = productService.getProductById(productId);
         Color color = colorService.getColorById(colorId);
@@ -112,19 +140,27 @@ public class ProductVariantController {
         existingVariant.setSize(size);
         existingVariant.setPrice(price);  
         existingVariant.setStock(stock);
+        existingVariant.setImage(imageBase64);
+	    existingVariant.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-        
-        ProductVariant updatedVariant = productVariantService.updateProductVariant(id, existingVariant);
-
-        return ResponseEntity.ok(updatedVariant);
-        
-        
+	    ProductVariant updatedVariant = productVariantService.updateProductVariant(id, existingVariant);
+	    
+	    return ResponseEntity.ok(updatedVariant);
     }
-
+    
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProductVariant(@PathVariable Long id) {
-        productVariantService.deleteProductVariant(id);
-        return ResponseEntity.noContent().build();
+    	productVariantService.deleteProductVariant(id);
+    	return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/product/{productId}")
+    public List<ProductVariant> getVariantsByProductId(@PathVariable Long productId) {
+    	return productVariantService.getVariantsByProductId(productId);
     }
 }
+
+        
+        
+        
 
