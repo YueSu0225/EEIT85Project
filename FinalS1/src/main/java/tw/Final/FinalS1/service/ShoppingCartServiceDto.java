@@ -146,16 +146,13 @@ public class ShoppingCartServiceDto {
 		return cart.getCartItems();
 	}
     
-    public BigDecimal getTotalPrice(CartItemsDto cartRequest) {
-    	 Long cartId = cartRequest.getId();
-         Long variantId = cartRequest.getVariantId();
-         int quantity = cartRequest.getQuantity();
+    public BigDecimal getTotalPrice(Long userId) {
     	
-		CartModel cart = cartRepository.findById(cartId)
+	CartModel cart = cartRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("Cart not found"));
-		
-		return cart.getCartItems().stream()
-				.map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+				
+	return cart.getCartItems().stream()
+			.map(CartItemsModel::getPrice)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
 	} 
 }

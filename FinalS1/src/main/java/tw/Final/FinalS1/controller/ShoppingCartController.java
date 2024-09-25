@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpSession;
 import tw.Final.FinalS1.dto.CartItemsDto;
 import tw.Final.FinalS1.model.CartItemsModel;
 import tw.Final.FinalS1.model.CartModel;
+import tw.Final.FinalS1.model.UserModel;
+import tw.Final.FinalS1.repository.UserRepository;
 import tw.Final.FinalS1.service.ShoppingCartService;
 import tw.Final.FinalS1.service.ShoppingCartServiceDto;
 
@@ -29,9 +32,19 @@ public class ShoppingCartController {
 	private ShoppingCartService cartService;
 	@Autowired
 	private ShoppingCartServiceDto shoppingCartServiceDto;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private HttpSession session;
 	
 	@PostMapping("/add")
 	public ResponseEntity<CartModel> addTocart(@RequestBody CartItemsDto cartRequest) {
+//		 String userUUID = (String) session.getAttribute("userUUID");
+//		 UserModel user = userRepository.findByUuid(userUUID);
+//		 if(userUUID == null) {
+//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//		 }
+		
 		try {
 			 CartModel updateCart = shoppingCartServiceDto.addTocart(cartRequest);
 			    return ResponseEntity.ok(updateCart);
@@ -42,6 +55,11 @@ public class ShoppingCartController {
 	
 	@PostMapping("/update")
 	public ResponseEntity<CartModel> updateCart(@RequestBody CartItemsDto cartRequest) {
+		 String userUUID = (String) session.getAttribute("userUUID");
+		 if(userUUID == null) {
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		 }
+		
 		try {
 			 CartModel updateCart = shoppingCartServiceDto.updateCart(cartRequest);
 			    return ResponseEntity.ok(updateCart);
@@ -50,25 +68,41 @@ public class ShoppingCartController {
 		}
 	}
 	
-	
-	
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<CartModel> delegteCart(@PathVariable Long id, CartItemsDto cartRequest){
-		shoppingCartServiceDto.deleteCartItem(cartRequest);
-			return ResponseEntity.noContent().build();
+	@DeleteMapping("/delete")
+	public ResponseEntity<String> delegteCartItem(@RequestBody CartItemsDto cartRequest){
+		 String userUUID = (String) session.getAttribute("userUUID");
+		 if(userUUID == null) {
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		 }
+		
+		try {			
+			shoppingCartServiceDto.deleteCartItem(cartRequest);
+			return ResponseEntity.ok("Item successfully deleted");
+		}catch(RuntimeException e){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
+	
 	@GetMapping("/items")
-	public ResponseEntity<List<CartItemsModel>> getCartItems(@RequestParam Long userId,
-													@RequestParam Long variantId,				
-													@RequestParam int quantity){
-			List<CartItemsModel> cartItems = cartService.getCartItems(userId);
+	public ResponseEntity<List<CartItemsModel>> getCartItems(@PathVariable Long cartId){
+		 String userUUID = (String) session.getAttribute("userUUID");
+		 if(userUUID == null) {
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		 }
+		
+		List<CartItemsModel> cartItems = cartService.getCartItems(cartId);
 			return ResponseEntity.ok(cartItems);
 }
 	
-	@GetMapping("/total")
-	public ResponseEntity<BigDecimal> getTotalPrice(@RequestParam Long userId){		
-			BigDecimal totalPrice = cartService.getTotalPrice(userId);
+	@GetMapping("/total/{id}")
+	public ResponseEntity<BigDecimal> getTotalPrice(@PathVariable Long id){		
+//		 String userUUID = (String) session.getAttribute("userUUID");
+//		 if(userUUID == null) {
+//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//		 }
+		
+			BigDecimal totalPrice = shoppingCartServiceDto.getTotalPrice(id);
 			return ResponseEntity.ok(totalPrice);
 	}
 	
