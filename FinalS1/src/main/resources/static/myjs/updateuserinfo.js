@@ -27,16 +27,20 @@ function updateMember(event) {
 	    birthday: document.getElementById('updateBirthday').value
 	};
 	const phoneError = document.getElementById('phoneerrormesg');
+	const nameError = document.getElementById('nameerrormesg');
 	const errorMessageSpan = document.getElementById('streeterrormesg');
 	phoneError.textContent = '';
+	nameError.textContent = ''; 
 	errorMessageSpan.textContent = '';
 	
-	// 驗證手機號碼
-	    
-	    
-	    
+	// 驗證姓名
+	if (userInfo.name.length < 3) { 
+	    nameError.textContent = '姓名至少三個字！';
+	    return; // 結束函數，不提交
+	}
+    
 	// 驗證地址
-	   const addressPattern = /^(?=.*?[縣市])(?=.*?[區鄉鎮])(?=.*?[路街巷弄]\d+號).+$/;
+		const addressPattern = /^(?:.+?縣|.+?市|.+?區|.+?鄉|.+?鎮).+?[路街巷弄]\d+號$/;
 	if (!addressPattern.test(userInfo.address)) {
 	    errorMessageSpan.textContent = '請輸入有效的地址，例如：台北市中正區中山路1號';
 	    return; // 結束函數，不提交
@@ -88,4 +92,7 @@ document.getElementById('updatePhone').addEventListener('input', function() {
 
 document.getElementById('updateAddr').addEventListener('input', function() {
     document.getElementById('streeterrormesg').textContent = '';
+});
+document.getElementById('updateName').addEventListener('input', function() {
+    document.getElementById('nameerrormesg').textContent = ''; 
 });

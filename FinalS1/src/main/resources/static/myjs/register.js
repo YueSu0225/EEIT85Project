@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const account = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const checkPassword = document.getElementById('checkPassword').value;
-        const name = document.querySelector('input[placeholder="姓名"]').value;
+        const name = document.getElementById('name').value;
         const phone = document.querySelector('input[placeholder="請輸入手機號碼"]').value;
         const street = document.getElementById('street').value;
         const birthday = document.querySelector('input[type="date"]').value;
@@ -25,6 +25,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('checkPasswordError').textContent = '密碼與確認密碼不一致';
             return;
         }
+		
+		if (name.length < 3) {
+			document.getElementById('nameErrormesg').textContent = '姓名至少三個字'; // 格式不對,顯示錯誤信息
+			return;
+		} else {
+		   document.getElementById('nameErrormesg').textContent = ''; // 長度符合,清空錯誤信息
+		}
+		
 		
 		// 地址格式驗證
 		if (!addressPattern.test(street)) {

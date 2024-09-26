@@ -157,8 +157,6 @@
 						</div>
 						<div class="ftco-animate member-ov-card">
 							<h6 class="mov-" id="userInfoName">LEO</h6>
-							<!--  <h6 class="mov-">lucky@gmail.com</h6>
-                            <h6 class="mov-">********</h6>-->
 						</div>
 
 						<div class="ftco-animate"></div>
@@ -175,8 +173,6 @@
 						</div>
 						<div class="ftco-animate member-ov-card">
 							<h6 class="mov-" id="userInfoAddress">台中市</h6>
-							<!--    <h6 class="mov-">南屯區</h6>
-                        <h6 class="mov-">公益路二段51號18樓</h6>-->
 						</div>
 					</div>
 				</div>
@@ -216,7 +212,6 @@
 								<h6>姓名</h6>
 							</div>
 							<div class="col-lg-3 ftco-animate">
-								<!--   <h6><a href="" style="color: gray;">修改</a></h6>-->
 							</div>
 						</div>
 					</div>
@@ -242,7 +237,6 @@
 								<h6>手機</h6>
 							</div>
 							<div class="col-lg-3 ftco-animate">
-								<!--   <h6><a href="" style="color: gray;">修改</a></h6> -->
 							</div>
 						</div>
 						<div class="ftco-animate member-ov-card">
@@ -255,8 +249,7 @@
 								<h6>生日</h6>
 							</div>
 							<div class="col-lg-3 ftco-animate">
-								<!--    <h6><a href="" style="color: gray;">修改</a></h6>-->
-							</div>
+						</div>
 						</div>
 						<div class="ftco-animate member-ov-card">
 							<h6 class="mov-" id="userInfoBirthday">2024-09-09</h6>
@@ -271,104 +264,81 @@
 
 
 				<!-- 模態框 -->
-<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="updateModalLabel">修改用戶資料</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="updateMemberForm">
-                        <div class="form-group">
-                            <label for="updateEmail">信箱:</label>
-                            <input type="text" class="form-control" id="updateEmail" readonly> <!-- 設置為 readonly -->
-                        </div>
-                        <div class="form-group">
-                            <label for="updateName">姓名:</label>
-                            <input type="text" class="form-control" id="updateName">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateAddr">地址:</label>
-                            <input type="text" class="form-control" id="updateAddr">
-                            <span id="streeterrormesg" style="color: red;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="updatePhone">電話:</label>
-                            <input type="text" class="form-control" id="updatePhone">
-                            <span id="phoneerrormesg" style="color: red;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="updateBirthday">生日:</label>
-                            <input type="date" class="form-control" id="updateBirthday">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" onclick="updateMember(event)">提交</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-	<!-- <div id="updateForm" style="display: none;">
-	    <h2>修改用戶資料</h2>
-	    <form id="updateMemberForm">
-	        <label for="updateEmail">信箱:</label>
-	        <input type="text" id="updateEmail">
-	        <label for="updateName">姓名</label>
-	        <input type="text" id="updateName">	        
-	        <label for="updateAddr">地址:</label>
-	        <input type="text" id="updateAddr">
-	        <label for="updatePhone">電話:</label>
-	        <input type="text" id="updatePhone">
-	        <label for="updateBirthday">生日:</label>
-	        <input type="text" id="updateBirthday">
-	        <div class="form-buttons">
-	            <button type="button" onclick="updateMember()">提交</button>
-	            <button type="button" onclick="hideUpdateForm()">取消</button>
-	        </div>
-	    </form>
-	</div> -->
-
-
-
-				<!-- Asaddr -->
-				<div id="As-addr" class="col-lg-9 ftco-animate as-block">
-					<div class="ftco-animate member-ov">
-						<div class="ftco-animate">
-							<div class="row ftco-animate">
-								<div class="col-lg-9 ftco-animate">
-									<button class="btn btn-secondary">
-										<strong>修改密碼</strong>
-									</button>
-								</div>
-
+				<div class="modal fade" id="updateModal" tabindex="-1" role="dialog"
+					aria-labelledby="updateModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="updateModalLabel">修改用戶資料</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
 							</div>
-
-						</div>
-					</div>
-					<br />
-					<div class="ftco-animate member-ov">
-						<div class="ftco-animate">
-							<div class="row ftco-animate">
-								<div class="col-lg-9 ftco-animate">
-									<button class="btn btn-danger">
-										<strong>刪除帳號</strong>
-									</button>
-								</div>
-
+							<div class="modal-body">
+								<form id="updateMemberForm">
+									<div class="form-group">
+										<label for="updateEmail">信箱:</label> <input type="text"
+											class="form-control" id="updateEmail" readonly>
+										<!-- 設置為 readonly -->
+									</div>
+									<div class="form-group">
+										<label for="updateName">姓名:</label> <input type="text"
+											class="form-control" id="updateName"> <span
+											id="nameerrormesg" style="color: red;"></span>
+									</div>
+									<div class="form-group">
+										<label for="updateAddr">地址:</label> <input type="text"
+											class="form-control" id="updateAddr"> <span
+											id="streeterrormesg" style="color: red;"></span>
+									</div>
+									<div class="form-group">
+										<label for="updatePhone">電話:</label> <input type="text"
+											class="form-control" id="updatePhone"> <span
+											id="phoneerrormesg" style="color: red;"></span>
+									</div>
+									<div class="form-group">
+										<label for="updateBirthday">生日:</label> <input type="date"
+											class="form-control" id="updateBirthday">
+									</div>
+								</form>
 							</div>
-
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									data-dismiss="modal">取消</button>
+								<button type="button" class="btn btn-primary"
+									onclick="updateMember(event)">提交</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</section>
+			
+			
+			 <!-- Asaddr -->
+            <div id="As-addr" class="col-lg-9 ftco-animate as-block">
+                <div class="ftco-animate member-ov">
+                    <div class="row ftco-animate">
+                        <div class="col-lg-9 ftco-animate">
+                            <button class="btn btn-secondary">
+                                <strong>修改密碼</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="ftco-animate member-ov">
+                    <div class="row ftco-animate">
+                        <div class="col-lg-9 ftco-animate">
+                            <button class="btn btn-danger">
+                                <strong>刪除帳號</strong>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+</section>
 
 
 
