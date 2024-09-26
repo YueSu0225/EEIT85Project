@@ -31,7 +31,7 @@ public class ShoppingCartServiceDto {
         Long cartId = cartRequest.getId();
         Long variantId = cartRequest.getVariantId();
         int quantity = cartRequest.getQuantity();
-
+        
         // 确保购物车存在
         CartModel cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
@@ -46,7 +46,10 @@ public class ShoppingCartServiceDto {
             if (Objects.equals(item.getProductVariant().getId(), variantId)){
                 item.setQuantity(item.getQuantity() + quantity);
                 // 更新價格
-                item.setPrice(productVariant.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                int price = productVariant.getPrice() * item.getQuantity();
+                item.setPrice(price);
+                // 以下為bigDecimal 計算有小數點的方法
+//                 item.setPrice(productVariant.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
                 itemExists = true;
                 break;
             }
@@ -55,10 +58,12 @@ public class ShoppingCartServiceDto {
         // 如果商品不存在，则添加新商品
         if (!itemExists) {
             CartItemsModel newItem = new CartItemsModel();
+            int price = productVariant.getPrice() * quantity;
             newItem.setCart(cart);
             newItem.setProductVariant(productVariant);
             newItem.setQuantity(quantity);
-            newItem.setPrice(productVariant.getPrice().multiply(BigDecimal.valueOf(newItem.getQuantity())));
+            newItem.setPrice(price);
+//            newItem.setPrice(productVariant.getPrice().multiply(BigDecimal.valueOf(newItem.getQuantity())));
             cart.getCartItems().add(newItem);
         }
 
@@ -70,7 +75,7 @@ public class ShoppingCartServiceDto {
     	Long cartId = cartRequest.getId();
         Long variantId = cartRequest.getVariantId();
         int newquantity = cartRequest.getQuantity();
-
+        
         // 确保购物车存在
         CartModel cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
@@ -83,7 +88,9 @@ public class ShoppingCartServiceDto {
         // 更新或移除
         if(newquantity > 0) {
         	itemsToUpdate.setQuantity(newquantity);
-        	itemsToUpdate.setPrice(itemsToUpdate.getProductVariant().getPrice().multiply(BigDecimal.valueOf(newquantity)));
+        	int newprice = itemsToUpdate.getProductVariant().getPrice() * newquantity;
+        	itemsToUpdate.setPrice(newprice);
+//        	itemsToUpdate.setPrice(itemsToUpdate.getProductVariant().getPrice().multiply(BigDecimal.valueOf(newquantity)));
         }else {
         	cart.getCartItems().remove(itemsToUpdate);
         }
@@ -146,13 +153,17 @@ public class ShoppingCartServiceDto {
 		return cart.getCartItems();
 	}
     
-    public BigDecimal getTotalPrice(Long userId) {
+    public int getTotalPrice(Long userId) {
     	
 	CartModel cart = cartRepository.findById(userId)
 				.orElseThrow(() -> new RuntimeException("Cart not found"));
 				
-	return cart.getCartItems().stream()
-			.map(CartItemsModel::getPrice)
-			.reduce(BigDecimal.ZERO, BigDecimal::add);
-	} 
+//	return cart.getCartItems().stream()
+//			.map(CartItemsModel::getPrice)
+//			.reduce(BigDecimal.ZERO, BigDecimal::add);
+	
+	 return cart.getCartItems().stream()
+	            .mapToInt(CartItemsModel::getPrice)  // 假設 getPrice 返回的是 int 型別
+	            .sum();  // 直接對整數進行加總
+    }
 }

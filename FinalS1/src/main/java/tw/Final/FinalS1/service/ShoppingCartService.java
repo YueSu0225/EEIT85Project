@@ -60,13 +60,16 @@ public class ShoppingCartService {
 		return cart.getCartItems();
 	}
 	
-	public BigDecimal getTotalPrice(Long cartId) {
+	public int getTotalPrice(Long cartId) {
 		CartModel cart = cartRepository.findById(cartId)
 				.orElseThrow(() -> new RuntimeException("Cart not found"));
 		
+//		return cart.getCartItems().stream()
+//				.map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+//				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		return cart.getCartItems().stream()
-				.map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
+	            .mapToInt(CartItemsModel::getPrice)  // 假設 getPrice 返回的是 int 型別
+	            .sum();  // 直接對整數進行加總
 	
 	}
 	

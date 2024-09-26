@@ -31,7 +31,7 @@ public class CartItemsModel {
 	private ProductVariant productVariant;
 	
 	private int quantity;
-	private BigDecimal price;
+	private int price;
 	
 	
 	public long getId() {
@@ -64,10 +64,10 @@ public class CartItemsModel {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public BigDecimal getPrice() {
+	public int getPrice() {
 		return price;
 	}
-	public void setPrice(BigDecimal price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 	

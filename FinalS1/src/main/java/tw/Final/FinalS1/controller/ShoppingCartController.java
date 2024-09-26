@@ -55,10 +55,10 @@ public class ShoppingCartController {
 	
 	@PostMapping("/update")
 	public ResponseEntity<CartModel> updateCart(@RequestBody CartItemsDto cartRequest) {
-		 String userUUID = (String) session.getAttribute("userUUID");
-		 if(userUUID == null) {
-			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		 }
+//		 String userUUID = (String) session.getAttribute("userUUID");
+//		 if(userUUID == null) {
+//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//		 }
 		
 		try {
 			 CartModel updateCart = shoppingCartServiceDto.updateCart(cartRequest);
@@ -70,10 +70,10 @@ public class ShoppingCartController {
 	
 	@DeleteMapping("/delete")
 	public ResponseEntity<String> delegteCartItem(@RequestBody CartItemsDto cartRequest){
-		 String userUUID = (String) session.getAttribute("userUUID");
-		 if(userUUID == null) {
-			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		 }
+//		 String userUUID = (String) session.getAttribute("userUUID");
+//		 if(userUUID == null) {
+//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//		 }
 		
 		try {			
 			shoppingCartServiceDto.deleteCartItem(cartRequest);
@@ -84,25 +84,25 @@ public class ShoppingCartController {
 	}
 	
 	
-	@GetMapping("/items")
-	public ResponseEntity<List<CartItemsModel>> getCartItems(@PathVariable Long cartId){
-		 String userUUID = (String) session.getAttribute("userUUID");
-		 if(userUUID == null) {
-			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		 }
-		
-		List<CartItemsModel> cartItems = cartService.getCartItems(cartId);
-			return ResponseEntity.ok(cartItems);
-}
-	
-	@GetMapping("/total/{id}")
-	public ResponseEntity<BigDecimal> getTotalPrice(@PathVariable Long id){		
+	@GetMapping("/items/{id}")
+	public ResponseEntity<List<CartItemsModel>> getCartItems(@PathVariable Long id){
 //		 String userUUID = (String) session.getAttribute("userUUID");
 //		 if(userUUID == null) {
 //			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 //		 }
 		
-			BigDecimal totalPrice = shoppingCartServiceDto.getTotalPrice(id);
+		List<CartItemsModel> cartItems = cartService.getCartItems(id);
+			return ResponseEntity.ok(cartItems);
+}
+	
+	@GetMapping("/total/{id}")
+	public ResponseEntity<Integer> getTotalPrice(@PathVariable Long id){		
+//		 String userUUID = (String) session.getAttribute("userUUID");
+//		 if(userUUID == null) {
+//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//		 }
+		
+			int totalPrice = shoppingCartServiceDto.getTotalPrice(id);
 			return ResponseEntity.ok(totalPrice);
 	}
 	
