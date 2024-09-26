@@ -17,16 +17,24 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public OrderModel createOrder(UserModel user, BigDecimal totalPrice) {
+    public OrderModel createOrder(Long userId, BigDecimal totalPrice) {
         OrderModel order = new OrderModel();
-        order.setUser(user);  // 設置 user 關聯
+        order.setUserId(userId);  // 設置 user 關聯
+//        order.setUser(user);
         order.setTotalPrice(totalPrice);
-        order.setStatus("CREATED");
+        order.setStatus("已付款");
+        // 為 ecpayNumber 設置一個值，如果是從第三方系統生成，可以在這裡添加生成邏輯
+        order.setEcpayNumber(generateEcpayNumber());  // 確保這裡有值
         order.setCreatedAt(LocalDateTime.now());
         order.setUpdatedAt(LocalDateTime.now());
         return orderRepository.save(order);
     }
 
+ // 模擬產生 ecpay_number
+    private String generateEcpayNumber() {
+        return "ECPAY" + System.currentTimeMillis();  // 這裡可以根據需求設計生成邏輯
+    }
+    
     public OrderModel getOrder(Long orderId) {
         return orderRepository.findById(orderId)
             .orElseThrow(() -> new RuntimeException("Order not found"));

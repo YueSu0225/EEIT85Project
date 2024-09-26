@@ -19,13 +19,13 @@ public class OrderItems {
     @ManyToOne
     @JoinColumn(name = "product_variant_id", nullable = false)
     private ProductVariant productVariant;
-
+    
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
-
+    
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -71,7 +71,7 @@ public class OrderItems {
     public void setProductVariant(ProductVariant productVariant) {
         this.productVariant = productVariant;
     }
-
+    
     public int getQuantity() {
         return quantity;
     }

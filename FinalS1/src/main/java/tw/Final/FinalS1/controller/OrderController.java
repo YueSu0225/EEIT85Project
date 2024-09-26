@@ -26,15 +26,22 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+//    @PostMapping
+//    public ResponseEntity<OrderModel> createOrder(@RequestBody OrderRequest orderRequest) {
+//        // 根據 userId 創建訂單
+//        UserModel user = new UserModel();
+//        user.setId(orderRequest.getUserId().intValue());  // 將 Long 轉換為 int
+//        OrderModel order = orderService.createOrder(user, orderRequest.getTotalPrice());
+//        return new ResponseEntity<>(order, HttpStatus.CREATED);
+//    }
+
     @PostMapping
     public ResponseEntity<OrderModel> createOrder(@RequestBody OrderRequest orderRequest) {
-        // 根據 userId 創建訂單
-        UserModel user = new UserModel();
-        user.setId(orderRequest.getUserId().intValue());  // 將 Long 轉換為 int
-        OrderModel order = orderService.createOrder(user, orderRequest.getTotalPrice());
+        // 直接傳遞 userId 給 orderService
+        OrderModel order = orderService.createOrder(orderRequest.getUserId(), orderRequest.getTotalPrice());
         return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
-
+    
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderModel> getOrder(@PathVariable Long orderId) {
         OrderModel order = orderService.getOrder(orderId);

@@ -22,16 +22,22 @@ public class OrderModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+/*    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)  // 使用 user_id 而不是 order_id
     @JsonIgnore  // 直接忽略 user 序列化
     private UserModel user;  // 存放用戶ID
-
+*/
+    @Column(name = "user_id", nullable = false)  // 使用 user_id 而不是 user 模型
+    private Long userId;  // 存放用戶ID
+    
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
 
     @Column(name = "status", nullable = false)
     private String status;
+    
+    @Column(name = "ecpay_number", nullable = false)  // ecpay_number 必須有值
+    private String ecpayNumber;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -43,16 +49,15 @@ public class OrderModel {
     public OrderModel() {}
 
     // 全參構造函數，根據需要選擇是否使用
-    public OrderModel(UserModel user, BigDecimal totalPrice, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.user = user;
+    public OrderModel(Long userId, BigDecimal totalPrice, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.userId = userId;
         this.totalPrice = totalPrice;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    // Getter 和 Setter 方法
-
+ // Getter 和 Setter 方法
     public Long getId() {
         return id;
     }
@@ -61,12 +66,12 @@ public class OrderModel {
         this.id = id;
     }
 
-    public UserModel getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(UserModel user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public BigDecimal getTotalPrice() {
@@ -85,6 +90,14 @@ public class OrderModel {
         this.status = status;
     }
 
+    public String getEcpayNumber() {
+        return ecpayNumber;
+    }
+
+    public void setEcpayNumber(String ecpayNumber) {
+        this.ecpayNumber = ecpayNumber;
+    }
+    
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
