@@ -23,14 +23,13 @@ public class OrderItemsController {
     }
 
     // 新增訂單項目
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PostMapping
     public ResponseEntity<OrderItems> addOrderItem(@RequestBody OrderItems orderItem) {
         OrderItems newItem = orderItemService.addOrderItems(orderItem);
         return ResponseEntity.ok(newItem);
     }
-
     // 查詢所有訂單項目
-    @GetMapping("/{id}")
+    @GetMapping
     public ResponseEntity<List<OrderItems>> getAllOrderItems() {
         List<OrderItems> items = orderItemService.getAllOrderItems();
         return ResponseEntity.ok(items);

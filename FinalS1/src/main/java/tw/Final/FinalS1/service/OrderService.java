@@ -53,8 +53,8 @@ public class OrderService {
 
     public void cancelOrder(Long orderId) {
         OrderModel order = getOrder(orderId);
-        if ("CREATED".equals(order.getStatus())) {
-            order.setStatus("CANCELED");
+        if ("已付款".equals(order.getStatus())) {
+            order.setStatus("取消");
             order.setUpdatedAt(LocalDateTime.now());
             orderRepository.save(order);
         } else {
