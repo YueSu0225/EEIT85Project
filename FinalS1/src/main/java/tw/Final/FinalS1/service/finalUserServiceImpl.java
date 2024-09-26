@@ -205,7 +205,7 @@ public class finalUserServiceImpl implements UserService{
 	}
 
 
-	@Override
+	@Override//這是在確認有無登入中,加上結帳後,點擊需要登入才能使用功能時,給一台購物車
 	public ResponseEntity<Map<String, String>> sessionResponse(HttpSession session) {
 	    String userUUID = (String) session.getAttribute("userUUID");
 	    
@@ -213,6 +213,17 @@ public class finalUserServiceImpl implements UserService{
 	        // 創建建一个 Map 来存返回的 UUID
 	        Map<String, String> response = new HashMap<>();
 	        response.put("userUUID", userUUID);
+	        // 查詢用戶是否有購物車
+	        UserModel user = userRepository.findByUuid(userUUID);
+	        if (user != null) {
+	            CartModel cart = cartRepository.findByUser(user);
+	            if (cart == null) {
+	                // 如果沒有購物車，創建一個新的購物車
+	                cart = new CartModel();
+	                cart.setUser(user); // 將用戶設置到購物車
+	                cartRepository.save(cart); // 保存購物車到數據庫
+	            }
+	        }
 	        return ResponseEntity.ok(response); // 返回 UUID
 	    } else {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); // 未登录
