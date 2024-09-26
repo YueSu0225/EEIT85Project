@@ -1,11 +1,14 @@
 package tw.Final.FinalS1.service;
 
 
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import tw.Final.FinalS1.model.Product;
@@ -29,6 +32,11 @@ public class ProductService  {
 	public List<Product> getAllProducts(){
 		return productRepository.findAll();
 	}
+	
+	public Page<Product> getpageProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
 	
 	public Product getProductById(Long id) {
         return productRepository.findById(id).orElse(null);
@@ -69,5 +77,7 @@ public class ProductService  {
     public Optional<Product> checkProductByName(String productName) {
         return productRepository.findByName(productName);
     }
+    
+    
 
 }

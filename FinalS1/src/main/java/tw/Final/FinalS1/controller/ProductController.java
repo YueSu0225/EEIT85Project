@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +27,7 @@ import tw.Final.FinalS1.model.Product;
 import tw.Final.FinalS1.model.ProductVariant;
 import tw.Final.FinalS1.model.Size;
 import tw.Final.FinalS1.model.Type;
+import tw.Final.FinalS1.repository.ProductRepository;
 import tw.Final.FinalS1.service.CategoryService;
 import tw.Final.FinalS1.service.ColorService;
 import tw.Final.FinalS1.service.ProductService;
@@ -60,10 +63,17 @@ public class ProductController {
 	
 	
 	
+	
 	@GetMapping
 	public List<Product> getAllProducts(){
 		return productService.getAllProducts();
 	}
+	
+	 @GetMapping("/page")
+	    public Page<Product> getPagedProducts(Pageable pageable) {
+	        return productService.getpageProducts(pageable);
+	    }
+	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Product> getProductById(@PathVariable Long id) {
@@ -265,6 +275,10 @@ public class ProductController {
 	        return ResponseEntity.notFound().build();
 	    }
 	}
+	
+	 
+	
+
 
 
 }
