@@ -109,6 +109,14 @@ public class finalUserServiceImpl implements UserService{
 			// 使用方法userRepository 將 UUID 插入到資料庫
 			user.setUuid(uuid);
 			userRepository.save(user);
+			 // 檢查用戶是否已有購物車
+			CartModel userCart = cartRepository.findByUser(user); // 假設有個方法可以根據用戶 ID 查詢購物車
+	        if (userCart == null) {
+	            // 如果沒有購物車，則創建一個新的購物車
+	        	userCart = new CartModel();
+	            userCart.setUser(user);
+	            cartRepository.save(userCart); // 保存新的購物車
+	        }
 			
 	        // 設置 session
 	        HttpSession session = servletRequest.getSession();
@@ -261,6 +269,21 @@ public class finalUserServiceImpl implements UserService{
 
 	        return ResponseEntity.ok(Map.of("success", true));
 	    }
+
+
+	@Override
+	public ResponseEntity<Map<String, String>> deleteUser(HttpSession session) {
+		 String userUUID = (String) session.getAttribute("userUUID");
+	        
+	        // 根據 UUID 查詢用戶
+	        UserModel user = userRepository.findByUuid(userUUID);
+	        if (user == null) {
+	            return ResponseEntity.status(404).body(Map.of("message", "User not found"));
+	        }
+	        userRepository.delete(user);
+	        session.invalidate();
+	        return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
+	}
 	
 
 

@@ -72,4 +72,8 @@ public class ControllerFinaltest {
     public ResponseEntity<Map<String, Object>> updateUser(@RequestBody Map<String, String> userInfo, HttpSession session) {
         return finalUserService.updateUserInfo(userInfo, session);
     }
+    @DeleteMapping("/deleteUser")
+	public ResponseEntity<Map<String, String>> deleteUser(HttpSession session) {
+    	return finalUserService.deleteUser(session);
+    }
 }
