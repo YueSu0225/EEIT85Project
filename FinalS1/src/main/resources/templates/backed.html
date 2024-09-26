@@ -1,70 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th = "http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>W2W 後台管理</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f7f8fc;
-        }
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	background-color: #f7f8fc;
+}
 
-        .container {
-            display: flex;
-            height: 100vh;
-        }
+.container {
+	display: flex;
+}
 
-        /* Sidebar 樣式 */
-        .sidebar {
-            width: 180px;
-            background-color: #5c5fbe;
-            padding: 20px;
-            color: white;
-        }
+/* Sidebar 樣式 */
+.sidebar {
+	width: 250px;
+	background-color: #5c5fbe;
+	padding: 20px;
+	color: black;
+	height: 100vh;
+}
 
-        .sidebar h2 {
-            color: #fff;
-            font-size: 20px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
+.sidebar h2 {
+	color: #fff;
+	font-size: 24px;
+	text-align: center;
+}
 
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
+.sidebar ul {
+	list-style: none;
+	padding: 0;
+}
 
-        .sidebar ul li {
-            padding: 10px 5px;
-            cursor: pointer;
-        }
+.sidebar ul li {
+	padding: 15px 10px;
+	cursor: pointer;
+}
 
-        .sidebar ul li:hover {
-            background-color: #494ca8;
-        }
+.sidebar ul li:hover {
+	background-color: #494ca8;
+}
 
-        /* 主體內容樣式 */
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            background-color: #eaeef7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
 
-        /* 內容框 */
-        .main-box {
-            background-color: #fff;
-            width: 80%;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+
+button {
+	background-color: #5c5fbe;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+button:hover {
+	background-color: #494ca8;
+}
+
+
+</style>
 </head>
 <body>
     <div class="container">
@@ -86,7 +83,7 @@
         <!-- 主體內容區域 -->
         <div class="content">
             <!-- 使用 Thymeleaf 來動態加載頁面內容 -->
-            <div th:replace="${content}"></div>
+        <!--      <div th:replace="${content}"></div>-->
         </div>
     </div>
 </body>
