@@ -31,7 +31,7 @@ public class UserModel {
     private CartModel cart;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private wishListModel wishList;
+    private WishlistModel wishList;
     
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private userInfoMedel userInfoMedel;
@@ -104,11 +104,11 @@ public class UserModel {
 		this.cart = cart;
 	}
 
-	public wishListModel getWishList() {
+	public WishlistModel getWishList() {
 		return wishList;
 	}
 
-	public void setWishList(wishListModel wishList) {
+	public void setWishList(WishlistModel wishList) {
 		this.wishList = wishList;
 	}
 

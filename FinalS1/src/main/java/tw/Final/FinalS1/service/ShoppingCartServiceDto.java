@@ -97,8 +97,7 @@ public class ShoppingCartServiceDto {
         return cartRepository.save(cart);
     }
     
-    
-    
+      
 //    public void removeFromcart(CartItemsDto cartRequest) {
 //   	 	Long cartId = cartRequest.getId();
 //        Long variantId = cartRequest.getVariantId();
@@ -138,14 +137,11 @@ public class ShoppingCartServiceDto {
 	    // 从购物车中移除商品项
 	    cart.getCartItems().remove(itemToDelete);
 		
-		
 		cartRepository.save(cart);
 	}
     
-    public List<CartItemsModel> getCartItems(CartItemsDto cartRequest){
-    	 Long cartId = cartRequest.getId();
-         Long variantId = cartRequest.getVariantId();
-         int quantity = cartRequest.getQuantity();
+    
+    public List<CartItemsModel> getCartItems(Long cartId){
     	
 		CartModel cart = cartRepository.findById(cartId)
 				.orElseThrow(() -> new RuntimeException("Cart not found"));
@@ -153,9 +149,9 @@ public class ShoppingCartServiceDto {
 		return cart.getCartItems();
 	}
     
-    public int getTotalPrice(Long userId) {
+    public int getTotalPrice(Long cartId) {
     	
-	CartModel cart = cartRepository.findById(userId)
+	CartModel cart = cartRepository.findById(cartId)
 				.orElseThrow(() -> new RuntimeException("Cart not found"));
 				
 //	return cart.getCartItems().stream()
