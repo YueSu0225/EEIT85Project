@@ -118,7 +118,7 @@ window.onload = function() {
         })
         .then(response => response.json())
         .then(data => {
-            alert("商品及變體上架成功！");
+            alert("商品上架成功！");
         })
         .catch(err => {
             console.error("上架失敗：", err);

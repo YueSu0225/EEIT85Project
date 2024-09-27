@@ -19,6 +19,8 @@ public class TypeService {
 	}
 	
 	public Type getTypeById(Long id) {
+		
+		
 		return typeRepository.findById(id).orElse(null);
 	}
 	
