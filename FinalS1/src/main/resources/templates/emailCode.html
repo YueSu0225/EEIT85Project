@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>EEIT85-W2W信箱驗證</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            margin: 50px auto;
+            padding: 20px;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #4CAF50;
+            padding: 10px;
+            color: white;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .content p {
+            font-size: 16px;
+            color: #333333;
+        }
+        .verification-code {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            background-color: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #999999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>信箱驗證</h2>
+        </div>
+        <div class="content">
+            <p>您好，</p>
+            <p>感谢您使用我們的服務，您的驗證碼如下：</p>
+            <div class="verification-code" th:text="${JWTemailCode}"></div>
+            <input type="hidden" id="jwtToken" th:value="${jwtToken}" />
+            <p>請在5分鐘內使用此驗證碼完成驗證。</p>
+        </div>
+        <div class="footer">
+            <p>如果您没有請求此信件，請忽略此信息。</p>
+            <p>&copy; 2024 WEARTOWEAR</p>
+        </div>
+    </div>
+</body>
+</html>
