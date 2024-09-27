@@ -19,11 +19,11 @@ import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.CartModel;
 import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.model.userInfoMedel;
-import tw.Final.FinalS1.model.wishListModel;
+import tw.Final.FinalS1.model.WishlistModel;
 import tw.Final.FinalS1.repository.UserInfoRepository;
 import tw.Final.FinalS1.repository.UserRepository;
 import tw.Final.FinalS1.repository.CartRepository;
-import tw.Final.FinalS1.repository.wishListRepository;
+import tw.Final.FinalS1.repository.WishlistRepository;
 
 
 @Service
@@ -36,7 +36,7 @@ public class finalUserServiceImpl implements UserService{
 	@Autowired
 	private UserInfoRepository userInfoRepository;
 	@Autowired
-	private wishListRepository wishListRepository;
+	private WishlistRepository wishListRepository;
 	
 	
 
@@ -67,7 +67,7 @@ public class finalUserServiceImpl implements UserService{
 	        cartRepository.save(cart);
 	        
 	        // 創建喜愛清單
-	        wishListModel wishList = new wishListModel();
+	        WishlistModel wishList = new WishlistModel();
 	        wishList.setUser(user);
 	        wishListRepository.save(wishList);
 
@@ -179,7 +179,7 @@ public class finalUserServiceImpl implements UserService{
 	        cartRepository.save(cart);
 	        
 	        // 創建喜愛清單
-	        wishListModel wishList = new wishListModel();
+	        WishlistModel wishList = new WishlistModel();
 	        wishList.setUser(user);
 	        wishListRepository.save(wishList);
 

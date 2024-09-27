@@ -22,14 +22,11 @@ import tw.Final.FinalS1.model.CartItemsModel;
 import tw.Final.FinalS1.model.CartModel;
 import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.repository.UserRepository;
-import tw.Final.FinalS1.service.ShoppingCartService;
 import tw.Final.FinalS1.service.ShoppingCartServiceDto;
 
 @RestController
 @RequestMapping("/cart")
 public class ShoppingCartController {
-	@Autowired
-	private ShoppingCartService cartService;
 	@Autowired
 	private ShoppingCartServiceDto shoppingCartServiceDto;
 	@Autowired
@@ -91,7 +88,7 @@ public class ShoppingCartController {
 //			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 //		 }
 		
-		List<CartItemsModel> cartItems = cartService.getCartItems(id);
+		List<CartItemsModel> cartItems = shoppingCartServiceDto.getCartItems(id);
 			return ResponseEntity.ok(cartItems);
 }
 	
