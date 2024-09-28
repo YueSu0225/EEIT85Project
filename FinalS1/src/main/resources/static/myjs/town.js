@@ -108,7 +108,8 @@
 		    const districtSelect = document.getElementById('district');
 		    const addressInput = document.querySelector('input[placeholder="請輸入街道名門牌號"]');
 		    const errorMessageSpan = document.getElementById('streeterrormesg');
-		    const addressPattern = /.+[路街].+號/; // 至少包含“XX路X號”的格式
+		    //const addressPattern = /.+[路街].+號/; // 至少包含“XX路X號”的格式
+			const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)?(?:號(?:之(\d+)?)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
 
 		    // 縣市選項
 		    for (const city in taiwanCities) {
@@ -148,7 +149,7 @@
 		    function updateAddressInput() {
 		        // 驗證地址輸入框內容
 		        if (addressInput.value && !addressPattern.test(addressInput.value)) {
-		            errorMessageSpan.textContent = '請輸入完整的地址，ex: 中山路1號。';
+		            errorMessageSpan.textContent = '請輸入有效的地址("-"請使用"之")，例如：台北市中正區中山路1之1號';
 		        } else {
 		            errorMessageSpan.textContent = ''; // 清除错误信息
 		        }
