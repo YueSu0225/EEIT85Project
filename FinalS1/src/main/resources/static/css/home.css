@@ -1,0 +1,33 @@
+
+
+
+
+/* 商品部分的樣式 */
+.product:hover {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 滑過時的陰影效果 */
+}
+
+.product .img-prod {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+}
+
+.product .img-prod img {
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.product .img-prod:hover img {
+    transform: scale(1.1); /* 滑過時圖片放大效果 */
+}
+
+.product .text {
+    padding: 15px;
+}
+
+.product .pricing {
+    font-size: 18px;
+    color: #ff5a5f; /* 價格顏色 */
+}
+
