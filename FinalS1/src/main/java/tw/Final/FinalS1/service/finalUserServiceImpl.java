@@ -295,6 +295,25 @@ public class finalUserServiceImpl implements UserService{
 	        session.invalidate();
 	        return ResponseEntity.ok(Map.of("message", "User deleted successfully"));
 	}
+
+
+	@Override
+	public ResponseEntity<Void> logout(HttpServletRequest request) {
+		 //獲取USER UUID 為誰
+        String userId = (String) request.getSession().getAttribute("userUUID");
+
+        if (userId != null) {
+            UserModel user = userRepository.findByUuid(userId); // 查找用户
+            if (user != null) {
+                user.setUuid(""); // 設置UUID空字串
+                userRepository.save(user); // 保存用户信息
+            }
+        }        
+        //刪除session
+        request.getSession().invalidate();
+
+        return ResponseEntity.ok().build(); // 返回 OK 
+    }
 	
 	
 

@@ -82,6 +82,11 @@ public class ControllerFinaltest {
     	return finalUserService.deleteUser(session);
     }
     
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        return finalUserService.logout(request);
+    }
+    
     @PostMapping("/sendCode")
     public ResponseEntity<Map<String, Object>> sendVerificationCode(@RequestBody Map<String, String> request) {
         String email = request.get("email"); // 從request獲取email

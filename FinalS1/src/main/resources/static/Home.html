@@ -130,8 +130,23 @@
 					<!-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
 					<li class="nav-item"><a href="contact.html" class="nav-link">聯繫我們</a></li>
 
-					<li class="nav-item cta cta-colored"><a href="#"
-						class="nav-link" id="sessionCheck"><span class="icon-person"></span></a></li>
+					<!-- <li class="nav-item dropdown cta cta-colored"><a href="#"
+						class="nav-link" id="sessionCheck"><span class="icon-person"></span></a>
+						<div class="dropdown-menu dropdown-menu-center"
+							aria-labelledby="sessionCheck">
+							<a class="dropdown-item" href="#">會員中心</a> <a
+								class="dropdown-item" href="#">登出</a>
+						</div></li> -->
+
+					<li class="nav-item dropdown cta cta-colored"><a href="#"
+						class="nav-link " id="sessionCheck"
+						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="icon-person"></span>
+					</a>
+						<div class="dropdown-menu" id="userDropdown">
+							<a class="dropdown-item" href="/Account.html">會員中心</a> <a
+								class="dropdown-item" href="#" id="logoutButton">登出</a>
+						</div></li>
 					<li class="nav-item cta cta-colored"><a href="wishlist.html"
 						class="nav-link" id="sessionCheck"><span class="icon-heart"></span></a></li>
 					<li class="nav-item cta cta-colored"><a href="cart.html"
@@ -979,7 +994,8 @@
 			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 		<script src="js/google-map.js"></script>
 		<script src="js/main.js"></script>
-		<script src="myjs/session.js"></script>
+		<script src="myjs/session.js"></script> 
+		<script src="myjs/logout.js"></script> 
 </body>
 
 </html>

@@ -40,7 +40,8 @@ function updateMember(event) {
 	}
     
 	// 驗證地址
-		const addressPattern = /^(?:.+?縣|.+?市|.+?區|.+?鄉|.+?鎮).+?[路街巷弄]\d+號$/;
+	const addressPattern = /^(?:.+?縣|.+?市|.+?區|.+?鄉|.+?鎮)(?:.+?[路街巷]\d+巷?\d*號\d*樓(?:-\d+)?(?:.*)?)$/;
+
 	if (!addressPattern.test(userInfo.address)) {
 	    errorMessageSpan.textContent = '請輸入有效的地址，例如：台北市中正區中山路1號';
 	    return; // 結束函數，不提交
