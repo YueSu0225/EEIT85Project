@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const phone = document.querySelector('input[placeholder="請輸入手機號碼"]').value;
         const street = document.getElementById('street').value;
         const birthday = document.querySelector('input[type="date"]').value;
-		const addressPattern = /.+[路街].+號/; // 至少包含“XX路X號”的格式
+		const addressPattern = /.+[路街巷].+?(?:巷(?:\d+弄)?\d*號(?:\d*樓(?:-\d+)?)?)$/; // 至少包含“XX路街巷X號”的格式
 		const phonePattern = /^09\d{8}$/; // 驗證手機號碼格式：09開頭，後面8個數字
 		
         // 表單驗證
