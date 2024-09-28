@@ -31,6 +31,22 @@ document.getElementById("sendEmailCode").addEventListener("click", function(even
 
 			document.getElementById("confirmationSection").style.display = "inline-block";
 			alert("驗證碼已發送，請檢察您的信箱。");
+			
+			// 禁用按钮并设置计时器
+			          const sendEmailButton = document.getElementById("sendEmailCode");
+			          sendEmailButton.disabled = true; // 禁用按钮
+			          let countdown = 60; // 倒數計時60秒
+
+			          const countdownInterval = setInterval(() => {
+			              sendEmailButton.innerText = `重新發送(${countdown}s)`; // 更新按鈕文字顯示倒數
+			              countdown--;
+
+			              if (countdown < 0) {
+			                  clearInterval(countdownInterval); // 清除計時器
+			                  sendEmailButton.disabled = false; // 一分钟后启用按钮
+			                  sendEmailButton.innerText = "發送驗證碼"; // 重置按鈕文字
+			              }
+			          }, 1000); // 每秒更新一次
         } else {
             alert("發送失敗: " + data.message);
         }
@@ -48,9 +64,9 @@ function validateEmail(email) {
 
 document.getElementById("confirmCode").addEventListener("click", function() {
        const verificationCode = document.getElementById("verificationCode").value;
-       
-       // 获取JWT token（可以通过其他方式获取，比如从后端响应中获取）
-       const jwtToken = localStorage.getItem("jwtToken"); // 假设你将token存储在localStorage中
+	   const resultElement = document.getElementById("result");
+       // 獲取JWT token（可以通过其他方式获取，比如从后端响应中获取）
+       const jwtToken = localStorage.getItem("jwtToken"); // 假設你將tokenh儲存在localStorage中
 		
        if (!verificationCode) {
            document.getElementById("result").innerText = "請輸入驗證碼";
@@ -64,21 +80,28 @@ document.getElementById("confirmCode").addEventListener("click", function() {
                'Content-Type': 'application/json',
           },
            body: JSON.stringify({ 
-			token: jwtToken, // 发送存储的JWT
+			token: jwtToken, // 發送儲存的jwt
 
 			code: verificationCode })
        })
        .then(response => response.json())
        .then(data => {
            if (data.success) {
-               document.getElementById("result").innerText = "驗證成功！";
+               resultElement.innerText = "驗證成功！";
+			   resultElement.style.color = "green";
+			   
+			   document.getElementById("verificationCode").disabled = true; // 鎖定驗證碼輸入框
+			   document.getElementById("confirmCode").disabled = true; // 鎖定確認按鈕
+
            } else {
 			console.log("erro1");
-               document.getElementById("result").innerText = "驗證失敗，請檢查驗證碼。";
+			resultElement.innerText = "驗證失敗，請檢查驗證碼。";
+
            }
        })
        .catch(error => {
            console.error('Error:', error);
-           document.getElementById("result").innerText = "發生錯誤，請稍後重試。";
+		   resultElement.innerText = "發生錯誤，請稍後重試。";
+
        });
    });
