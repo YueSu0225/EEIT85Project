@@ -35,32 +35,8 @@
 <link rel="stylesheet" href="css/flaticon.css">
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
-<style>
-#pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
+<link rel="stylesheet" href="css/home.css">
 
-#pagination button {
-    background-color: #fff;
-    border: 1px solid #000;
-    color: #000;
-    padding: 8px 16px;
-    margin: 0 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-#pagination button:hover {
-    background-color: #000;
-    color: #fff;
-}
-
-#pagination button.active {
-    background-color: #000;
-    color: #fff;
-}</style>
 
 
 </head>
@@ -331,113 +307,63 @@
 				<div class="col-md-12 heading-section text-center ftco-animate">
 					<span class="subheading">Featured Products</span>
 					<h2 class="mb-4">Our Products</h2>
-					<p>Far far away, behind the word mountains, far from the
-						countries Vokalia and Consonantia</p>
+				<!--	<p>Far far away, behind the word mountains, far from the
+						countries Vokalia and Consonantia</p>!-->
 				</div>
 			</div>
 		</div>
 
 
-		<div class="container">
-			<div class="row" id="product-list">
-				<!-- 商品會動態插入到這裡 -->
-			</div>
-			<div id="pagination"></div>
-			
-		</div>
-		
-		<script>
-		document.addEventListener("DOMContentLoaded", function() {
-		    // 呼叫 API 獲取商品資料
-		    fetch('/products')  // 替換為你的 API 路徑
-		        .then(response => response.json())  // 將回應轉換為 JSON
-		        .then(data => {
-		            // 隨機打亂數據並選擇前 8 個商品
-		            let shuffledData = data.sort(() => 0.5 - Math.random());
-		            let selectedProducts = shuffledData.slice(0, 8); // 選擇 8 個商品
-		            
-		            let productList = document.getElementById('product-list');
-		            productList.innerHTML = ""; // 清空當前列表
-		            
-		            selectedProducts.forEach(product => {
-		                // 動態生成商品 HTML
-		                let productHTML = `
-		                    <div class="col-md-6 col-lg-3 ftco-animate">
-		                        <div class="product">
-		                            <a href="#" class="img-prod">
-		                                <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
-		                                <div class="overlay"></div>
-		                            </a>
-		                            <div class="text py-3 pb-4 px-3 text-center">
-		                                <h3><a href="#">${product.name}</a></h3>
-		                                <div class="pricing">
-		                                    <p class="price"><span class="price-sale">$${product.price}</span></p>
-		                                </div>
-		                            </div>
-		                        </div>
-		                    </div>
-		                `;
-		                // 將商品插入到 product-list 中
-		                productList.innerHTML += productHTML;
-		            });
-		        })
-		        .catch(error => console.error('Error fetching products:', error));
-		});
-		
-		
-		
-		document.addEventListener("DOMContentLoaded", function() {
-		    let currentPage = 0;  // 當前頁數
-		    let pageSize = 8;     // 每頁顯示 8 個商品
+	<div class="container">
+    <div class="row" id="product-list">
+        <!-- 商品會動態插入到這裡 -->
+    </div>
+</div>
 
-		    function loadProducts(page) {
-		        fetch(`/products/page?page=${page}&size=${pageSize}`)  // 後端 API
-		            .then(response => response.json())
-		            .then(data => {
-		                let productList = document.getElementById('product-list');
-		                productList.innerHTML = ""; // 清空當前列表
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 呼叫 API 獲取所有商品資料
+    function loadRandomProducts() {
+        fetch('/products')  // 取得所有商品的 API 路徑
+            .then(response => response.json())
+            .then(data => {
+                let productList = document.getElementById('product-list');
+                productList.innerHTML = ""; // 清空當前列表
 
-		                data.content.forEach(product => {
-		                    let productHTML = `
-		                        <div class="col-md-6 col-lg-3 ftco-animate">
-		                            <div class="product">
-		                                <a href="#" class="img-prod">
-		                                    <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
-		                                    <div class="overlay"></div>
-		                                </a>
-		                                <div class="text py-3 pb-4 px-3 text-center">
-		                                    <h3><a href="#">${product.name}</a></h3>
-		                                    <div class="pricing">
-		                                        <p class="price"><span class="price-sale">$${product.price}</span></p>
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
-		                    `;
-		                    productList.innerHTML += productHTML;
-		                });
+                // 隨機打亂商品並選擇前 8 個
+                let shuffledData = data.sort(() => 0.5 - Math.random());
+                let selectedProducts = shuffledData.slice(0, 8); // 選擇 8 個商品
 
-		                // 更新分頁按鈕
-		                setupPagination(data.totalPages);
-		            })
-		            .catch(error => console.error('Error fetching products:', error));
-		    }
+                // 動態插入商品資料
+                selectedProducts.forEach(product => {
+                    let productHTML = `
+                        <div class="col-md-6 col-lg-3 ftco-animate">
+                            <div class="product">
+                                <a href="product-single.html?productId=${product.id}" class="img-prod">
+                                    <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
+                                    <div class="overlay"></div>
+                                </a>
+                                <div class="text py-3 pb-4 px-3 text-center">
+                                    <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
+                                    <div class="pricing">
+                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    productList.innerHTML += productHTML;
+                });
+            })
+            .catch(error => console.error('Error fetching products:', error));
+    }
 
-		    // 初始化加載第一頁
-		    loadProducts(currentPage);
+    // 初始化隨機加載 8 張商品
+    loadRandomProducts();
+});
+</script>
 
-		    function setupPagination(totalPages) {
-		        let pagination = document.getElementById('pagination');
-		        pagination.innerHTML = ""; // 清空當前的分頁按鈕
 
-		        for (let i = 0; i < totalPages; i++) {
-		            let button = document.createElement('button');
-		            button.innerText = i + 1;
-		            button.addEventListener('click', () => loadProducts(i));
-		            pagination.appendChild(button);
-		        }
-		    }
-		});
 
 
 	

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import tw.Final.FinalS1.model.Color;
@@ -157,6 +158,16 @@ public class ProductVariantController {
     @GetMapping("/product/{productId}")
     public List<ProductVariant> getVariantsByProductId(@PathVariable Long productId) {
     	return productVariantService.getVariantsByProductId(productId);
+    }
+    
+    
+    //用productid 找到該商品變體相對應庫存
+    @GetMapping("/{productId}/variant")
+    public ProductVariant getVariantByProductAndAttributes(
+            @PathVariable Long productId,
+            @RequestParam Long colorId,
+            @RequestParam Long sizeId) {
+        return productVariantService.getVariantByAttributes(productId, colorId, sizeId);
     }
 }
 

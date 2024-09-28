@@ -10,5 +10,8 @@ import tw.Final.FinalS1.model.ProductVariant;
 @Repository
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, Long> {
 	List<ProductVariant> findByProductId(Long productId);
+	
+    ProductVariant findByProductIdAndColorIdAndSizeId(Long productId, Long colorId, Long sizeId);
+
 }
 
