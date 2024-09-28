@@ -29,6 +29,8 @@ function updateMember(event) {
 	const phoneError = document.getElementById('phoneerrormesg');
 	const nameError = document.getElementById('nameerrormesg');
 	const errorMessageSpan = document.getElementById('streeterrormesg');
+	const birthdayError = document.getElementById('birthdayerrormesg'); // 確保有這個元素
+	birthdayError.textContent = ''; // 清除之前的錯誤信息
 	phoneError.textContent = '';
 	nameError.textContent = ''; 
 	errorMessageSpan.textContent = '';
@@ -57,7 +59,10 @@ function updateMember(event) {
 		    return; // 結束函數，不提交
 		}
 
-
+		if (!userInfo.birthday) {
+			birthdayError.textContent = '生日不能為空！';
+			return; // 結束函數，不提交
+		}
 	
 
 
@@ -100,4 +105,7 @@ document.getElementById('updateAddr').addEventListener('input', function() {
 });
 document.getElementById('updateName').addEventListener('input', function() {
     document.getElementById('nameerrormesg').textContent = ''; 
+});
+document.getElementById('updateBirthday').addEventListener('input', function() {
+    document.getElementById('birthdayerrormesg').textContent = ''; 
 });

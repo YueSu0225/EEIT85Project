@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function (){
 		    document.getElementById('userInfoBirthday').innerHTML = data.userInfoBirthday; // 用戶生日
 		    document.getElementById('userInfoName').innerHTML = data.userInfoName;
 			document.getElementById('userInfoName2').innerHTML = data.userInfoName; // 用戶名字
-		    document.getElementById('userInfoPhone').innerHTML = "0"+data.userInfoPhone; // 用戶手機
+		    document.getElementById('userInfoPhone').innerHTML = data.userInfoPhone; // 用戶手機
 		})
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);

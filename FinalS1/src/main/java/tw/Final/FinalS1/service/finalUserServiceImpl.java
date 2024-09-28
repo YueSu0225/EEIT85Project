@@ -75,7 +75,7 @@ public class finalUserServiceImpl implements UserService{
 	        userInfoMedel userInfo = new userInfoMedel();
 	        userInfo.setUser(user);
 	        userInfo.setName(request.getName());
-	        userInfo.setPhone_number(Integer.parseInt(request.getPhone()));
+	        userInfo.setPhone_number(request.getPhone());
 	        userInfo.setAddress(request.getStreet());
 	        userInfo.setBirthday(request.getBirthday());
 	        userInfoRepository.save(userInfo);
@@ -187,7 +187,7 @@ public class finalUserServiceImpl implements UserService{
 	        userInfoMedel userInfo = new userInfoMedel();
 	        userInfo.setUser(user);
 	        userInfo.setName(name);
-	        userInfo.setPhone_number(0);
+	        userInfo.setPhone_number(null);
 	        userInfo.setAddress(null);
 	        userInfo.setBirthday(null);
 	        userInfoRepository.save(userInfo);
@@ -272,7 +272,7 @@ public class finalUserServiceImpl implements UserService{
 	        if (existingUserInfo != null) {
 	            existingUserInfo.setName(userInfo.get("name"));
 	            existingUserInfo.setAddress(userInfo.get("address"));
-	            existingUserInfo.setPhone_number(Integer.parseInt(userInfo.get("phone")));
+	            existingUserInfo.setPhone_number(userInfo.get("phone"));
 	            existingUserInfo.setBirthday(userInfo.get("birthday"));
 
 	            userInfoRepository.save(existingUserInfo); // 保存更改
@@ -289,8 +289,10 @@ public class finalUserServiceImpl implements UserService{
 	        // 根據 UUID 查詢用戶
 	        UserModel user = userRepository.findByUuid(userUUID);
 	        if (user == null) {
+	        	System.out.println("not found");
 	            return ResponseEntity.status(404).body(Map.of("message", "User not found"));
 	        }
+	        System.out.println(user);
 	        userRepository.delete(user);
 	        session.invalidate();
 	        return ResponseEntity.ok(Map.of("message", "User deleted successfully"));

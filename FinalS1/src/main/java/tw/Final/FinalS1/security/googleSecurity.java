@@ -42,7 +42,7 @@ public class googleSecurity {
 	            .clientId("ID")
 	            .clientSecret("金鑰匙")
 	            .scope("profile", "email")
-	            .authorizationUri("https://accounts.google.com/o/oauth2/auth")
+	            .authorizationUri("https://accounts.google.com/o/oauth2/auth?prompt=consent")
 	            .tokenUri("https://oauth2.googleapis.com/token")
 	            .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
 	            .userNameAttributeName("sub") // 使用 Google ID
