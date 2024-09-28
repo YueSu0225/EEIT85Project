@@ -1,4 +1,3 @@
-
 // 頁面加載時隱藏下拉菜單
 document.getElementById('userDropdown').style.display = 'none';
 
@@ -59,9 +58,17 @@ document.getElementById('sessionCheck').addEventListener('click', function(event
   });
 });
 
-// 當鼠標懸停在圖標或下拉菜單時保持顯示
+// 當鼠標懸停在圖標時保持顯示
 document.getElementById('sessionCheck').addEventListener('mouseenter', () => {
-  document.getElementById('userDropdown').style.display = 'block';
+  fetch('/final/checksession', {
+    method: 'GET',
+    credentials: 'include' // 確保攜帶 cookies
+  })
+  .then(response => {
+    if (response.ok) {
+      document.getElementById('userDropdown').style.display = 'block'; // 如果登入，顯示下拉菜單
+    }
+  });
 });
 
 // 當鼠標懸停在下拉菜單上時保持顯示

@@ -309,8 +309,10 @@ public class finalUserServiceImpl implements UserService{
                 userRepository.save(user); // 保存用户信息
             }
         }        
-        //刪除session
+       
         request.getSession().invalidate();
+
+
 
         return ResponseEntity.ok().build(); // 返回 OK 
     }
