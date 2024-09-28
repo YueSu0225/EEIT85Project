@@ -11,5 +11,8 @@ public class CMSviewController {
 		return "backed";
 	}
 	
-	
+	@RequestMapping("/emailCode")
+	public String emailCode() {
+		return "emailCode";
+	}
 }

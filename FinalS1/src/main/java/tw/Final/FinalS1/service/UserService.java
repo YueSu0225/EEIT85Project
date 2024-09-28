@@ -26,6 +26,9 @@ public interface UserService {
 	public ResponseEntity<Map<String, Object>> updateUserInfo(Map<String, String> userInfo, HttpSession session);
 	
 	public ResponseEntity<Map<String, String>> deleteUser(HttpSession session);
+	
+    public ResponseEntity<Void> logout(HttpServletRequest request);
+    	  
 		 
 		
 }

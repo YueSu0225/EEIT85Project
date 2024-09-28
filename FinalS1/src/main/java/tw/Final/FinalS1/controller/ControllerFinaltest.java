@@ -10,12 +10,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.*;
 import tw.Final.FinalS1.service.UserService;
+import tw.Final.FinalS1.service.emailCodeService;
 
 
 
@@ -27,6 +29,9 @@ public class ControllerFinaltest {
 	
 	@Autowired
 	private UserService finalUserService;
+	
+	@Autowired
+	private emailCodeService emailCodeService;
 	
 	
 	@PostMapping("/register")
@@ -75,5 +80,24 @@ public class ControllerFinaltest {
     @DeleteMapping("/deleteUser")
 	public ResponseEntity<Map<String, String>> deleteUser(HttpSession session) {
     	return finalUserService.deleteUser(session);
+    }
+    
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        return finalUserService.logout(request);
+    }
+    
+    @PostMapping("/sendCode")
+    public ResponseEntity<Map<String, Object>> sendVerificationCode(@RequestBody Map<String, String> request) {
+        String email = request.get("email"); // 從request獲取email
+        System.out.println(email);
+        return emailCodeService.sendVerificationCode(email);
+    }
+    
+    @PostMapping("/verifyCode")
+    public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody Map<String, String> request) {
+        System.out.println("Request: " + request); // 打印請求信息
+
+        return emailCodeService.processVerification(request); // 确保调用了processVerification
     }
 }

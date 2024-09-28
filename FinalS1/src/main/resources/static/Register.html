@@ -110,8 +110,16 @@
 							 <span id="correctmesg" style="color: green;"></span>
 						</div>
 						<div class="form-group">
-						<input type="submit" value="檢查信箱" class="btn btn-dark">
+							<button type="button" class="btn btn-secondary"
+								id="sendEmailCode">發送驗證碼</button>
 						</div>
+						<div id="confirmationSection"
+							style="display: none; margin-bottom: 10px;">
+							<input type="text" id="verificationCode" placeholder="輸入驗證碼" />
+							<button id="confirmCode" class="btn btn-success" type="button">確認</button>
+							<span id="result" style="color: red;"></span>
+						</div>
+
 						<div class="form-group">
 							<input type="password" id="password" class="form-control" placeholder="請輸入密碼">
 							<span id="passwordError" style="color: red;"></span>
@@ -276,6 +284,7 @@
 <script src="myjs/register.js"></script>
 <script src="myjs/phone.js"></script>
 <script src="myjs/birthday.js"></script>
+<script src="myjs/sendEmailCode.js"></script>
 </body>
 
 </html>
