@@ -29,6 +29,8 @@ function updateMember(event) {
 	const phoneError = document.getElementById('phoneerrormesg');
 	const nameError = document.getElementById('nameerrormesg');
 	const errorMessageSpan = document.getElementById('streeterrormesg');
+	const birthdayError = document.getElementById('birthdayerrormesg'); // 確保有這個元素
+	birthdayError.textContent = ''; // 清除之前的錯誤信息
 	phoneError.textContent = '';
 	nameError.textContent = ''; 
 	errorMessageSpan.textContent = '';
@@ -40,10 +42,14 @@ function updateMember(event) {
 	}
     
 	// 驗證地址
-	const addressPattern = /^(?:.+?縣|.+?市|.+?區|.+?鄉|.+?鎮)(?:.+?[路街巷]\d+巷?\d*號\d*樓(?:-\d+)?(?:.*)?)$/;
+	const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)?(?:號(?:之(\d+)?)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
 
+	
 	if (!addressPattern.test(userInfo.address)) {
-	    errorMessageSpan.textContent = '請輸入有效的地址，例如：台北市中正區中山路1號';
+	    errorMessageSpan.textContent = '請輸入有效的地址("-"請使用"之")，例如：台北市中正區中山路1之1號';
+		
+		    console.log(userInfo.address);
+		
 	    return; // 結束函數，不提交
 	}
 		// 驗證手機號碼
@@ -53,7 +59,10 @@ function updateMember(event) {
 		    return; // 結束函數，不提交
 		}
 
-
+		if (!userInfo.birthday) {
+			birthdayError.textContent = '生日不能為空！';
+			return; // 結束函數，不提交
+		}
 	
 
 
@@ -96,4 +105,7 @@ document.getElementById('updateAddr').addEventListener('input', function() {
 });
 document.getElementById('updateName').addEventListener('input', function() {
     document.getElementById('nameerrormesg').textContent = ''; 
+});
+document.getElementById('updateBirthday').addEventListener('input', function() {
+    document.getElementById('birthdayerrormesg').textContent = ''; 
 });
