@@ -8041,7 +8041,7 @@ h1, h2, h3, h4, h5,
     width: calc(100% - 30px);
     color: white; }
 
-  #ftco-navbar.ftco-navbar-light {
+  .ftco-navbar-light {
   background: transparent !important;
   z-index: 3;
   padding: 0; }
@@ -9175,9 +9175,9 @@ h1, h2, h3, h4, h5,
 textarea.form-control {
   height: inherit !important; }
 
-/*.ftco-animate {
+.ftco-animate {
   opacity: 0;
-  visibility: hidden; }*/
+  visibility: hidden; }
   
 .bg-primary {
   background: #9FB3A7 !important; }
