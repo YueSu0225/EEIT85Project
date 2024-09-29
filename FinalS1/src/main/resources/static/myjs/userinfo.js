@@ -23,6 +23,13 @@ document.addEventListener('DOMContentLoaded', function (){
 		    document.getElementById('userInfoName').innerHTML = data.userInfoName;
 			document.getElementById('userInfoName2').innerHTML = data.userInfoName; // 用戶名字
 		    document.getElementById('userInfoPhone').innerHTML = data.userInfoPhone; // 用戶手機
+			
+			
+			// 判斷是否為 Google 第三方登錄
+			      if (data.isGoogleLogin) {
+			          // 如果是 Google 第三方登录，用戶不能修改密碼，隱藏按鈕
+			          document.getElementById('changePasswordBtn').style.display = 'none';
+			      }
 		})
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);

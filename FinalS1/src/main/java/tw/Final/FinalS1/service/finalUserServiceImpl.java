@@ -266,7 +266,9 @@ public class finalUserServiceImpl implements UserService{
 	        if (user == null) {
 	            return ResponseEntity.status(404).body(Map.of("message", "User not found"));
 	        }
-
+	        
+	        boolean isGoogleLogin = user.getGoogleId() != null && !user.getGoogleId().isEmpty();
+	        
 	        // 更新用戶信息
 	        userInfoMedel existingUserInfo = userInfoRepository.findByUserId(user.getId());
 	        if (existingUserInfo != null) {
@@ -278,7 +280,7 @@ public class finalUserServiceImpl implements UserService{
 	            userInfoRepository.save(existingUserInfo); // 保存更改
 	        }
 
-	        return ResponseEntity.ok(Map.of("success", true));
+	        return ResponseEntity.ok(Map.of("success", true,"isGoogleLogin", isGoogleLogin));
 	    }
 
 
