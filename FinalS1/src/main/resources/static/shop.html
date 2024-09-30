@@ -35,20 +35,13 @@
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
 <style>
-/* 只將這個動畫應用到特定的 class 上，比如 .animate-fade-up */
-.animate-fade-up {
-    opacity: 0; /* 初始狀態 */
-    animation: fadeInUp 0.8s ease-out forwards;
-}
-
 
 
 .ftco-animate1 {
-    opacity: 0; /* 初始設為不可見 */
-    visibility: hidden; /* 初始設為不可見 */
-    animation: fadeInUp 0.8s ease-out forwards; /* 加入動畫效果 */
+	opacity: 0; /* 初始設為不可見 */
+	visibility: hidden; /* 初始設為不可見 */
+	animation: fadeInUp 0.8s ease-out forwards; /* 加入動畫效果 */
 }
-
 </style>
 
 </head>
@@ -85,11 +78,12 @@
 						class="nav-link dropdown-toggle" href="shop.html" id="dropdown04"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">商品</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="shop.html">所有商品</a>
-							<a class="dropdown-item" href="#" categoryid="1">男裝</a> 
-							<a class="dropdown-item" href="#" categoryid="2">女裝</a> 
-							<a class="dropdown-item" href="#" categoryid="3">童裝</a>
+							<a href="#" id="all-products" class="dropdown-item">所有商品</a>
+							<a class="dropdown-item" href="#" categoryid="1">男裝</a> <a
+								class="dropdown-item" href="#" categoryid="2">女裝</a> <a
+								class="dropdown-item" href="#" categoryid="3">童裝</a>
 						</div></li>
+
 
 					<!-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
 					<li class="nav-item"><a href="contact.html" class="nav-link">聯繫我們</a></li>
@@ -127,26 +121,28 @@
 			<div class="row justify-content-center">
 				<div class="col-md-10 mb-5 text-center">
 					<ul class="product-category">
-						<li><a href="#" class="active">所有商品</a></li>
+						<li><a href="#" id="all-products" class="active">所有商品</a></li>
 						<li><a href="#">上身</a></li>
 						<li><a href="#">下身</a></li>
 						<li><a href="#">配件</a></li>
 
+
 					</ul>
 				</div>
 			</div>
-			
 
-				<!-- 商品列表 -->
-				<div class="container">
-				<div class="product animate-fade-up">
-					<div class="row" id="product-list">
-						<!-- 商品卡片會動態插入到這裡 -->
-					</div>
-					</div>
+
+			<!-- 商品列表 -->
+			<div class="container">
+
+				<div class="row" id="product-list">
+					<!-- 商品卡片會動態插入到這裡 -->
 				</div>
-</section>
-				<!--  <div class="col-md-6 col-lg-3 ftco-animate">
+
+			</div>
+		</div>
+	</section>
+	<!--  <div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid"
 							src="./images/Upperbody/Men/cloth1.png" alt="Colorlib Template">
@@ -568,7 +564,7 @@
 				</div>
 			</div>
 		</div>-->
-	
+
 
 	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
 		<div class="container py-4">
@@ -705,80 +701,48 @@
 
 	<script>
 	document.addEventListener("DOMContentLoaded", function() {
-	    // 呼叫 API 獲取所有商品資料
-	    function loadAllProducts() {
-	        fetch('/products')  // 假設這個 API 會返回所有商品
-	            .then(response => response.json())
-	            .then(data => {
-	                let productList = document.getElementById('product-list');
-	                productList.innerHTML = ""; // 清空當前列表
+	    // 取得 URL 中的 categoryid 參數，如果有則載入對應分類的商品，否則載入所有商品
+	    const params = new URLSearchParams(window.location.search);
+	    const categoryId = params.get('categoryid');
 
-	                // 動態插入所有商品資料
-	                data.forEach(product => {
-	                    let productHTML = `
-	                        <div class="col-md-6 col-lg-3 ftco-animate1">
-	                            <div class="product">
-	                                <a href="product-single.html?productId=${product.id}" class="img-prod">
-	                                    <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
-	                                    <div class="overlay"></div>
-	                                </a>
-	                                <div class="text py-3 pb-4 px-3 text-center">
-	                                    <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
-	                                    <div class="pricing">
-	                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
-	                                    </div>
-	                                    <div class="bottom-area d-flex px-3">
-	                                        <div class="m-auto d-flex">
-	                                            <a href="#" class="heart d-flex justify-content-center align-items-center">
-	                                                <span><i class="ion-ios-heart"></i></span>
-	                                            </a>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    `;
-	                    productList.innerHTML += productHTML;
-	                });
-
-	                // 顯示所有被隱藏的 .ftco-animate1 元素，動畫將會觸發
-	                let animatedElements = document.querySelectorAll('.ftco-animate1');
-	                animatedElements.forEach(el => {
-	                    el.style.opacity = 1;       // 顯示透明度
-	                    el.style.visibility = 'visible';  // 取消隱藏
-	                });
-	            })
-	            .catch(error => console.error('Error fetching products:', error));
+	    if (categoryId) {
+	        loadProductsByCategory(categoryId);  // 載入分類商品
+	    } else {
+	        loadAllProducts();  // 載入所有商品
 	    }
 
-	    // 頁面加載時執行
-	    loadAllProducts();
-	});
-
-
-	
-
-	
-	//分類
-	document.addEventListener("DOMContentLoaded", function() {
-	    // 綁定每個分類按鈕的點擊事件
+	    // 綁定分類按鈕的點擊事件
 	    document.querySelectorAll('.dropdown-item').forEach(item => {
-	        item.addEventListener('click', function() {
-	            const categoryId = this.getAttribute('categoryid'); // 獲取分類的 ID
-
-	            // 呼叫 API 獲取該分類的商品
-	            loadProductsByCategory(categoryId);
+	        item.addEventListener('click', function(event) {
+	            event.preventDefault(); // 防止預設的跳轉行為
+	            const categoryId = this.getAttribute('categoryid'); // 取得 categoryid
+	            
+	            if (categoryId) {
+	                loadProductsByCategory(categoryId); // 根據分類載入商品
+	            } else {
+	                console.error("Category ID is null or undefined");
+	            }
 	        });
 	    });
-	    
-	    function loadProductsByCategory(categoryId) {
-	        fetch(`/products/category/${categoryId}`)  // 根據分類取得商品的 API 路徑
-	            .then(response => response.json())
-	            .then(data => {
-	                let productList = document.getElementById('product-list');
-	                productList.innerHTML = ""; // 清空當前列表
+	});
 
-	                // 插入商品資料
+	// 綁定「所有商品」按鈕的點擊事件
+	document.getElementById('all-products').addEventListener('click', function(event) {
+	    event.preventDefault();  // 防止跳轉
+	    loadAllProducts();       // 重新載入所有商品
+	});
+
+	// 初次載入所有商品的函數
+	function loadAllProducts() {
+	    fetch('/products')  // 假設這個 API 返回所有商品的資料
+	        .then(response => response.json())
+	        .then(data => {
+	            console.log(data);  // 檢查 API 返回的資料
+	            let productList = document.getElementById('product-list');
+	            productList.innerHTML = "";  // 清空當前的商品列表
+
+	            if (Array.isArray(data)) {
+	                // 迭代每個商品並動態生成 HTML
 	                data.forEach(product => {
 	                    let productHTML = `
 	                        <div class="col-md-6 col-lg-3 ftco-animate1">
@@ -805,17 +769,67 @@
 	                    `;
 	                    productList.innerHTML += productHTML;
 	                });
+	                animateProducts();  // 呼叫動畫函數
+	            } else {
+	                console.error("Data is not an array:", data);
+	            }
+	        })
+	        .catch(error => console.error('Error fetching products:', error));
+	}
 
-	                // 顯示所有被隱藏的 .ftco-animate1 元素
-	                let animatedElements = document.querySelectorAll('.ftco-animate1');
-	                animatedElements.forEach(el => {
-	                    el.style.opacity = 1;       // 顯示透明度
-	                    el.style.visibility = 'visible';  // 取消隱藏
+	// 根據分類載入商品的函數
+	function loadProductsByCategory(categoryId) {
+	    fetch(`/products/category/${categoryId}`)  // 根據分類取得商品資料的 API 路徑
+	        .then(response => response.json())
+	        .then(data => {
+	            let productList = document.getElementById('product-list');
+	            productList.innerHTML = "";  // 清空當前的商品列表
+
+	            if (Array.isArray(data)) {
+	                // 迭代每個商品並動態生成 HTML
+	                data.forEach(product => {
+	                    let productHTML = `
+	                        <div class="col-md-6 col-lg-3 ftco-animate1">
+	                            <div class="product">
+	                                <a href="product-single.html?productId=${product.id}" class="img-prod">
+	                                    <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
+	                                    <div class="overlay"></div>
+	                                </a>
+	                                <div class="text py-3 pb-4 px-3 text-center">
+	                                    <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
+	                                    <div class="pricing">
+	                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
+	                                    </div>
+	                                    <div class="bottom-area d-flex px-3">
+	                                        <div class="m-auto d-flex">
+	                                            <a href="#" class="heart d-flex justify-content-center align-items-center">
+	                                                <span><i class="ion-ios-heart"></i></span>
+	                                            </a>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    `;
+	                    productList.innerHTML += productHTML;
 	                });
-	            })
-	            .catch(error => console.error('Error fetching products:', error));
-	    }
-	});
+	                animateProducts();  // 呼叫動畫函數
+	            } else {
+	                console.error("Data is not an array:", data);
+	            }
+	        })
+	        .catch(error => console.error('Error fetching products by category:', error));
+	}
+
+	// 商品動畫效果的函數
+	function animateProducts() {
+	    let animatedElements = document.querySelectorAll('.ftco-animate1');
+	    animatedElements.forEach(el => {
+	        el.style.opacity = 1;
+	        el.style.visibility = 'visible';
+	    });
+	}
+
 	
 	</script>
 
