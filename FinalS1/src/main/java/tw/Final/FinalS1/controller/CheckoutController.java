@@ -27,14 +27,16 @@ public class CheckoutController {
     public String checkout() {
     	
         AioCheckOutOneTime obj = new AioCheckOutOneTime();
-        obj.setMerchantTradeNo("EEIT85766");
+        obj.setMerchantID("EEIT2024");
+        obj.setMerchantTradeNo("EEIT85test08123");
         obj.setMerchantTradeDate("2024/09/12 15:45:30");
         obj.setTotalAmount("1000");
         obj.setTradeDesc("EEIT專案");
-        obj.setItemName("Test Product");
-        obj.setReturnURL("https://your-website.com/payment-return");
-        obj.setClientBackURL("https://your-website.com/back");
+        obj.setItemName("Test Product");       
+        obj.setReturnURL("http://3de1-218-32-102-243.ngrok-free.app/ecpayresponse/receiveECPayResponse");
+        obj.setClientBackURL("http://localhost:8080/Home.html");
         obj.setNeedExtraPaidInfo("N");
+        obj.setChooseSubPayment("ALL");
 
         // 產生金流頁面的表單 HTML
         String form = allInOne.aioCheckOut(obj, null);

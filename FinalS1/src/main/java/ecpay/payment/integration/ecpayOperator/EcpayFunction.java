@@ -71,6 +71,7 @@ public class EcpayFunction {
 			urlEncode = netUrlEncode(urlEncode);
 			return hash(urlEncode.getBytes(), "SHA-256");
 		} catch(Exception e){
+			System.out.println("生成 CheckMacValue 失败: " + e.getMessage());
 			throw new EcpayException(ErrorMessage.GEN_CHECK_MAC_VALUE_FAIL);
 		}
 	}
