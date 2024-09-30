@@ -323,6 +323,23 @@ public class finalUserServiceImpl implements UserService{
 
         return ResponseEntity.ok().build(); // 返回 OK 
     }
+
+
+	@Override
+	public ResponseEntity<Map<String, Object>> forgetPassword(RegisterRequest request) {
+		String account = request.getAccount();
+		String newPassword = request.getPassword();
+		
+		List<UserModel> userModel = userRepository.findByAccount(account);
+		UserModel user = userModel.get(0);
+		user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+		
+		userRepository.save(user);
+		 
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        return ResponseEntity.ok(response);
+	}
 	
 	
 
