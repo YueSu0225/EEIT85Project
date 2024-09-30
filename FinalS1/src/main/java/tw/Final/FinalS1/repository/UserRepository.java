@@ -9,7 +9,7 @@ import tw.Final.FinalS1.model.UserModel;
 
 
 @Repository
-public interface UserRepository extends JpaRepository<UserModel, Integer> {	
+public interface UserRepository extends JpaRepository<UserModel, Long> {	
 
 	public List<UserModel> findByAccount(String account);
 	
