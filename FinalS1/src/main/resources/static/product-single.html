@@ -37,52 +37,73 @@
 
 
 <style>
-.product-page {
-	margin-top: 50px; /* 你可以根據需要調整這個數值 */
+#carouselExampleIndicators {
+	max-width: 500px;
+	margin: 0 auto; /* 圖片居中 */
 }
 
+/* 調整標題和內容的間距 */
 .product-info {
-	padding: 20px;
-	background-color: #f9f9f9;
-	border-radius: 10px;
+	padding-left: 20px; /* 給右邊內容區域一些內距 */
+	margin-top: 20px;
 }
 
-.product-title {
-	font-size: 2.5rem;
-	font-weight: bold;
+.product-info h1 {
+	font-size: 32px;
+	margin-bottom: 20px;
 }
 
 .product-price {
-	font-size: 1.75rem;
-	color: #28a745;
-	margin-bottom: 15px;
+	font-size: 24px;
+	color: #888;
+	margin-bottom: 10px;
 }
 
-.product-select label {
-	font-size: 1.2rem;
-	margin-top: 10px;
+.product-select {
+	margin-bottom: 15px; /* 增加選項之間的間距 */
 }
 
+/* 優化按鈕樣式 */
+#add-to-cart {
+	background-color: #28a745;
+	color: white;
+	border-radius: 5px;
+	padding: 10px 20px;
+	font-size: 18px;
+	transition: background-color 0.3s ease;
+}
+
+#add-to-cart:hover {
+	background-color: #218838;
+}
+
+/* 表格樣式調整 */
 .table {
 	margin-top: 30px;
-	font-size: 1.1rem;
-	background-color: #ffffff;
-	border-radius: 10px;
-	border: 1px solid #dddddd;
 }
 
 .table th, .table td {
 	text-align: center;
+	vertical-align: middle;
 }
 
-.btn-primary {
-	background-color: #007bff;
-	border: none;
-	padding: 10px 20px;
+/* 調整 select 框的寬度 */
+.product-select .form-select {
+	width: 100%; /* 讓 select 框自動填滿父容器的寬度 */
+	max-width: 400px; /* 限制最大寬度，防止過寬 */
+	padding: 10px; /* 增加內部間距，讓選單看起來更舒適 */
+	font-size: 16px; /* 調整字體大小 */
+	border-radius: 5px; /* 圓角邊框 */
+	border: 1px solid #ccc; /* 增加邊框樣式 */
 }
 
-.btn-primary:hover {
-	background-color: #0056b3;
+/* 調整 product-select 的整體間距 */
+.product-select {
+	margin-bottom: 20px; /* 增加選項之間的距離 */
+}
+
+.carousel-indicators {
+	display: none; /* 隱藏每個指示器 */
 }
 </style>
 
@@ -121,9 +142,10 @@
 						class="nav-link dropdown-toggle" href="shop.html" id="dropdown04"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">商品</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a class="dropdown-item" href="shop.html">MEN</a> <a
-								class="dropdown-item" href="shop.html">WOMEN</a> <a
-								class="dropdown-item" href="shop.html">KIDS</a>
+							<a class="dropdown-item" href="shop.html">所有商品</a> <a
+								class="dropdown-item" href="shop.html">男裝</a> <a
+								class="dropdown-item" href="shop.html">女裝</a> <a
+								class="dropdown-item" href="shop.html">童裝</a>
 
 							<!-- <a class="dropdown-item" href="checkout.html">Checkout</a> -->
 						</div></li>
@@ -168,24 +190,41 @@
 			<!-- 圖片區域 -->
 			<div class="col-md-6">
 				<div id="carouselExampleIndicators" class="carousel slide"
-					data-bs-ride="carousel">
+					data-ride="carousel">
 					<!-- 輪播指示器 -->
-					<div class="carousel-indicators" id="carousel-indicators"></div>
+					<ol class="carousel-indicators" id="carousel-indicators">
+						<li data-target="#carouselExampleIndicators" data-slide-to="0"
+							class="active"></li>
+						<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+						<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+					</ol>
 
 					<!-- 輪播圖片區域 -->
-					<div class="carousel-inner" id="carousel-inner"></div>
+					<div class="carousel-inner" id="carousel-inner">
+						<div class="carousel-item active">
+							<img src="https://via.placeholder.com/600x400"
+								class="d-block w-100" alt="First slide">
+						</div>
+						<div class="carousel-item">
+							<img src="https://via.placeholder.com/600x400"
+								class="d-block w-100" alt="Second slide">
+						</div>
+						<div class="carousel-item">
+							<img src="https://via.placeholder.com/600x400"
+								class="d-block w-100" alt="Third slide">
+						</div>
+					</div>
 
 					<!-- 左右切換按鈕 -->
-					<button class="carousel-control-prev" type="button"
-						data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-						<span class="visually-hidden">Previous</span>
-					</button>
-					<button class="carousel-control-next" type="button"
-						data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-						<span class="carousel-control-next-icon" aria-hidden="true"></span>
-						<span class="visually-hidden">Next</span>
-					</button>
+					<a class="carousel-control-prev" href="#carouselExampleIndicators"
+						role="button" data-slide="prev"> <span
+						class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+						class="sr-only">Previous</span>
+					</a> <a class="carousel-control-next" href="#carouselExampleIndicators"
+						role="button" data-slide="next"> <span
+						class="carousel-control-next-icon" aria-hidden="true"></span> <span
+						class="sr-only">Next</span>
+					</a>
 				</div>
 			</div>
 
@@ -203,12 +242,22 @@
 						<label for="size-select">尺寸</label> <select id="size-select"
 							class="form-select"></select>
 					</div>
-					
 
-					<div class="product-select">
-						<label for="quantity">數量</label> <input id="quantity"
-							type="number" class="form-control" value="1" min="1" max="99">
-					</div>
+					<div class="input-group col-md-6 d-flex mb-3">
+							<span class="input-group-btn mr-2">
+								<button type="button" class="quantity-left-minus btn"
+									data-type="minus" data-field="">
+									<i class="ion-ios-remove"></i>
+								</button>
+							</span> <input type="text" id="quantity" name="quantity"
+								class="form-control input-number" value="1" min="1" max="100">
+							<span class="input-group-btn ml-2">
+								<button type="button" class="quantity-right-plus btn"
+									data-type="plus" data-field="">
+									<i class="ion-ios-add"></i>
+								</button>
+							</span>
+						</div>
 					<div>
 						<p>
 							庫存: <span id="stock"></span>
@@ -219,7 +268,6 @@
 							商品描述: <span id="description"></span>
 						</p>
 					</div>
-
 
 					<button id="add-to-cart" class="btn btn-primary btn-lg mt-3">加入購物車</button>
 				</div>
@@ -285,71 +333,89 @@
 
 
 
-	<!--  <section class="ftco-section">
-    	<div class="container">
-    		<div class="row">
-    			<div class="col-lg-6 mb-5 ftco-animate">
-    				<a href="images/product-1.jpg" class="image-popup"><img src="./images/Lowerbody/Men/paints17.png" class="img-fluid" alt="Colorlib Template"></a>
-    			</div>
-    			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-    				<h3>ACG paint</h3>
-    				<div class="rating d-flex">
-							<p class="text-left mr-4">
-								<a href="#" class="mr-2">5.0</a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-							</p>
-							<p class="text-left mr-4">
-								<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
-							</p>
-							<p class="text-left">
-								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
-							</p>
-						</div>
-    				<p class="price"><span>$120.00</span></p>
-    				<p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until.
+
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 mb-5 ftco-animate">
+					<a href="images/product-1.jpg" class="image-popup"><img
+						src="./images/Lowerbody/Men/paints17.png" class="img-fluid"
+						alt="Colorlib Template"></a>
+				</div>
+				<div class="col-lg-6 product-details pl-md-5 ftco-animate">
+					<h3>ACG paint</h3>
+					<div class="rating d-flex">
+						<p class="text-left mr-4">
+							<a href="#" class="mr-2">5.0</a> <a href="#"><span
+								class="ion-ios-star-outline"></span></a> <a href="#"><span
+								class="ion-ios-star-outline"></span></a> <a href="#"><span
+								class="ion-ios-star-outline"></span></a> <a href="#"><span
+								class="ion-ios-star-outline"></span></a> <a href="#"><span
+								class="ion-ios-star-outline"></span></a>
 						</p>
-						<div class="row mt-4">
-							<div class="col-md-6">
-								<div class="form-group d-flex">
-		              <div class="select-wrap">
-	                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-	                  <select name="" id="" class="form-control">
-	                  	<option value="">Small</option>
-	                    <option value="">Medium</option>
-	                    <option value="">Large</option>
-	                    <option value="">Extra Large</option>
-	                  </select>
-	                </div>
-		            </div>
+						<p class="text-left mr-4">
+							<a href="#" class="mr-2" style="color: #000;">100 <span
+								style="color: #bbb;">Rating</span></a>
+						</p>
+						<p class="text-left">
+							<a href="#" class="mr-2" style="color: #000;">500 <span
+								style="color: #bbb;">Sold</span></a>
+						</p>
+					</div>
+					<p class="price">
+						<span>$120.00</span>
+					</p>
+					<p>A small river named Duden flows by their place and supplies
+						it with the necessary regelialia. It is a paradisematic country,
+						in which roasted parts of sentences fly into your mouth. Text
+						should turn around and return to its own, safe country. But
+						nothing the copy said could convince her and so it didn’t take
+						long until.</p>
+					<div class="row mt-4">
+						<div class="col-md-6">
+							<div class="form-group d-flex">
+								<div class="select-wrap">
+									<div class="icon">
+										<span class="ion-ios-arrow-down"></span>
+									</div>
+									<select name="" id="" class="form-control">
+										<option value="">Small</option>
+										<option value="">Medium</option>
+										<option value="">Large</option>
+										<option value="">Extra Large</option>
+									</select>
+								</div>
 							</div>
-							<div class="w-100"></div>
-							<div class="input-group col-md-6 d-flex mb-3">
-	             	<span class="input-group-btn mr-2">
-	                	<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
-	                   <i class="ion-ios-remove"></i>
-	                	</button>
-	            		</span>
-	             	<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
-	             	<span class="input-group-btn ml-2">
-	                	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-	                     <i class="ion-ios-add"></i>
-	                 </button>
-	             	</span>
-	          	</div>
-	          	<div class="w-100"></div>
-	          	<div class="col-md-12">
-	          		<p style="color: #000;">600 kg available</p>
-	          	</div>
-          	</div>
-          	<p><a href="cart.html" class="btn btn-black py-3 px-5">Add to Cart</a></p>
-    			</div>
-    		</div>
-    	</div>
-    </section> -->
+						</div>
+						<div class="w-100"></div>
+						<div class="input-group col-md-6 d-flex mb-3">
+							<span class="input-group-btn mr-2">
+								<button type="button" class="quantity-left-minus btn"
+									data-type="minus" data-field="">
+									<i class="ion-ios-remove"></i>
+								</button>
+							</span> <input type="text" id="quantity" name="quantity"
+								class="form-control input-number" value="1" min="1" max="100">
+							<span class="input-group-btn ml-2">
+								<button type="button" class="quantity-right-plus btn"
+									data-type="plus" data-field="">
+									<i class="ion-ios-add"></i>
+								</button>
+							</span>
+						</div>
+						<div class="w-100"></div>
+						<div class="col-md-12">
+							<p style="color: #000;">600 kg available</p>
+						</div>
+					</div>
+					<p>
+						<a href="cart.html" class="btn btn-black py-3 px-5">Add to
+							Cart</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
 
 	<section class="ftco-section">
 		<div class="container">
@@ -366,6 +432,10 @@
 				<!-- 商品列表將動態插入到這裡 -->
 			</div>
 		</div>
+
+
+
+
 		<!--  	<div class="container">
 			<div class="row">
 				<div class="col-md-6 col-lg-3 ftco-animate">
@@ -703,55 +773,35 @@
 		    fetch(`/product-variants/product/${productId}`)
 		        .then(response => response.json())
 		        .then(variants => {
-		            const colorSelect = document.getElementById('color-select');
-		            const sizeSelect = document.getElementById('size-select');
-		            const priceElement = document.getElementById('price');
-		            const stockElement = document.getElementById('stock');
-		            const descriptionElement = document.getElementById('description');
-		            const productName = document.getElementById('product-name');
-
-		            const carouselInner = document.getElementById('carousel-inner');
-		            const carouselIndicators = document.getElementById('carousel-indicators');
-
-		            let colors = new Set();
-		            let sizes = new Set();
-
 		            if (variants.length > 0) {
+		                const colorSelect = document.getElementById('color-select');
+		                const sizeSelect = document.getElementById('size-select');
+		                const priceElement = document.getElementById('price');
+		                const stockElement = document.getElementById('stock');
+		                const descriptionElement = document.getElementById('description');
+		                const productName = document.getElementById('product-name');
+		                
+		                // 設定初始顏色和尺寸
 		                initialColor = variants[0].color.name;
 		                initialSize = variants[0].size.name;
 
 		                // 顯示初始產品資訊
 		                priceElement.innerText = `NT$${variants[0].price}`;
 		                stockElement.innerText = variants[0].stock;
-		                productName.innerText = variants[0].product.name; 
+		                productName.innerText = variants[0].product.name;
 		                descriptionElement.innerText = variants[0].product.description;
 
 		                // 顯示初始輪播圖片
 		                updateCarouselImages(variants[0]);
 
 		                // 動態生成顏色和尺寸選項
-		                variants.forEach(variant => {
-		                    colors.add(variant.color.name);
-		                    sizes.add(variant.size.name);
-		                });
+		                populateSelectOptions(variants, colorSelect, 'color');
+		                populateSelectOptions(variants, sizeSelect, 'size');
 
-		                colors.forEach(color => {
-		                    let option = document.createElement('option');
-		                    option.value = color;
-		                    option.innerText = color;
-		                    colorSelect.appendChild(option);
-		                });
-
-		                sizes.forEach(size => {
-		                    let option = document.createElement('option');
-		                    option.value = size;
-		                    option.innerText = size;
-		                    sizeSelect.appendChild(option);
-		                });
-
+		                // 監聽顏色和尺寸的變更
 		                colorSelect.addEventListener('change', updateProductDetails);
 		                sizeSelect.addEventListener('change', updateProductDetails);
-
+		                
 		                updateProductDetails(); 
 		            }
 		        })
@@ -789,6 +839,7 @@
 		        });
 		    }
 
+		    // 更新產品詳細資訊
 		    function updateProductDetails() {
 		        const selectedColor = document.getElementById('color-select').value || initialColor;
 		        const selectedSize = document.getElementById('size-select').value || initialSize;
@@ -807,12 +858,27 @@
 		            })
 		            .catch(error => console.error('Error fetching product details:', error));
 		    }
+
+		    // 動態生成顏色或尺寸選項的函數
+		    function populateSelectOptions(variants, selectElement, property) {
+		        const uniqueOptions = new Set(variants.map(variant => variant[property].name));
+		        uniqueOptions.forEach(optionValue => {
+		            const option = document.createElement('option');
+		            option.value = optionValue;
+		            option.innerText = optionValue;
+		            selectElement.appendChild(option);
+		        });
+		    }
 		});
+
+		
+		
 
 		
 		//推薦商品
 		document.addEventListener("DOMContentLoaded", function() {
 		    // 呼叫 API 獲取商品資料
+		    function loadRandomProducts() {
 		    fetch('/products')  // 替換為你的 API 路徑
 		        .then(response => response.json())
 		        .then(data => {
@@ -825,27 +891,48 @@
 
 		            // 動態插入商品資料
 		            selectedProducts.forEach(product => {
-		                let productHTML = `
-		                    <div class="col-md-6 col-lg-3 ftco-animate">
-		                        <div class="product">
-		                            <a href="product-single.html?productId=${product.id}" class="img-prod">
-		                                <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
-		                                <div class="overlay"></div>
-		                            </a>
-		                            <div class="text py-3 pb-4 px-3 text-center">
-		                                <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
-		                                <div class="pricing">
-		                                    <p class="price"><span class="price-sale">NT$${product.price}</span></p>
-		                                </div>
-		                            </div>
-		                        </div>
-		                    </div>
-		                `;
-		                productList.innerHTML += productHTML;
-		            });
-		        })
-		        .catch(error => console.error('Error fetching products:', error));
-		});
+	                    let productHTML = `
+	                        <div class="col-md-6 col-lg-3 ftco-animate1">
+	                            <div class="product">
+	                                <a href="product-single.html?productId=${product.id}" class="img-prod">
+	                                    <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
+	                                    <div class="overlay"></div>
+	                                </a>
+	                                <div class="text py-3 pb-4 px-3 text-center">
+	                                    <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
+	                                    <div class="pricing">
+	                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
+	                                    </div>
+	                                    <div class="bottom-area d-flex px-3">
+	    								<div class="m-auto d-flex">
+	    								
+	    									<a href="#" class="heart d-flex justify-content-center align-items-center ">
+	    										<span><i class="ion-ios-heart"></i></span>
+	    									</a>
+	    								</div>
+	    							</div>
+	                                </div>
+
+	                            </div>
+	                        </div>
+	                    `;
+	                    productList.innerHTML += productHTML;
+	                });
+
+	                // 顯示所有被隱藏的 .ftco-animate 元素
+	                let animatedElements = document.querySelectorAll('.ftco-animate1');
+	                animatedElements.forEach(el => {
+	                    el.style.opacity = 1;       // 顯示透明度
+	                    el.style.visibility = 'visible';  // 取消隱藏
+	                });
+	            })
+	           
+	            .catch(error => console.error('Error fetching products:', error));
+	    }
+
+	    // 初始化隨機加載 4張商品
+	    loadRandomProducts();
+	});
 
 
 
