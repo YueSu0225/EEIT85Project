@@ -106,4 +106,9 @@ public class ControllerFinaltest {
 	
     	return finalUserService.forgetPassword(request);
 	}
+    
+    @PostMapping("/changepassword")
+    public ResponseEntity<Map<String, Object>> changePassword(@RequestBody RegisterRequest request, HttpSession session) {
+        return finalUserService.changePassword(request, session);
+    }
 }

@@ -9,13 +9,21 @@ public class RegisterRequest {
     private String phone;
     private String street;
     private String birthday;
-
+    private String oldPassword;
     // Getters and setters
     public String getAccount() {
         return account;
     }
 
-    public void setAccount(String account) {
+    public String getOldPassword() {
+		return oldPassword;
+	}
+
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+
+	public void setAccount(String account) {
         this.account = account;
     }
 

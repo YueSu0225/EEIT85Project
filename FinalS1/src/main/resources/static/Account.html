@@ -317,16 +317,20 @@
 			
 			
 			 <!-- Asaddr -->
-            <div id="As-addr" class="col-lg-9 ftco-animate as-block">
+             <div id="As-addr" class="col-lg-9 ftco-animate as-block">
                 <div class="ftco-animate member-ov">
                     <div class="row ftco-animate">
                         <div class="col-lg-9 ftco-animate">
-                            <button class="btn btn-secondary" id="changePasswordBtn">
+                            <button class="btn btn-secondary" id="changePasswordBtn" data-toggle="modal" data-target="#changePasswordModal">
                                 <strong>修改密碼</strong>
                             </button>
                         </div>
                     </div>
                 </div>
+                
+ 
+			
+
                 <br />
                 <div class="ftco-animate member-ov">
                     <div class="row ftco-animate">
@@ -342,7 +346,49 @@
     </div>   
 </section>
 
+               <!-- 密碼修改模態窗口 -->
+				<!-- 模態框 -->
+				<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog"
+					aria-labelledby="updateModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="updatePasswordLabel">修改密碼</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form id="updatePasswordMemberForm">
 
+									<div class="form-group">
+										<label for="oldpassword">請輸入舊密碼:</label>
+										<input type="password" class="form-control" id="oldPassword">
+                        				<span id="oldPasswordError" style="color: red;"></span>
+									</div>
+									<div class="form-group">
+										<label for="NewPassword">請輸入新密碼:</label> 
+                       <input type="password" class="form-control" id="newPassword">
+                        <span id="newPasswordError" style="color: red;"></span>
+									</div>
+									<div class="form-group">
+										<label for="checknewPassword">確認新密碼:</label> 
+                        <input type="password" class="form-control" id="confirmPassword">
+                        <span id="confirmPasswordError" style="color: red;"></span>
+									</div>
+
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									data-dismiss="modal">取消</button>
+								<button type="button" class="btn btn-primary"
+									onclick="updatePassword(event)">提交</button>
+							</div>
+						</div>
+					</div>
+				</div>
 
 
 	<!-- Footer -->
@@ -470,6 +516,7 @@
 	<script src="myjs/userinfo.js"></script>
 	<script src="myjs/updateuserinfo.js"></script>
 	<script src="myjs/deleteuser.js"></script>
+	<script src="myjs/changepassword.js"></script>
 </body>
 
 </html>
