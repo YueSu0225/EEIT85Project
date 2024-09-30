@@ -242,7 +242,7 @@ public class finalUserServiceImpl implements UserService{
         }
         
         boolean isGoogleLogin = user.getGoogleId() != null && !user.getGoogleId().isEmpty();
-        System.out.println(isGoogleLogin);
+
 
         
         // 查詢 userinfo
