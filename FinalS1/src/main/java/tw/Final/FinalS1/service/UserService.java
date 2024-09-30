@@ -29,6 +29,8 @@ public interface UserService {
 	
     public ResponseEntity<Void> logout(HttpServletRequest request);
     	  
-		 
-		
+    public ResponseEntity<Map<String, Object>> forgetPassword(RegisterRequest request);
+    	   	 
+    public ResponseEntity<Map<String, Object>> changePassword(RegisterRequest request, HttpSession session);
+	
 }

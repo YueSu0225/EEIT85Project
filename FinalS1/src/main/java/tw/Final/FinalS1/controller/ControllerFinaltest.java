@@ -100,4 +100,15 @@ public class ControllerFinaltest {
 
         return emailCodeService.processVerification(request); // 确保调用了processVerification
     }
+    
+    @PostMapping("/forgetpassword")
+	public ResponseEntity<Map<String, Object>> forgetPasswordPassword(@RequestBody RegisterRequest request) {
+	
+    	return finalUserService.forgetPassword(request);
+	}
+    
+    @PostMapping("/changepassword")
+    public ResponseEntity<Map<String, Object>> changePassword(@RequestBody RegisterRequest request, HttpSession session) {
+        return finalUserService.changePassword(request, session);
+    }
 }

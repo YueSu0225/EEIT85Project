@@ -67,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const phone = document.querySelector('input[placeholder="請輸入手機號碼"]').value;
         const street = document.getElementById('street').value;
         const birthday = document.querySelector('input[type="date"]').value;
-		const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)?(?:號(?:之(\d+)?)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
+		//const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)?(?:號(?:之(\d+)?)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
+		const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)號(?:之(\d+)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
 
 		const phonePattern = /^09\d{8}$/; // 驗證手機號碼格式：09開頭，後面8個數字
 		

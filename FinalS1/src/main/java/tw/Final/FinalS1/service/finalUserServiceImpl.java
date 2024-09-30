@@ -242,7 +242,7 @@ public class finalUserServiceImpl implements UserService{
         }
         
         boolean isGoogleLogin = user.getGoogleId() != null && !user.getGoogleId().isEmpty();
-        System.out.println(isGoogleLogin);
+
 
         
         // 查詢 userinfo
@@ -323,6 +323,43 @@ public class finalUserServiceImpl implements UserService{
 
         return ResponseEntity.ok().build(); // 返回 OK 
     }
+
+
+	@Override
+	public ResponseEntity<Map<String, Object>> forgetPassword(RegisterRequest request) {
+		String account = request.getAccount();
+		String newPassword = request.getPassword();
+		
+		List<UserModel> userModel = userRepository.findByAccount(account);
+		UserModel user = userModel.get(0);
+		user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+		
+		userRepository.save(user);
+		 
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        return ResponseEntity.ok(response);
+	}
+
+
+	@Override
+	public ResponseEntity<Map<String, Object>> changePassword(RegisterRequest request, HttpSession session) {
+		 String userUUID = (String) session.getAttribute("userUUID");
+	        UserModel user = userRepository.findByUuid(userUUID);
+	        
+	        if (BCrypt.checkpw(request.getOldPassword(), user.getPassword())) {	           
+		        user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
+		        userRepository.save(user);
+	        	Map<String, Object> response = new HashMap<>();
+	            response.put("success", true);
+	        	return ResponseEntity.ok(response);
+	        }else {
+	        	Map<String, Object> response = new HashMap<>();
+	        	response.put("success", false);
+		        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+	        }
+	
+	}
 	
 	
 

@@ -143,7 +143,7 @@ public class emailCodeServiceImpl implements emailCodeService {
 	        } else {
 	            response.put("success", false);
 	            response.put("message", "驗證失敗，請檢查驗證碼。");
-	            System.out.println("erro2");
+	            System.out.println("erro2: 驗證碼輸入錯誤");
 	        }
 	        
 	        return ResponseEntity.ok(response);
