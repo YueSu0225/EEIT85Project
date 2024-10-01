@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="CMShead"></head>
     <div class="container">
     
-
   <div class="content flex-grow-1 p-4">
     <div class="container">
         <form action="/users" method="get" class="form-inline mb-3" onsubmit="clearInput()">
@@ -17,7 +15,6 @@
     </div>
 </div>
   <h1 class="mt-5">用戶管理</h1>
-
     <table class="table table-bordered mt-3">
         <thead>
             <tr>
@@ -42,7 +39,6 @@
             </tr>
         </tbody>
     </table>
-
         <div class="pagination mt-4">
         <ul class="pagination">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
@@ -56,7 +52,6 @@
             </li>
         </ul>
     </div>
+    </div>
     
-    
-
 <footer th:include="CMSfooter"></footer>
