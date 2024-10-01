@@ -260,7 +260,7 @@ public class ProductController {
 	        return ResponseEntity.noContent().build();
 	}
 	
-	@GetMapping("/category/{categoryId}")
+	@GetMapping("products/category/{categoryId}")
 	public List<Product> getProductsByCategory(@PathVariable Long categoryId) {
 	    return productService.getProductsByCategory(categoryId);
 	}
@@ -275,6 +275,21 @@ public class ProductController {
 	        return ResponseEntity.notFound().build();
 	    }
 	}
+	
+	@GetMapping("products/type/{typeId}")
+	public List<Product> getProductsByType(@PathVariable Long typeId) {
+	    return productService.getProductsByType(typeId);
+	}
+	
+	@GetMapping("/products/category/{categoryId}/type/{typeId}")
+	public ResponseEntity<List<Product>> getProductsByCategoryAndType(
+	        @PathVariable Long categoryId,
+	        @PathVariable Long typeId) {
+	    List<Product> products = productService.findByCategoryAndType(categoryId, typeId);
+	    return ResponseEntity.ok(products);
+	}
+
+
 	
 	 
 	
