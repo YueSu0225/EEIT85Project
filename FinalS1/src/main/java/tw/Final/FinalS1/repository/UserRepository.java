@@ -30,7 +30,7 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
             "u.googleId LIKE CONCAT('%', :keyword, '%') OR " +
             "u.userInfoMedel.name LIKE CONCAT('%', :keyword, '%') OR " +
             "u.userInfoMedel.phone_number LIKE CONCAT('%', :keyword, '%') OR " +
-            "u.userInfoMedel.address LIKE CONCAT('%', :keyword, '%') OR " +
-            "u.userInfoMedel.birthday LIKE CONCAT('%', :keyword, '%')")
+            "u.userInfoMedel.address LIKE CONCAT('%', :keyword, '%')"
+            )
      public Page<UserModel> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }
