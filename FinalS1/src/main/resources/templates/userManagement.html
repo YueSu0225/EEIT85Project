@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="CMShead"></head>
+    <div class="container">
+    
+
+  <div class="content flex-grow-1 p-4">
+    <div class="container">
+        <form action="/users" method="get" class="form-inline mb-3" onsubmit="clearInput()">
+            <div class="form-group">
+                <span class="icon ion-ios-search"></span>
+                <input type="text" id="searchInput" name="key" class="form-control" placeholder="搜尋..." required>
+                <button type="submit" class="btn btn-primary ml-2">搜尋</button>
+            </div>
+        </form>
+    </div>
+</div>
+  <h1 class="mt-5">用戶管理</h1>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>账号</th>
+                <th>邮箱</th>
+                <th>姓名</th>
+                <th>电话号码</th>
+                <th>地址</th>
+                <th>生日</th>
+                <th>第三方</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${usersPage}">
+                <td th:text="${user.account}">帳號</td>
+                <td th:text="${user.email}">信箱</td>       
+                <td th:text="${user.userInfoMedel.name}">姓名</td>
+                <td th:text="${user.userInfoMedel.phone_number}">電話</td>
+                <td th:text="${user.userInfoMedel.address}">地址</td>
+                <td th:text="${user.userInfoMedel.birthday}">生日</td>
+                <td th:text="${user.googleId}">第三方</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <div class="pagination mt-4">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/users(page=${currentPage - 1}, size=5)}">上一頁</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/users(page=${i}, size=5)}" th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/users(page=${currentPage + 1}, size=5)}">下一頁</a>
+            </li>
+        </ul>
+    </div>
+    
+    
+
+<footer th:include="CMSfooter"></footer>
