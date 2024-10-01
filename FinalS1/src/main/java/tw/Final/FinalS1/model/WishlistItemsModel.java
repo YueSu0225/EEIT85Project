@@ -23,8 +23,9 @@ public class WishlistItemsModel {
 	private WishlistModel wishlist;
 	
 	@ManyToOne
-	@JoinColumn(name = "product_variant_id")
-	private ProductVariant productVariant;
+	@JoinColumn(name = "product_id")
+	private Product product;
+	
 	
 	
 	public Long getId() {
@@ -39,11 +40,12 @@ public class WishlistItemsModel {
 	public void setWishlist(WishlistModel wishlist) {
 		this.wishlist = wishlist;
 	}
-	public ProductVariant getProductVariant() {
-		return productVariant;
+	public Product getProduct() {
+		return product;
 	}
-	public void setProductVariant(ProductVariant productVariant) {
-		this.productVariant = productVariant;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
+	
 	
 }

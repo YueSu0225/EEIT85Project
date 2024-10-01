@@ -16,11 +16,21 @@ import tw.Final.FinalS1.model.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	
-	List<Product> findByCategoryId(Long categoryId);
-	
+	 // 根據分類和版型查詢商品
+    List<Product> findByCategoryIdAndTypeId(Long categoryId, Long typeId);
+
+    // 只根據分類查詢商品
+    List<Product> findByCategoryId(Long categoryId);
+
+    // 只根據版型查詢商品
+    List<Product> findByTypeId(Long typeId);
+
 	Optional<Product> findByName(String name);  // 返回 Optional 以便於處理空值
 
 	Page<Product> findAll(Pageable pageable);
+	
+
+
 	
 	
 

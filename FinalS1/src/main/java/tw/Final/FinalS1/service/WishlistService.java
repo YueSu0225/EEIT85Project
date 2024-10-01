@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tw.Final.FinalS1.dto.WishlistDto;
+import tw.Final.FinalS1.model.Product;
 import tw.Final.FinalS1.model.ProductVariant;
 import tw.Final.FinalS1.model.WishlistItemsModel;
 import tw.Final.FinalS1.model.WishlistModel;
+import tw.Final.FinalS1.repository.ProductRepository;
 import tw.Final.FinalS1.repository.ProductVariantRepository;
 import tw.Final.FinalS1.repository.WishistItemsRepository;
 import tw.Final.FinalS1.repository.WishlistRepository;
@@ -17,7 +19,7 @@ import tw.Final.FinalS1.repository.WishlistRepository;
 @Service
 public class WishlistService {
 	@Autowired
-	private ProductVariantRepository productVariantRepository;
+	private ProductRepository productRepository;
 
 	@Autowired
 	private WishlistRepository wishlistRepository;
@@ -26,40 +28,25 @@ public class WishlistService {
 	private WishistItemsRepository wishistItemsRepository;
 	
 	public WishlistModel addTowishlist(WishlistDto wishrequest) {
-		Long wishlistId = wishrequest.getId();
-		Long variantId = wishrequest.getVariantId();
-		int quantity = wishrequest.getQuantity();
+		Long wishlistId = wishrequest.getWishlistId();
+		Long productId = wishrequest.getProductId();
 
 		// 確認喜愛清單
 		WishlistModel wishlist = wishlistRepository.findById(wishlistId)
 				.orElseThrow(() -> new RuntimeException("wishlist not found"));
 
-		// 查找产品变体
-		ProductVariant productVariant = productVariantRepository.findById(variantId)
-				.orElseThrow(() -> new RuntimeException("Productvariant not found"));
+		// 查找商品
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new RuntimeException("Product not found"));
 
 		// 更新购物车中的商品
-		boolean itemExists = false;
-		for (WishlistItemsModel item : wishlist.getWishlistItems()) {
-			if (Objects.equals(item.getProductVariant().getId(), variantId)) {
-//				item.setQuantity(item.getQuantity() + quantity);
-//				// 更新價格
-//				int price = productVariant.getPrice() * item.getQuantity();
-//				item.setPrice(price);
-
-				itemExists = true;
-				break;
-			}
-		}
-
+		boolean itemExists = wishlist.getWishlistItems().stream()
+				.anyMatch(item -> Objects.equals(item.getProduct().getId(), productId));
 		// 如果商品不存在，则添加新商品
 		if (!itemExists) {
 			WishlistItemsModel newItem = new WishlistItemsModel();
-			int price = productVariant.getPrice() * quantity;
 			newItem.setWishlist(wishlist);
-			newItem.setProductVariant(productVariant);
-//			newItem.setQuantity(quantity);
-//			newItem.setPrice(price);
+			newItem.setProduct(product);
 			wishlist.getWishlistItems().add(newItem);
 		}
 		return wishlistRepository.save(wishlist);
@@ -89,14 +76,14 @@ public class WishlistService {
 //	}
 	
 	public WishlistModel deleteWishlist(WishlistDto wishrequest) {
-		Long wishlistId = wishrequest.getId();
-		Long variantId = wishrequest.getVariantId();
+		Long wishlistId = wishrequest.getWishlistId();
+		Long productId = wishrequest.getProductId();
 
 		WishlistModel wishlist = wishlistRepository.findById(wishlistId)
 				.orElseThrow(() -> new RuntimeException("Wishlist not found"));
 		
 		WishlistItemsModel itemToDelete = wishlist.getWishlistItems().stream()
-										.filter(item -> Objects.equals(item.getProductVariant().getId(), variantId))
+										.filter(item -> Objects.equals(item.getProduct().getId(), productId))
 							            .findFirst()
 							            .orElseThrow(() -> new RuntimeException("Item not found in wishlist"));
 		

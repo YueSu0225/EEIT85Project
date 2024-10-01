@@ -42,6 +42,12 @@
 	visibility: hidden; /* 初始設為不可見 */
 	animation: fadeInUp 0.8s ease-out forwards; /* 加入動畫效果 */
 }
+
+.dropdown-item.active {
+    color: #FFFFFF !important; /* 白色文字 */
+    background-color: #e3dcd2  !important; 
+}
+
 </style>
 
 </head>
@@ -78,7 +84,7 @@
 						class="nav-link dropdown-toggle" href="shop.html" id="dropdown04"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">商品</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
-							<a href="#" id="all-products" class="dropdown-item">所有商品</a>
+							<a href="#" id="all-products-category" class="dropdown-item">所有商品</a>
 							<a class="dropdown-item" href="#" categoryid="1">男裝</a> <a
 								class="dropdown-item" href="#" categoryid="2">女裝</a> <a
 								class="dropdown-item" href="#" categoryid="3">童裝</a>
@@ -121,10 +127,11 @@
 			<div class="row justify-content-center">
 				<div class="col-md-10 mb-5 text-center">
 					<ul class="product-category">
-						<li><a href="#" id="all-products" class="active">所有商品</a></li>
-						<li><a href="#">上身</a></li>
-						<li><a href="#">下身</a></li>
-						<li><a href="#">配件</a></li>
+						<li><a href="#" id="all-products-type" class="active">所有商品</a></li>
+						<li><a href="#" typeid="1">上身</a></li>
+						<li><a href="#" typeid="2">下身</a></li>
+						<li><a href="#" typeid="3">連身</a></li>
+						<li><a href="#" typeid="4">配件</a></li>
 
 
 					</ul>
@@ -701,48 +708,92 @@
 
 	<script>
 	document.addEventListener("DOMContentLoaded", function() {
-	    // 取得 URL 中的 categoryid 參數，如果有則載入對應分類的商品，否則載入所有商品
-	    const params = new URLSearchParams(window.location.search);
-	    const categoryId = params.get('categoryid');
+	    let selectedCategoryId = null;
+	    let selectedTypeId = null;
 
-	    if (categoryId) {
-	        loadProductsByCategory(categoryId);  // 載入分類商品
-	    } else {
-	        loadAllProducts();  // 載入所有商品
-	    }
+	    // 綁定版型按鈕的點擊事件
+	    document.querySelectorAll('.product-category li a').forEach(item => {
+	        item.addEventListener('click', function(event) {
+	            event.preventDefault(); // 防止預設的跳轉行為
+
+	            // 移除所有 li 的 active 類
+	            document.querySelectorAll('.product-category li a').forEach(link => {
+	                link.classList.remove('active');
+	            });
+
+	            // 為當前點擊的 li 添加 active 類
+	            this.classList.add('active');
+
+	            selectedTypeId = this.getAttribute('typeid'); // 取得 typeid
+
+	            if (selectedTypeId) {
+	                loadProducts(selectedCategoryId, selectedTypeId); // 根據版型載入商品
+	            } else {
+	                loadAllProducts(); // 如果是所有商品，則顯示所有
+	            }
+	        });
+	    });
 
 	    // 綁定分類按鈕的點擊事件
 	    document.querySelectorAll('.dropdown-item').forEach(item => {
 	        item.addEventListener('click', function(event) {
 	            event.preventDefault(); // 防止預設的跳轉行為
-	            const categoryId = this.getAttribute('categoryid'); // 取得 categoryid
-	            
-	            if (categoryId) {
-	                loadProductsByCategory(categoryId); // 根據分類載入商品
+
+	            // 清除所有 active 類
+	            document.querySelectorAll('.dropdown-item').forEach(link => {
+	                link.classList.remove('active');
+	            });
+	            this.classList.add('active');
+
+	            selectedCategoryId = this.getAttribute('categoryid'); // 取得 categoryid
+
+	            if (selectedCategoryId) {
+	                loadProducts(selectedCategoryId, selectedTypeId); // 根據分類載入商品
 	            } else {
-	                console.error("Category ID is null or undefined");
+	                loadAllProducts(); // 如果是所有商品，則顯示所有
 	            }
 	        });
 	    });
+
+	    // 綁定「所有商品」按鈕的點擊事件
+	    document.getElementById('all-products-category').addEventListener('click', function(event) {
+	        event.preventDefault();  // 防止跳轉
+	        selectedCategoryId = null;  // 清空分類選擇
+	        selectedTypeId = null;      // 清空版型選擇
+
+	        // 移除所有 active 類
+	        document.querySelectorAll('.product-category li a, .dropdown-item').forEach(link => {
+	            link.classList.remove('active');
+	        });
+	        this.classList.add('active');
+
+	        loadAllProducts();          // 重新載入所有商品
+	    });
+
+	    // 頁面加載時自動加載所有商品
+	    loadAllProducts();
 	});
 
-	// 綁定「所有商品」按鈕的點擊事件
-	document.getElementById('all-products').addEventListener('click', function(event) {
-	    event.preventDefault();  // 防止跳轉
-	    loadAllProducts();       // 重新載入所有商品
-	});
+	// 根據分類與版型載入商品的函數
+	function loadProducts(categoryId, typeId) {
+	    let url = '/products';  // 初始化基礎 URL
 
-	// 初次載入所有商品的函數
-	function loadAllProducts() {
-	    fetch('/products')  // 假設這個 API 返回所有商品的資料
+	    // 根據傳遞的 categoryId 和 typeId 動態構建 URL
+	    if (categoryId && typeId) {
+	        url = `/products/products/category/${categoryId}/type/${typeId}`;
+	    } else if (categoryId) {
+	        url = `/products/products/category/${categoryId}`;
+	    } else if (typeId) {
+	        url = `/products/products/type/${typeId}`;
+	    }
+
+	    fetch(url)
 	        .then(response => response.json())
 	        .then(data => {
-	            console.log(data);  // 檢查 API 返回的資料
 	            let productList = document.getElementById('product-list');
 	            productList.innerHTML = "";  // 清空當前的商品列表
 
 	            if (Array.isArray(data)) {
-	                // 迭代每個商品並動態生成 HTML
 	                data.forEach(product => {
 	                    let productHTML = `
 	                        <div class="col-md-6 col-lg-3 ftco-animate1">
@@ -777,16 +828,24 @@
 	        .catch(error => console.error('Error fetching products:', error));
 	}
 
-	// 根據分類載入商品的函數
-	function loadProductsByCategory(categoryId) {
-	    fetch(`/products/category/${categoryId}`)  // 根據分類取得商品資料的 API 路徑
+	// 商品動畫效果的函數
+	function animateProducts() {
+	    let animatedElements = document.querySelectorAll('.ftco-animate1');
+	    animatedElements.forEach(el => {
+	        el.style.opacity = 1;
+	        el.style.visibility = 'visible';
+	    });
+	}
+
+	// 載入所有商品的函數
+	function loadAllProducts() {
+	    fetch('/products')
 	        .then(response => response.json())
 	        .then(data => {
 	            let productList = document.getElementById('product-list');
 	            productList.innerHTML = "";  // 清空當前的商品列表
 
 	            if (Array.isArray(data)) {
-	                // 迭代每個商品並動態生成 HTML
 	                data.forEach(product => {
 	                    let productHTML = `
 	                        <div class="col-md-6 col-lg-3 ftco-animate1">
@@ -800,13 +859,6 @@
 	                                    <div class="pricing">
 	                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
 	                                    </div>
-	                                    <div class="bottom-area d-flex px-3">
-	                                        <div class="m-auto d-flex">
-	                                            <a href="#" class="heart d-flex justify-content-center align-items-center">
-	                                                <span><i class="ion-ios-heart"></i></span>
-	                                            </a>
-	                                        </div>
-	                                    </div>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -818,17 +870,10 @@
 	                console.error("Data is not an array:", data);
 	            }
 	        })
-	        .catch(error => console.error('Error fetching products by category:', error));
+	        .catch(error => console.error('Error fetching products:', error));
 	}
 
-	// 商品動畫效果的函數
-	function animateProducts() {
-	    let animatedElements = document.querySelectorAll('.ftco-animate1');
-	    animatedElements.forEach(el => {
-	        el.style.opacity = 1;
-	        el.style.visibility = 'visible';
-	    });
-	}
+
 
 	
 	</script>
