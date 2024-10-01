@@ -110,8 +110,16 @@
 							 <span id="correctmesg" style="color: green;"></span>
 						</div>
 						<div class="form-group">
-						<input type="submit" value="檢查信箱" class="btn btn-dark">
+							<button type="button" class="btn btn-secondary"
+								id="sendEmailCode">發送驗證碼</button>
 						</div>
+						<div id="confirmationSection"
+							style="display: none; margin-bottom: 10px;">
+							<input type="text" id="verificationCode" placeholder="輸入驗證碼" />
+							<button id="confirmCode" class="btn btn-success" type="button">確認</button>
+							<span id="result" style="color: red;"></span>
+						</div>
+
 						<div class="form-group">
 							<input type="password" id="password" class="form-control" placeholder="請輸入密碼">
 							<span id="passwordError" style="color: red;"></span>
@@ -121,7 +129,8 @@
 							<span id="checkPasswordError" style="color: red;"></span>
 						</div>
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="姓名">
+							<input type="text" class="form-control" placeholder="姓名" id="name">
+							<span id="nameErrormesg" style="color: red;"></span>
 						</div>
 						
 						<div class="form-group">
@@ -150,7 +159,7 @@
 						</div>
 
 						<div class="form-group">
-							<label>生日：</label> <input type="date" class="form-control">
+							<label>生日：</label> <input type="date" class="form-control" id ="birthday">
 						</div>
 						<div class="form-group" style="text-align: center;">
                             <input type="submit" value="註冊" class="btn btn-primary py-3 px-5">
@@ -270,10 +279,12 @@
     <script src="js/google-map.js"></script>
     <script src="js/main.js"></script>
 <script src="myjs/town.js"></script>
-<script src="myjs/emailtype.js"></script>
+<script src="myjs/email.js"></script>
 <script src="myjs/passwd.js"></script>
 <script src="myjs/register.js"></script>
 <script src="myjs/phone.js"></script>
+<script src="myjs/birthday.js"></script>
+<script src="myjs/sendEmailCode.js"></script>
 </body>
 
 </html>

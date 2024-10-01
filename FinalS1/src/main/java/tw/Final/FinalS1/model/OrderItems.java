@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "order_items")
 public class OrderItems {
@@ -12,20 +14,22 @@ public class OrderItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    // 與 OrderModel 的多對一關係
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonIgnore
     private OrderModel order;
 
     @ManyToOne
     @JoinColumn(name = "product_variant_id", nullable = false)
     private ProductVariant productVariant;
-    
+
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
     @Column(name = "price", nullable = false)
     private BigDecimal price;
-    
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -71,7 +75,7 @@ public class OrderItems {
     public void setProductVariant(ProductVariant productVariant) {
         this.productVariant = productVariant;
     }
-    
+
     public int getQuantity() {
         return quantity;
     }
@@ -79,7 +83,7 @@ public class OrderItems {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
+ 
     public BigDecimal getPrice() {
         return price;
     }
@@ -92,7 +96,17 @@ public class OrderItems {
         return createdAt;
     }
 
+    // createdAt 的 setter 通常不需要，因為由 @PrePersist 管理
+    // public void setCreatedAt(LocalDateTime createdAt) {
+    //     this.createdAt = createdAt;
+    // }
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+
+    // updatedAt 的 setter 通常不需要，因為由 @PreUpdate 管理
+    // public void setUpdatedAt(LocalDateTime updatedAt) {
+    //     this.updatedAt = updatedAt;
+    // }
 }
