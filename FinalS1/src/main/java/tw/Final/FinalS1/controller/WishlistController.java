@@ -1,6 +1,7 @@
 package tw.Final.FinalS1.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import tw.Final.FinalS1.dto.WishlistDto;
 import tw.Final.FinalS1.model.WishlistItemsModel;
 import tw.Final.FinalS1.model.WishlistModel;
 import tw.Final.FinalS1.repository.UserRepository;
+import tw.Final.FinalS1.repository.WishlistRepository;
 import tw.Final.FinalS1.service.WishlistService;
 
 @RestController
@@ -27,6 +29,31 @@ public class WishlistController {
 	public WishlistService wishlistService;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private WishlistRepository wishlistRepository;
+	
+	@PostMapping("/toggle")
+	public ResponseEntity<WishlistModel> toggleWishlistItem(@RequestBody WishlistDto wishlistRequest) {
+		Long wishlistId = wishlistRequest.getWishlistId();
+        Long productId = wishlistRequest.getProductId();
+        
+        // 查找喜愛清單
+        WishlistModel wishlist = wishlistRepository.findById(wishlistId)
+                .orElseThrow(() -> new RuntimeException("Wishlist not found"));
+
+        // 檢查商品是否已存在於喜愛清單中
+        boolean itemExists = wishlist.getWishlistItems().stream()
+                .anyMatch(item -> Objects.equals(item.getProduct().getId(), productId));
+
+        if (itemExists) {
+            // 如果商品存在，則移除
+            return ResponseEntity.ok(wishlistService.deleteWishlist(wishlistRequest));
+        } else {
+            // 如果商品不存在，則添加
+            return ResponseEntity.ok(wishlistService.addTowishlist(wishlistRequest));
+        }
+    }
+	
 
 	@PostMapping("/add")
 	public ResponseEntity<WishlistModel> addTowishlist(@RequestBody WishlistDto wishrequest) {
