@@ -2,16 +2,21 @@ package tw.Final.FinalS1.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,48 +27,65 @@ public class OrderModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-/*    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)  // 使用 user_id 而不是 order_id
-    @JsonIgnore  // 直接忽略 user 序列化
-    private UserModel user;  // 存放用戶ID
-*/
-    @Column(name = "user_id", nullable = false)  // 使用 user_id 而不是 user 模型
-    private Long userId;  // 存放用戶ID
-    
-    @Column(name = "total_price", nullable = false)
+    // 添加與 OrderItems 的一對多關係
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<OrderItems> orderItems = new ArrayList<>();
+
+    // 如果需要與 UserModel 建立關係，可以取消註解以下代碼
+    /*
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private UserModel user;
+    */
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private String status;
-    
-    @Column(name = "ecpay_number", nullable = false)  // ecpay_number 必須有值
+
+    @Column(name = "ecpay_number")
     private String ecpayNumber;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     // 無參構造函數（JPA要求）
     public OrderModel() {}
 
     // 全參構造函數，根據需要選擇是否使用
-    public OrderModel(Long userId, BigDecimal totalPrice, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public OrderModel(Long userId, BigDecimal totalPrice, String status, String ecpayNumber, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.userId = userId;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.ecpayNumber = ecpayNumber;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
- // Getter 和 Setter 方法
+    // Getter 和 Setter 方法
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    // 添加 orderItems 的 Getter 和 Setter
+    public List<OrderItems> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItems> orderItems) {
+        this.orderItems = orderItems;
     }
 
     public Long getUserId() {
@@ -97,7 +119,7 @@ public class OrderModel {
     public void setEcpayNumber(String ecpayNumber) {
         this.ecpayNumber = ecpayNumber;
     }
-    
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

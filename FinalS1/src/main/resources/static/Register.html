@@ -87,88 +87,87 @@
       </div>
     </div> -->
 
-    <!-- 表單  -->
-    <section class="ftco-section signin-section bg-light">
-        <div class="container">
-            <div class="block-9">
-                <div class="order-md-last d-flex justify-content-center">
-                    <form action="#" class="bg-white p-5 signin-form">
-						<div class="row text-center">
-							<div class="col-md-6 form-group active">
-								<span type="button"><a href="SignIn.html" class="w-100"
-									style="color: black;">登入</a>
-								</span>
-							</div>
-							<div class="col-md-6 form-group">
-								<span type="button"><a href="#" class="w-100"
-									style="color: black;">註冊</a></span>
-							</div> 
-						</div>
-						<div class="form-group">
-							<input type="email" id="email" class="form-control" placeholder="請輸入信箱" required>
-							 <span id="errormesg" style="color: red;"></span>
-							 <span id="correctmesg" style="color: green;"></span>
-						</div>
-						<div class="form-group">
-							<button type="button" class="btn btn-secondary"
-								id="sendEmailCode">發送驗證碼</button>
-						</div>
-						<div id="confirmationSection"
-							style="display: none; margin-bottom: 10px;">
-							<input type="text" id="verificationCode" placeholder="輸入驗證碼" />
-							<button id="confirmCode" class="btn btn-success" type="button">確認</button>
-							<span id="result" style="color: red;"></span>
-						</div>
-
-						<div class="form-group">
-							<input type="password" id="password" class="form-control" placeholder="請輸入密碼">
-							<span id="passwordError" style="color: red;"></span>
-						</div>
-						<div class="form-group">
-							<input type="password" id="checkPassword" class="form-control" placeholder="請確認密碼">
-							<span id="checkPasswordError" style="color: red;"></span>
-						</div>
-						<div class="form-group">
-							<input type="text" class="form-control" placeholder="姓名" id="name">
-							<span id="nameErrormesg" style="color: red;"></span>
-						</div>
-						
-						<div class="form-group">
-                            <input type="text" class="form-control" id="phone" placeholder="請輸入手機號碼">
-                            <span id="phoneerrormesg" style="color: red;"></span>
-                            
+   <section class="ftco-section signin-section bg-light">
+    <div class="container-fluid"> <!-- 改為 container-fluid 讓表單占滿整個屏幕 -->
+        <div class="block-9">
+            <div class="order-md-last d-flex justify-content-center">
+                <form action="#" class="bg-white p-5 signin-form w-100" style="max-width: 500px;"> <!-- max-width: 500px 限制最大寬度, w-100 保持100%寬度 -->
+                    <div class="row text-center">
+                        <div class="col-md-6 col-12 form-group active">
+                            <span type="button"><a href="SignIn.html" class="btn btn-link w-100" style="color: black;">登入</a></span>
                         </div>
-						<!-- 地址 - 縣市 -->
-						<div class="form-group">
-							<select id="city" class="form-control">
-								<option value="" disabled selected>選擇縣市</option>
-							</select>
-						</div>
-						<!-- 地址 - 區域 -->
-						<div class="form-group">
-							<select id="district" class="form-control">
-								<option value="" disabled selected>選擇鄉鎮區</option>
-							</select>
-						</div>
-
-						<!-- 地址 - 街道名稱 -->
-						<div class="form-group">
-							<input type="text" id="street" class="form-control"
-								placeholder="請輸入街道名門牌號">
-								<span id="streeterrormesg" style="color: red;"></span>
-						</div>
-
-						<div class="form-group">
-							<label>生日：</label> <input type="date" class="form-control" id ="birthday">
-						</div>
-						<div class="form-group" style="text-align: center;">
-                            <input type="submit" value="註冊" class="btn btn-primary py-3 px-5">
+                        <div class="col-md-6 col-12 form-group">
+                            <span type="button"><a href="#" class="btn btn-link w-100" style="color: black;">註冊</a></span>
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="email" id="email" class="form-control" placeholder="請輸入信箱" required>
+                        <span id="errormesg" style="color: red;"></span>
+                        <span id="correctmesg" style="color: green;"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary w-100" id="sendEmailCode">發送驗證碼</button>
+                    </div>
+                    
+                    <div id="confirmationSection" style="display: none; margin-bottom: 10px;">
+                        <input type="text" id="verificationCode" placeholder="輸入驗證碼" class="form-control mb-2" />
+                        <button id="confirmCode" class="btn btn-success w-100" type="button">確認</button>
+                        <span id="result" style="color: red;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" id="password" class="form-control" placeholder="請輸入密碼">
+                        <span id="passwordError" style="color: red;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" id="checkPassword" class="form-control" placeholder="請確認密碼">
+                        <span id="checkPasswordError" style="color: red;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="姓名" id="name">
+                        <span id="nameErrormesg" style="color: red;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="phone" placeholder="請輸入手機號碼">
+                        <span id="phoneerrormesg" style="color: red;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="city" class="form-control">
+                            <option value="" disabled selected>選擇縣市</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="district" class="form-control">
+                            <option value="" disabled selected>選擇鄉鎮區</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" id="street" class="form-control" placeholder="請輸入街道名門牌號">
+                        <span id="streeterrormesg" style="color: red;"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>生日：</label>
+                        <input type="date" class="form-control" id="birthday">
+                    </div>
+
+                    <div class="form-group" style="text-align: center;">
+                        <input type="submit" value="註冊" class="btn btn-primary py-3 px-5 w-100">
+                    </div>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <footer class="ftco-footer ftco-section">
         <div class="container">
