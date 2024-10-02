@@ -10,10 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.service.CMSuserService;
 
@@ -41,6 +44,18 @@ public class CMSviewController {
             				Model model) {
 		return cmSuserService.getAllUsers(page, size, key, model);
 	}
+	
+	@PostMapping("/edit")
+	public String editUser(@ModelAttribute RegisterRequest request) {
+	    cmSuserService.updateUser(request);  // 调用 Service 更新用户信息
+	    return "redirect:/users";
+	}
+	
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id) {
+    	cmSuserService.deleteUserById(id);
+        return "redirect:/users";
+    }
 }	
 	
 

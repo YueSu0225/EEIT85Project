@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+
+import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.repository.UserRepository;
 
@@ -35,5 +37,24 @@ public class CMSuserServiceImpl implements CMSuserService{
 	    model.addAttribute("totalElements", userPage.getTotalElements());
 	    
 	    return "userManagement"; // 跳轉使用者資料頁
+	}
+
+	@Override
+	public void updateUser(RegisterRequest request) {
+		UserModel user = userRepository.findById(request.getId())
+				.orElseThrow(() -> new RuntimeException("用户不存在"));
+		user.setEmail(request.getEmail());
+		user.getUserInfoMedel().setAddress(request.getStreet());
+		user.getUserInfoMedel().setPhone_number(request.getPhone());
+		
+		
+		userRepository.save(user);
+		
+	}
+
+	@Override
+	public void deleteUserById(Long id) {
+        userRepository.deleteById(id); 
+    
 	}
 }

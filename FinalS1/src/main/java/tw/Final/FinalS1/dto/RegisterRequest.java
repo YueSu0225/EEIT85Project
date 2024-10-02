@@ -1,6 +1,7 @@
 package tw.Final.FinalS1.dto;
 
 public class RegisterRequest {
+	private Long id;
     private String account;
     private String password;
     private String name;
@@ -15,7 +16,15 @@ public class RegisterRequest {
         return account;
     }
 
-    public String getOldPassword() {
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getOldPassword() {
 		return oldPassword;
 	}
 

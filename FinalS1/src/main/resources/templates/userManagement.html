@@ -8,7 +8,7 @@
         <form action="/users" method="get" class="form-inline mb-3" onsubmit="clearInput()">
             <div class="form-group">
                 <span class="icon ion-ios-search"></span>
-                <input type="text" id="searchInput" name="key" class="form-control" placeholder="搜尋..." required>
+                <input type="text" id="searchInput" name="key" class="form-control" placeholder="搜尋...">
                 <button type="submit" class="btn btn-primary ml-2">搜尋</button>
             </div>
         </form>
@@ -18,17 +18,20 @@
     <table class="table table-bordered mt-3">
         <thead>
             <tr>
-                <th>账号</th>
-                <th>邮箱</th>
+            	<th>ID</th>
+                <th>帳號</th>
+                <th>信箱</th>
                 <th>姓名</th>
-                <th>电话号码</th>
+                <th>電話</th>
                 <th>地址</th>
                 <th>生日</th>
                 <th>第三方</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="user : ${usersPage}">
+            	<td th:text="${user.id}">ID</td>
                 <td th:text="${user.account}">帳號</td>
                 <td th:text="${user.email}">信箱</td>       
                 <td th:text="${user.userInfoMedel.name}">姓名</td>
@@ -36,6 +39,18 @@
                 <td th:text="${user.userInfoMedel.address}">地址</td>
                 <td th:text="${user.userInfoMedel.birthday}">生日</td>
                 <td th:text="${user.googleId}">第三方</td>
+                 <td>
+          <!-- 修改和刪除按鈕 -->
+<button type="button" class="btn btn-warning btn-sm" 
+		data-toggle="modal" 
+        data-target="#editUserModal" 
+    th:attr="data-id=${user.id}, data-account=${user.account}, data-email=${user.email}, data-name=${user.userInfoMedel.name}, data-phone=${user.userInfoMedel.phone_number}, data-address=${user.userInfoMedel.address}">
+
+    修改
+</button>
+   
+          <a th:href="@{/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除該用戶嗎？')">刪除</a>
+        </td>
             </tr>
         </tbody>
     </table>
@@ -53,5 +68,78 @@
         </ul>
     </div>
     </div>
-    
+<!-- 模态框 -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">修改用戶資料</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" action="/edit">
+                <div class="modal-body">
+                    <input type="hidden" id="userId" name="id" />
+                    <div class="form-group">
+                        <label>帳號</label>
+                        <input type="text" id="account" class="form-control" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label>信箱</label>
+                        <input type="email" id="email" name="email" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input type="text" id="name" name="name" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label>電話</label>
+                        <input type="text" id="phone" name="phone" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label>地址</label>
+                        <input type="text" id="address" name="Street" class="form-control" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">保存更改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+ <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取模态框
+    const editModal = document.getElementById('editUserModal');
+
+    // 监听模态框的显示事件
+    $(document).on('show.bs.modal', '#editUserModal', function(event) {
+        // 获取触发按钮
+        const button = event.relatedTarget;
+
+        // 从按钮中获取数据
+        const id = button.getAttribute('data-id');
+        const account = button.getAttribute('data-account');
+        const email = button.getAttribute('data-email');
+        const name = button.getAttribute('data-name');
+        const phone = button.getAttribute('data-phone');
+        const address = button.getAttribute('data-address');
+
+
+
+        // 更新模态框中的输入值
+        editModal.querySelector('#userId').value = id;
+        editModal.querySelector('#account').value = account;
+        editModal.querySelector('#email').value = email;
+        editModal.querySelector('#name').value = name;
+        editModal.querySelector('#phone').value = phone;
+        editModal.querySelector('#address').value = address;
+    });
+});
+</script>
+
 <footer th:include="CMSfooter"></footer>
