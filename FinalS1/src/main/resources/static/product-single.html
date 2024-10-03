@@ -32,78 +32,37 @@
 
 
 <link rel="stylesheet" href="css/flaticon.css">
-<link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css">
 <link rel="stylesheet" href="css/style.css">
 
 
 <style>
-#carouselExampleIndicators {
-	max-width: 500px;
-	margin: 0 auto; /* 圖片居中 */
+.carousel-inner img {
+	width: 100%;
+	height: auto;
+	object-fit: cover;
 }
 
-/* 調整標題和內容的間距 */
-.product-info {
-	padding-left: 20px; /* 給右邊內容區域一些內距 */
-	margin-top: 20px;
+/* 优化模态窗口内的表格 */
+.modal-body {
+	padding: 20px;
 }
 
-.product-info h1 {
-	font-size: 32px;
-	margin-bottom: 20px;
+.modal-body table {
+	width: 100%;
+	table-layout: fixed; /* 固定表格布局，避免内容过宽 */
 }
 
-.product-price {
-	font-size: 24px;
-	color: #888;
-	margin-bottom: 10px;
+.modal-body th, .modal-body td {
+	word-wrap: break-word; /* 自动换行 */
+	text-align: center; /* 居中对齐 */
 }
 
-.product-select {
-	margin-bottom: 15px; /* 增加選項之間的間距 */
-}
-
-/* 優化按鈕樣式 */
-#add-to-cart {
-	background-color: #28a745;
-	color: white;
-	border-radius: 5px;
-	padding: 10px 20px;
-	font-size: 18px;
-	transition: background-color 0.3s ease;
-}
-
-#add-to-cart:hover {
-	background-color: #218838;
-}
-
-/* 表格樣式調整 */
-.table {
-	margin-top: 30px;
-}
-
-.table th, .table td {
-	text-align: center;
-	vertical-align: middle;
-}
-
-/* 調整 select 框的寬度 */
-.product-select .form-select {
-	width: 100%; /* 讓 select 框自動填滿父容器的寬度 */
-	max-width: 400px; /* 限制最大寬度，防止過寬 */
-	padding: 10px; /* 增加內部間距，讓選單看起來更舒適 */
-	font-size: 16px; /* 調整字體大小 */
-	border-radius: 5px; /* 圓角邊框 */
-	border: 1px solid #ccc; /* 增加邊框樣式 */
-}
-
-/* 調整 product-select 的整體間距 */
-.product-select {
-	margin-bottom: 20px; /* 增加選項之間的距離 */
-}
-
-.carousel-indicators {
-	display: none; /* 隱藏每個指示器 */
+/* 确保模态窗口在小屏幕上自适应 */
+@media ( max-width : 576px) {
+	.carousel-inner img {
+		height: 300px; /* 调整图片高度以适应小屏幕 */
+	}
 }
 </style>
 
@@ -184,12 +143,192 @@
 
 
 	<div class="container product-page">
-		<div class="row">
-			<!-- 圖片區域 -->
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row">
+                <!-- 图片区域 -->
+                <div class="col-lg-6">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <!-- 轮播图片区域 -->
+                        <div class="carousel-inner" id="carousel-inner">
+                            <!-- 动态生成的轮播项 -->
+                        </div>
+                        <!-- 左右切换按钮（保留功能，隐藏显示） -->
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <!-- 我们将通过 CSS 隐藏这些箭头 -->
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">上一张</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">下一张</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 商品详情区域 -->
+                <div class="col-lg-6 product-details pl-md-5 ftco-animate">
+                    <!-- 商品名称 -->
+                    <h3 id="product-name">商品名称</h3>
+                    <!-- 商品描述 -->
+                    <p id="description">商品描述</p>
+                    <!-- 商品价格 -->
+                    <p class="price"><span id="price">NT$</span></p>
+                    <!-- 尺寸表和库存 -->
+                    <div class="row mb-0" style="font-size: 12px">
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <a href="#" data-toggle="modal" data-target="#sizeChartModal">尺寸表</a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="content d-flex">
+                                <span> 库存: <span id="stock"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 颜色和尺寸选择 -->
+                    <div class="row mt-4">
+                        <!-- 颜色选择 -->
+                        <div class="col-md-6">
+                            <div class="form-group d-flex">
+                                <div class="select-wrap" style="width: 200px;">
+                                    <div class="icon">
+                                        <span class="ion-ios-arrow-down"></span>
+                                    </div>
+                                    <select name="" id="color-select" class="form-control">
+                                        <!-- 动态生成颜色选项 -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 尺寸选择 -->
+                        <div class="col-md-6">
+                            <div class="form-group d-flex">
+                                <div class="select-wrap" style="width: 200px;">
+                                    <div class="icon">
+                                        <span class="ion-ios-arrow-down"></span>
+                                    </div>
+                                    <select name="" id="size-select" class="form-control">
+                                        <!-- 动态生成尺寸选项 -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 数量调整 -->
+                    <div class="w-100">
+                        <div class="input-group d-flex mb-3 w-75">
+                            <span class="input-group-btn mr-2">
+                                <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
+                                    <i class="ion-ios-remove"></i>
+                                </button>
+                            </span>
+                            <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1">
+                            <span class="input-group-btn ml-2">
+                                <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+                                    <i class="ion-ios-add"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 加入购物车按钮 -->
+                    <p>
+                        <a href="cart.html" class="btn btn-black py-3 px-5">Add to Cart</a>
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div class="modal fade" id="sizeChartModal" tabindex="-1" role="dialog" aria-labelledby="sizeChartModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> <!-- 使用 modal-lg 增大模态窗口宽度 -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sizeChartModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="关闭">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- 尺寸表内容 -->
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                    <th>尺寸</th>
+                    <th>胸圍 (cm)</th>
+                    <th>腰圍 (cm)</th>
+                    <th>臀圍 (cm)</th>
+                    <th>適合年齡</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>S</td>
+                    <td>88-92</td>
+                    <td>74-78</td>
+                    <td>90-94</td>
+                    <td>成人</td>
+                </tr>
+                <tr>
+                    <td>M</td>
+                    <td>94-98</td>
+                    <td>80-84</td>
+                    <td>96-100</td>
+                    <td>成人</td>
+                </tr>
+                <tr>
+                    <td>L</td>
+                    <td>100-104</td>
+                    <td>86-90</td>
+                    <td>102-106</td>
+                    <td>成人</td>
+                </tr>
+                <tr>
+                    <td>2-8歲</td>
+                    <td>60-80</td>
+                    <td>55-75</td>
+                    <td>60-80</td>
+                    <td>2~8歲</td>
+                </tr>
+                <tr>
+                    <td>8-14歲</td>
+                    <td>80-100</td>
+                    <td>70-90</td>
+                    <td>80-100</td>
+                    <td>8~14歲</td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+		
+							
+						
+
+	 	<!--  <div class="row">
+			
 			<div class="col-md-6">
 				<div id="carouselExampleIndicators" class="carousel slide"
 					data-ride="carousel">
-					<!-- 輪播指示器 -->
+					
 					<ol class="carousel-indicators" id="carousel-indicators">
 						<li data-target="#carouselExampleIndicators" data-slide-to="0"
 							class="active"></li>
@@ -197,7 +336,7 @@
 						<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
 					</ol>
 
-					<!-- 輪播圖片區域 -->
+				
 					<div class="carousel-inner" id="carousel-inner">
 						<div class="carousel-item active">
 							<img src="https://via.placeholder.com/600x400"
@@ -213,7 +352,7 @@
 						</div>
 					</div>
 
-					<!-- 左右切換按鈕 -->
+					
 					<a class="carousel-control-prev" href="#carouselExampleIndicators"
 						role="button" data-slide="prev"> <span
 						class="carousel-control-prev-icon" aria-hidden="true"></span> <span
@@ -226,7 +365,7 @@
 				</div>
 			</div>
 
-			<!-- 商品詳情區域 -->
+			
 			<div class="col-md-6">
 				<div class="product-info">
 					<h1 id="product-name" class="product-title"></h1>
@@ -242,20 +381,20 @@
 					</div>
 
 					<div class="input-group col-md-6 d-flex mb-3">
-							<span class="input-group-btn mr-2">
-								<button type="button" class="quantity-left-minus btn"
-									data-type="minus" data-field="">
-									<i class="ion-ios-remove"></i>
-								</button>
-							</span> <input type="text" id="quantity" name="quantity"
-								class="form-control input-number" value="1" min="1" max="100">
-							<span class="input-group-btn ml-2">
-								<button type="button" class="quantity-right-plus btn"
-									data-type="plus" data-field="">
-									<i class="ion-ios-add"></i>
-								</button>
-							</span>
-						</div>
+						<span class="input-group-btn mr-2">
+							<button type="button" class="quantity-left-minus btn"
+								data-type="minus" data-field="">
+								<i class="ion-ios-remove"></i>
+							</button>
+						</span> <input type="text" id="quantity" name="quantity"
+							class="form-control input-number" value="1" min="1" max="100">
+						<span class="input-group-btn ml-2">
+							<button type="button" class="quantity-right-plus btn"
+								data-type="plus" data-field="">
+								<i class="ion-ios-add"></i>
+							</button>
+						</span>
+					</div>
 					<div>
 						<p>
 							庫存: <span id="stock"></span>
@@ -272,54 +411,7 @@
 			</div>
 		</div>
 
-		<!-- 新增尺寸表 -->
-		<div class="row mt-5">
-			<div class="col-12">
-				<h3>尺寸表</h3>
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th>尺寸</th>
-							<th>肩寬 (cm)</th>
-							<th>胸圍 (cm)</th>
-							<th>衣長 (cm)</th>
-							<th>袖長 (cm)</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>S</td>
-							<td>45</td>
-							<td>100</td>
-							<td>70</td>
-							<td>20</td>
-						</tr>
-						<tr>
-							<td>M</td>
-							<td>47</td>
-							<td>104</td>
-							<td>72</td>
-							<td>21</td>
-						</tr>
-						<tr>
-							<td>L</td>
-							<td>49</td>
-							<td>108</td>
-							<td>74</td>
-							<td>22</td>
-						</tr>
-						<tr>
-							<td>XL</td>
-							<td>51</td>
-							<td>112</td>
-							<td>76</td>
-							<td>24</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+	</div> -->
 
 
 
@@ -332,7 +424,8 @@
 
 
 
-	<section class="ftco-section">
+
+	<!--  <section class="ftco-section">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6 mb-5 ftco-animate">
@@ -413,7 +506,7 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section>-->
 
 	<section class="ftco-section">
 		<div class="container">
@@ -755,10 +848,11 @@
 		
 		
 		
+		
 		document.addEventListener("DOMContentLoaded", function() {
-		    // 從 URL 中獲取 productId
+		    
 		    const urlParams = new URLSearchParams(window.location.search);
-		    const productId = urlParams.get('productId');  // 動態獲取 productId
+		    const productId = urlParams.get('productId');  
 
 		    if (!productId) {
 		        console.error('Product ID is missing in the URL');
@@ -767,7 +861,7 @@
 
 		    let initialColor, initialSize;
 
-		    // 繼續進行 API 請求以獲取產品資料
+		    
 		    fetch(`/product-variants/product/${productId}`)
 		        .then(response => response.json())
 		        .then(variants => {
@@ -778,66 +872,32 @@
 		                const stockElement = document.getElementById('stock');
 		                const descriptionElement = document.getElementById('description');
 		                const productName = document.getElementById('product-name');
+
 		                
-		                // 設定初始顏色和尺寸
 		                initialColor = variants[0].color.name;
 		                initialSize = variants[0].size.name;
 
-		                // 顯示初始產品資訊
+		                
 		                priceElement.innerText = `NT$${variants[0].price}`;
 		                stockElement.innerText = variants[0].stock;
 		                productName.innerText = variants[0].product.name;
 		                descriptionElement.innerText = variants[0].product.description;
 
-		                // 顯示初始輪播圖片
-		                updateCarouselImages(variants[0]);
-
-		                // 動態生成顏色和尺寸選項
+		                
 		                populateSelectOptions(variants, colorSelect, 'color');
 		                populateSelectOptions(variants, sizeSelect, 'size');
 
-		                // 監聽顏色和尺寸的變更
+		               
 		                colorSelect.addEventListener('change', updateProductDetails);
 		                sizeSelect.addEventListener('change', updateProductDetails);
+
 		                
-		                updateProductDetails(); 
+		                updateProductDetails();
 		            }
 		        })
 		        .catch(error => console.error('Error fetching variants:', error));
 
-		    // 根據選擇的顏色更新輪播圖片
-		    function updateCarouselImages(variant) {
-		        const carouselInner = document.getElementById('carousel-inner');
-		        const carouselIndicators = document.getElementById('carousel-indicators');
-
-		        carouselInner.innerHTML = '';
-		        carouselIndicators.innerHTML = '';
-
-		        let images = [variant.image];
-		        if (variant.image2) images.push(variant.image2);
-		        if (variant.image3) images.push(variant.image3);
-
-		        images.forEach((image, index) => {
-		            // 輪播內的圖片
-		            let carouselItem = document.createElement('div');
-		            carouselItem.classList.add('carousel-item');
-		            if (index === 0) carouselItem.classList.add('active');
-		            carouselItem.innerHTML = `<img src="data:image/jpeg;base64,${image}" class="d-block w-100" alt="Product Image">`;
-		            carouselInner.appendChild(carouselItem);
-
-		            // 輪播指示器
-		            let indicator = document.createElement('button');
-		            indicator.type = "button";
-		            indicator.dataset.bsTarget = "#carouselExampleIndicators";
-		            indicator.dataset.bsSlideTo = index;
-		            if (index === 0) indicator.classList.add('active');
-		            indicator.setAttribute('aria-current', 'true');
-		            indicator.setAttribute('aria-label', `Slide ${index + 1}`);
-		            carouselIndicators.appendChild(indicator);
-		        });
-		    }
-
-		    // 更新產品詳細資訊
+		   
 		    function updateProductDetails() {
 		        const selectedColor = document.getElementById('color-select').value || initialColor;
 		        const selectedSize = document.getElementById('size-select').value || initialSize;
@@ -850,16 +910,42 @@
 		                    document.getElementById('price').innerText = `NT$${selectedVariant.price}`;
 		                    document.getElementById('stock').innerText = selectedVariant.stock;
 
-		                    // 更新輪播圖片
+		                    // 更新轮播图片
 		                    updateCarouselImages(selectedVariant);
+		                } else {
+		                    console.error('No variant found for the selected color and size.');
 		                }
 		            })
 		            .catch(error => console.error('Error fetching product details:', error));
 		    }
 
-		    // 動態生成顏色或尺寸選項的函數
+		    // 更新轮播图片
+		    function updateCarouselImages(variant) {
+		        const carouselInner = document.getElementById('carousel-inner');
+
+		        carouselInner.innerHTML = '';
+
+		        let images = [variant.image];
+		        if (variant.image2) images.push(variant.image2);
+		        if (variant.image3) images.push(variant.image3);
+
+		        images.forEach((image, index) => {
+		            // 轮播内的图片
+		            let carouselItem = document.createElement('div');
+		            carouselItem.classList.add('carousel-item');
+		            if (index === 0) carouselItem.classList.add('active');
+		            carouselItem.innerHTML = `<img src="data:image/jpeg;base64,${image}" class="d-block w-100" alt="Product Image">`;
+		            carouselInner.appendChild(carouselItem);
+		        });
+
+		        // 初始化轮播
+		        $('#carouselExampleIndicators').carousel();
+		    }
+
+		    // 动态生成颜色或尺寸选项的函数
 		    function populateSelectOptions(variants, selectElement, property) {
 		        const uniqueOptions = new Set(variants.map(variant => variant[property].name));
+		        selectElement.innerHTML = ''; // 清空选项
 		        uniqueOptions.forEach(optionValue => {
 		            const option = document.createElement('option');
 		            option.value = optionValue;
@@ -869,6 +955,7 @@
 		    }
 		});
 
+
 		
 		
 
@@ -877,7 +964,7 @@
 		document.addEventListener("DOMContentLoaded", function() {
 		    // 呼叫 API 獲取商品資料
 		    function loadRandomProducts() {
-		    fetch('/products')  // 替換為你的 API 路徑
+		    fetch('/products/random')  // 替換為你的 API 路徑
 		        .then(response => response.json())
 		        .then(data => {
 		            let productList = document.getElementById('product-list');
@@ -943,3 +1030,57 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+								
+
+
+
+
+
+
+
+
+
+
+		
+		
+		
+		
+
+
+

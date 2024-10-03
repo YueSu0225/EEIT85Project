@@ -1,34 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品上架系統</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 800px;
-            margin-top: 50px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .image-preview img {
-            max-width: 150px;
-            max-height: 150px;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="CMShead"></head>
+    <div class="container">
 
 <form th:action="@{/products/add}" method="post" id="product-form" enctype="multipart/form-data">
     <!-- 商品名稱 -->
@@ -115,9 +88,8 @@
 </form>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script src="/myjs/product_update.js"></script>
 
-</body>
-</html>
+<footer th:include="CMSfooter"></footer>
 

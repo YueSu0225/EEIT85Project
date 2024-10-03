@@ -2,12 +2,14 @@ package tw.Final.FinalS1.controller;
 
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,19 +62,43 @@ public class ProductController {
 	private ProductVariantService productVariantService;
 	
 	
-	
-	
-	
-	
-	@GetMapping
+	@GetMapping("/random")
 	public List<Product> getAllProducts(){
 		return productService.getAllProducts();
 	}
 	
-	 @GetMapping("/page")
-	    public Page<Product> getPagedProducts(Pageable pageable) {
-	        return productService.getpageProducts(pageable);
-	    }
+	
+	
+	
+	
+	
+	 // 获取所有商品（支持分页）
+	@GetMapping
+    public Map<String, Object> getAllProducts(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "8") int limit) {
+
+        // 防止负数和过大的 limit
+        if (offset < 0) offset = 0;
+        if (limit <= 0) limit = 8;
+        if (limit > 100) limit = 100;
+
+        int page = offset / limit;
+        Pageable pageable = PageRequest.of(page, limit);
+
+        // 调用服务层方法获取分页产品列表
+        Page<Product> productPage = productService.getAllProducts(pageable);
+
+        List<Product> products = productPage.getContent();
+        long total = productPage.getTotalElements();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", products);
+        response.put("total", total);
+
+        return response;
+    }
+	
 	
 	
 	@GetMapping("/{id}")
@@ -260,7 +286,7 @@ public class ProductController {
 	        return ResponseEntity.noContent().build();
 	}
 	
-	@GetMapping("products/category/{categoryId}")
+	@GetMapping("/category/{categoryId}")
 	public List<Product> getProductsByCategory(@PathVariable Long categoryId) {
 	    return productService.getProductsByCategory(categoryId);
 	}
@@ -276,12 +302,12 @@ public class ProductController {
 	    }
 	}
 	
-	@GetMapping("products/type/{typeId}")
+	@GetMapping("/type/{typeId}")
 	public List<Product> getProductsByType(@PathVariable Long typeId) {
 	    return productService.getProductsByType(typeId);
 	}
 	
-	@GetMapping("/products/category/{categoryId}/type/{typeId}")
+	@GetMapping("/category/{categoryId}/type/{typeId}")
 	public ResponseEntity<List<Product>> getProductsByCategoryAndType(
 	        @PathVariable Long categoryId,
 	        @PathVariable Long typeId) {

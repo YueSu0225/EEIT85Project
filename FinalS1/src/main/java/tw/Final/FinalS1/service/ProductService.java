@@ -30,9 +30,9 @@ public class ProductService {
 		return productRepository.findAll();
 	}
 
-	public Page<Product> getpageProducts(Pageable pageable) {
-		return productRepository.findAll(pageable);
-	}
+	 public Page<Product> getAllProducts(Pageable pageable) {
+	        return productRepository.findAll(pageable);
+	    }
 
 	public Product getProductById(Long id) {
 		return productRepository.findById(id).orElse(null);

@@ -34,9 +34,11 @@
 <link rel="stylesheet" href="css/flaticon.css">
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
+<!-- 引入 Font Awesome -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
-
-
 .ftco-animate1 {
 	opacity: 0; /* 初始設為不可見 */
 	visibility: hidden; /* 初始設為不可見 */
@@ -44,10 +46,33 @@
 }
 
 .dropdown-item.active {
-    color: #FFFFFF !important; /* 白色文字 */
-    background-color: #e3dcd2  !important; 
+	color: #FFFFFF !important; /* 白色文字 */
+	background-color: #e3dcd2 !important;
 }
 
+.no-products-message {
+	display: none; /* 預設隱藏 */
+	text-align: center;
+	font-size: 20px;
+	margin-top: 40px;
+	color: #555;
+	font-weight: bold;
+}
+
+.no-products-message::before {
+	content: "\f071"; /* Font Awesome 的警告圖示 */
+	font-family: "Font Awesome 5 Free"; /* 確保已引入 Font Awesome */
+	font-weight: 900; /* 使用 Font Awesome 的 Solid 樣式 */
+	display: block;
+	font-size: 50px;
+	margin-bottom: 20px;
+	color: #FF6F61;
+}
+
+#load-more-button {
+	display: block;
+	margin: 0 auto;
+}
 </style>
 
 </head>
@@ -80,15 +105,17 @@
 						class="nav-link">首頁</a></li>
 					<li class="nav-item"><a href="AboutUs.html" class="nav-link">關於我們</a></li>
 
+
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle" href="shop.html" id="dropdown04"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">商品</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
 							<a href="#" id="all-products-category" class="dropdown-item">所有商品</a>
-							<a class="dropdown-item" href="#" categoryid="1">男裝</a> <a
-								class="dropdown-item" href="#" categoryid="2">女裝</a> <a
-								class="dropdown-item" href="#" categoryid="3">童裝</a>
+							<a href="#" class="dropdown-item" categoryid="1">男裝</a> <a
+								href="#" class="dropdown-item" categoryid="2">女裝</a> <a href="#"
+								class="dropdown-item" categoryid="3">童裝</a>
 						</div></li>
+
 
 
 					<!-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
@@ -145,10 +172,19 @@
 				<div class="row" id="product-list">
 					<!-- 商品卡片會動態插入到這裡 -->
 				</div>
+				<div id="no-products-message" class="no-products-message">
+					查無此商品</div>
+				<button id="load-more-button" class="btn btn-primary"
+					style="display: block; margin: 0 auto;">
+					<i class="fas fa-sync-alt"></i> 加载更多
+				</button>
 
 			</div>
 		</div>
 	</section>
+
+
+
 	<!--  <div class="col-md-6 col-lg-3 ftco-animate">
 					<div class="product">
 						<a href="#" class="img-prod"><img class="img-fluid"
@@ -707,72 +743,23 @@
 
 
 	<script>
-	document.addEventListener("DOMContentLoaded", function() {
-	    let selectedCategoryId = null;
-	    let selectedTypeId = null;
+	// 全局變數
+	let selectedCategoryId = null;
+	let selectedTypeId = null;
+	let offset = 0; // 仅用于 loadAllProducts
+	const limit = 10; // 每次加载的商品数量
+	let totalProducts = 0; // 商品总数（仅用于 loadAllProducts）
+	let isLoading = false; // 是否正在加载中
 
-	    // 綁定版型按鈕的點擊事件
-	    document.querySelectorAll('.product-category li a').forEach(item => {
-	        item.addEventListener('click', function(event) {
-	            event.preventDefault(); // 防止預設的跳轉行為
+	// 获取 URL 查询参数的函数
+	function getQueryParam(param) {
+	    let urlParams = new URLSearchParams(window.location.search);
+	    return urlParams.get(param);
+	}
 
-	            // 移除所有 li 的 active 類
-	            document.querySelectorAll('.product-category li a').forEach(link => {
-	                link.classList.remove('active');
-	            });
-
-	            // 為當前點擊的 li 添加 active 類
-	            this.classList.add('active');
-
-	            selectedTypeId = this.getAttribute('typeid'); // 取得 typeid
-
-	            if (selectedTypeId) {
-	                loadProducts(selectedCategoryId, selectedTypeId); // 根據版型載入商品
-	            } else {
-	                loadAllProducts(); // 如果是所有商品，則顯示所有
-	            }
-	        });
-	    });
-
-	    // 綁定分類按鈕的點擊事件
-	    document.querySelectorAll('.dropdown-item').forEach(item => {
-	        item.addEventListener('click', function(event) {
-	            event.preventDefault(); // 防止預設的跳轉行為
-
-	            // 清除所有 active 類
-	            document.querySelectorAll('.dropdown-item').forEach(link => {
-	                link.classList.remove('active');
-	            });
-	            this.classList.add('active');
-
-	            selectedCategoryId = this.getAttribute('categoryid'); // 取得 categoryid
-
-	            if (selectedCategoryId) {
-	                loadProducts(selectedCategoryId, selectedTypeId); // 根據分類載入商品
-	            } else {
-	                loadAllProducts(); // 如果是所有商品，則顯示所有
-	            }
-	        });
-	    });
-
-	    // 綁定「所有商品」按鈕的點擊事件
-	    document.getElementById('all-products-category').addEventListener('click', function(event) {
-	        event.preventDefault();  // 防止跳轉
-	        selectedCategoryId = null;  // 清空分類選擇
-	        selectedTypeId = null;      // 清空版型選擇
-
-	        // 移除所有 active 類
-	        document.querySelectorAll('.product-category li a, .dropdown-item').forEach(link => {
-	            link.classList.remove('active');
-	        });
-	        this.classList.add('active');
-
-	        loadAllProducts();          // 重新載入所有商品
-	    });
-
-	    // 頁面加載時自動加載所有商品
-	    loadAllProducts();
-	});
+	// 获取 category 和 type 参数的值
+	selectedCategoryId = getQueryParam('category');
+	selectedTypeId = getQueryParam('type');
 
 	// 根據分類與版型載入商品的函數
 	function loadProducts(categoryId, typeId) {
@@ -780,20 +767,24 @@
 
 	    // 根據傳遞的 categoryId 和 typeId 動態構建 URL
 	    if (categoryId && typeId) {
-	        url = `/products/products/category/${categoryId}/type/${typeId}`;
+	        url = `/products/category/${categoryId}/type/${typeId}`;
 	    } else if (categoryId) {
-	        url = `/products/products/category/${categoryId}`;
+	        url = `/products/category/${categoryId}`;
 	    } else if (typeId) {
-	        url = `/products/products/type/${typeId}`;
+	        url = `/products/type/${typeId}`;
 	    }
+	    console.log('Fetching products from URL:', url); // 调试信息
 
 	    fetch(url)
 	        .then(response => response.json())
 	        .then(data => {
 	            let productList = document.getElementById('product-list');
+	            let noProductsMessage = document.getElementById('no-products-message');
 	            productList.innerHTML = "";  // 清空當前的商品列表
 
-	            if (Array.isArray(data)) {
+	            if (Array.isArray(data) && data.length > 0) {
+	                // 隱藏提示訊息
+	                noProductsMessage.style.display = 'none';
 	                data.forEach(product => {
 	                    let productHTML = `
 	                        <div class="col-md-6 col-lg-3 ftco-animate1">
@@ -821,8 +812,12 @@
 	                    productList.innerHTML += productHTML;
 	                });
 	                animateProducts();  // 呼叫動畫函數
+
+	                // 隐藏“加载更多”按钮
+	                document.getElementById('load-more-button').style.display = 'none';
+
 	            } else {
-	                console.error("Data is not an array:", data);
+	                noProductsMessage.style.display = 'block';
 	            }
 	        })
 	        .catch(error => console.error('Error fetching products:', error));
@@ -837,16 +832,35 @@
 	    });
 	}
 
-	// 載入所有商品的函數
-	function loadAllProducts() {
-	    fetch('/products')
+	// 載入所有商品的函數（支持加載更多）
+	function loadAllProducts(reset = false) {
+	    if (isLoading) return;
+	    isLoading = true;
+
+	    if (reset) {
+	        offset = 0;
+	        totalProducts = 0;
+	        document.getElementById('product-list').innerHTML = '';
+	    }
+
+	    let url = `/products?offset=${offset}&limit=${limit}`;
+
+	    fetch(url)
 	        .then(response => response.json())
 	        .then(data => {
+	            isLoading = false;
 	            let productList = document.getElementById('product-list');
-	            productList.innerHTML = "";  // 清空當前的商品列表
+	            let noProductsMessage = document.getElementById('no-products-message');
 
-	            if (Array.isArray(data)) {
-	                data.forEach(product => {
+	            if (!productList) {
+	                console.error('Cannot find element with id "product-list".');
+	                return;
+	            }
+
+	            if (Array.isArray(data.products) && data.products.length > 0) {
+	                noProductsMessage.style.display = 'none';
+
+	                data.products.forEach(product => {
 	                    let productHTML = `
 	                        <div class="col-md-6 col-lg-3 ftco-animate1">
 	                            <div class="product">
@@ -859,19 +873,141 @@
 	                                    <div class="pricing">
 	                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
 	                                    </div>
-	                                </div>
+	                                    <div class="bottom-area d-flex px-3">
+	                                        <div class="m-auto d-flex">
+	                                            <a href="#" class="heart d-flex justify-content-center align-items-center">
+	                                                <span><i class="ion-ios-heart"></i></span>
+	                                            </a>
+	                                        </div>
+	                                     </div>
+	                               </div>
 	                            </div>
 	                        </div>
 	                    `;
 	                    productList.innerHTML += productHTML;
 	                });
 	                animateProducts();  // 呼叫動畫函數
+
+	                offset += data.products.length;
+	                totalProducts = data.total;
+
+	                // 檢查是否還有更多商品
+	                if (offset >= totalProducts) {
+	                    document.getElementById('load-more-button').style.display = 'none';
+	                } else {
+	                    document.getElementById('load-more-button').style.display = 'block';
+	                }
 	            } else {
-	                console.error("Data is not an array:", data);
+	                if (reset) {
+	                    noProductsMessage.style.display = 'block';
+	                }
+	                document.getElementById('load-more-button').style.display = 'none';
 	            }
 	        })
-	        .catch(error => console.error('Error fetching products:', error));
+	        .catch(error => {
+	            isLoading = false;
+	            console.error('Error fetching products:', error);
+	        });
 	}
+
+	document.addEventListener("DOMContentLoaded", function() {
+	    // 綁定版型按鈕的點擊事件
+	    document.querySelectorAll('.product-category li a').forEach(item => {
+	        item.addEventListener('click', function(event) {
+	            event.preventDefault(); // 防止預設的跳轉行為
+
+	            // 移除所有 li 的 active 類
+	            document.querySelectorAll('.product-category li a').forEach(link => {
+	                link.classList.remove('active');
+	            });
+
+	            // 為當前點擊的 li 添加 active 類
+	            this.classList.add('active');
+
+	            selectedTypeId = this.getAttribute('typeid'); // 取得 typeid
+
+	            // 清空商品列表
+	            document.getElementById('product-list').innerHTML = '';
+	            // 隐藏“加载更多”按钮
+	            document.getElementById('load-more-button').style.display = 'none';
+
+	            if (selectedTypeId) {
+	                loadProducts(selectedCategoryId, selectedTypeId); // 根據版型載入商品
+	            } else {
+	                if (selectedCategoryId) {
+	                    loadProducts(selectedCategoryId, null);
+	                } else {
+	                    loadAllProducts(true); // 如果沒有選擇分類和版型，則顯示所有
+	                }
+	            }
+	        });
+	    });
+
+	    // 綁定分類按鈕的點擊事件
+	    document.querySelectorAll('.dropdown-item').forEach(item => {
+	        item.addEventListener('click', function(event) {
+	            event.preventDefault(); // 防止預設的跳轉行為
+
+	            // 清除所有 active 類
+	            document.querySelectorAll('.dropdown-item').forEach(link => {
+	                link.classList.remove('active');
+	            });
+	            this.classList.add('active');
+
+	            selectedCategoryId = this.getAttribute('categoryid'); // 取得 categoryid
+
+	            // 清空商品列表
+	            document.getElementById('product-list').innerHTML = '';
+	            // 隐藏“加载更多”按钮
+	            document.getElementById('load-more-button').style.display = 'none';
+
+	            if (selectedCategoryId) {
+	                loadProducts(selectedCategoryId, selectedTypeId); // 根據分類載入商品
+	            } else {
+	                if (selectedTypeId) {
+	                    loadProducts(null, selectedTypeId);
+	                } else {
+	                    loadAllProducts(true); // 如果沒有選擇分類和版型，則顯示所有
+	                }
+	            }
+	        });
+	    });
+
+	    // 綁定「所有商品」按鈕的點擊事件
+	    document.getElementById('all-products-category').addEventListener('click', function(event) {
+	        event.preventDefault();  // 防止跳轉
+	        selectedCategoryId = null;  // 清空分類選擇
+	        selectedTypeId = null;      // 清空版型選擇
+
+	        // 移除所有 active 類
+	        document.querySelectorAll('.product-category li a, .dropdown-item').forEach(link => {
+	            link.classList.remove('active');
+	        });
+	        this.classList.add('active');
+
+	        // 显示“加载更多”按钮
+	        document.getElementById('load-more-button').style.display = 'none';
+
+	        loadAllProducts(true);          // 重新載入所有商品
+	    });
+
+	    // 綁定“加載更多”按鈕點擊事件
+	    document.getElementById('load-more-button').addEventListener('click', function() {
+	        loadAllProducts();
+	    });
+
+	    // 頁面加載時根據 URL 參數自動載入商品
+	    if (selectedCategoryId || selectedTypeId) {
+	        // 清空商品列表
+	        document.getElementById('product-list').innerHTML = '';
+	        // 隐藏“加载更多”按钮
+	        document.getElementById('load-more-button').style.display = 'none';
+
+	        loadProducts(selectedCategoryId, selectedTypeId);
+	    } else {
+	        loadAllProducts(true);
+	    }
+	});
 
 
 

@@ -36,7 +36,6 @@
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
 <style>
-
 </style>
 
 
@@ -100,9 +99,9 @@
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">商品</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
 							<a class="dropdown-item" href="shop.html">所有商品</a> <a
-								class="dropdown-item" href="shop.html?categoryid=1">男裝</a> <a
-								class="dropdown-item" href="shop.html?categoryid=2">女裝</a> <a
-								class="dropdown-item" href="shop.html?categoryid=3">童裝</a>
+								class="dropdown-item" href="shop.html?category=1">男裝</a> <a
+								class="dropdown-item" href="shop.html?category=2">女裝</a> <a
+								class="dropdown-item" href="shop.html?category=3">童裝</a>
 						</div></li>
 
 
@@ -266,7 +265,7 @@
 								style="background-image: url(./Picture/CTGMEN.png);">
 								<div class="text px-3 py-1">
 									<h2 class="mb-0">
-										<a href="shop.html?categoryid=1">MEN</a>
+										<a href="shop.html?category=1">MEN</a>
 									</h2>
 								</div>
 							</div>
@@ -275,7 +274,7 @@
 								style="background-image: url(./Picture/CTGKID.png);">
 								<div class="text px-3 py-1">
 									<h2 class="mb-0">
-										<a href="shop.html?categoryid=3">KIDS</a>
+										<a href="shop.html?category=3">KIDS</a>
 									</h2>
 								</div>
 							</div>
@@ -289,20 +288,20 @@
 						style="background-image: url(./Picture/CTGWOMEN.png);">
 						<div class="text px-3 py-1">
 							<h2 class="mb-0">
-								<a href="shop.html?categoryid=2">WOMEN</a>
+								<a href="shop.html?category=2">WOMEN</a>
 							</h2>
 						</div>
 					</div>
 					<div class="category-wrap ftco-animate img d-flex align-items-end"
 						style="background-image: url(./Picture/CTGACCESSORIES.png);">
-						<div class="text px-3 py-1">
+						<!--  <div class="text px-3 py-1">
 							<h2 class="mb-0">
 								<a href="#">ACCESSORIES</a>
-							</h2>
-						</div>
+							</h2>-->
 					</div>
 				</div>
 			</div>
+		</div>
 		</div>
 	</section>
 
@@ -320,72 +319,119 @@
 
 
 		<div class="container">
-			
-				<div class="row" id="product-list">
-					<!-- 商品會動態插入到這裡 -->
-				</div>
-			
+
+			<div class="row" id="product-list">
+				<!-- 商品會動態插入到這裡 -->
+			</div>
+
 		</div>
 	</section>
 
 	<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // 呼叫 API 獲取所有商品資料
-    function loadRandomProducts() {
-        fetch('/products')  // 取得所有商品的 API 路徑
-            .then(response => response.json())
-            .then(data => {
-                let productList = document.getElementById('product-list');
-                productList.innerHTML = ""; // 清空當前列表
+	document.addEventListener("DOMContentLoaded", function() {
+	    // 假設用戶已經登入並且 `wishlistId` 已經存儲在 localStorage 中
+	    const wishlistId = localStorage.getItem('wishlistId') || ''; // 確保從 localStorage 獲取 wishlistId
 
-                // 隨機打亂商品並選擇前 8 個
-                let shuffledData = data.sort(() => 0.5 - Math.random());
-                let selectedProducts = shuffledData.slice(0, 8); // 選擇 8 個商品
+	    // 呼叫 API 獲取所有商品資料
+	    function loadRandomProducts() {
+	        fetch('/products/random')  // 取得所有商品的 API 路徑
+	            .then(response => response.json())
+	            .then(data => {
+	                let productList = document.getElementById('product-list');
+	                productList.innerHTML = ""; // 清空當前列表
 
-                // 動態插入商品資料
-                selectedProducts.forEach(product => {
-                    let productHTML = `
-                        <div class="col-md-6 col-lg-3 ftco-animate1">
-                            <div class="product">
-                                <a href="product-single.html?productId=${product.id}" class="img-prod">
-                                    <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
-                                    <div class="overlay"></div>
-                                </a>
-                                <div class="text py-3 pb-4 px-3 text-center">
-                                    <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
-                                    <div class="pricing">
-                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
-                                    </div>
-                                    <div class="bottom-area d-flex px-3">
-    								<div class="m-auto d-flex">
-    								
-    									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-    										<span><i class="ion-ios-heart"></i></span>
-    									</a>
-    								</div>
-    							</div>
-                                </div>
+	                // 隨機打亂商品並選擇前 8 個
+	                let shuffledData = data.sort(() => 0.5 - Math.random());
+	                let selectedProducts = shuffledData.slice(0, 8); // 選擇 8 個商品
 
-                            </div>
-                        </div>
-                    `;
-                    productList.innerHTML += productHTML;
-                });
+	                // 動態插入商品資料
+	                selectedProducts.forEach(product => {
+	                    let productHTML = `
+	                        <div class="col-md-6 col-lg-3 ftco-animate1">
+	                            <div class="product">
+	                                <a href="product-single.html?productId=${product.id}" class="img-prod">
+	                                    <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
+	                                    <div class="overlay"></div>
+	                                </a>
+	                                <div class="text py-3 pb-4 px-3 text-center">
+	                                    <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
+	                                    <div class="pricing">
+	                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
+	                                    </div>
+	                                    <div class="bottom-area d-flex px-3">
+	                                        <div class="m-auto d-flex">
+	                                            <a href="#" class="heart d-flex justify-content-center align-items-center" data-product-id="${product.id}">
+	                                                <span><i class="ion-ios-heart"></i></span>
+	                                            </a>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    `;
+	                    productList.innerHTML += productHTML;
+	                });
 
-                // 顯示所有被隱藏的 .ftco-animate 元素
-                let animatedElements = document.querySelectorAll('.ftco-animate1');
-                animatedElements.forEach(el => {
-                    el.style.opacity = 1;       // 顯示透明度
-                    el.style.visibility = 'visible';  // 取消隱藏
-                });
-            })
-           
-            .catch(error => console.error('Error fetching products:', error));
-    }
+	                // 顯示所有被隱藏的 .ftco-animate 元素
+	                let animatedElements = document.querySelectorAll('.ftco-animate1');
+	                animatedElements.forEach(el => {
+	                    el.style.opacity = 1;       // 顯示透明度
+	                    el.style.visibility = 'visible';  // 取消隱藏
+	                });
 
-    // 初始化隨機加載 8 張商品
-    loadRandomProducts();
-});
+	                // 當商品載入完成後綁定心形按鈕事件
+	                bindWishlistEvents();
+	            })
+	            .catch(error => console.error('Error fetching products:', error));
+	    }
+
+	    // 綁定心形圖標的點擊事件
+	    function bindWishlistEvents() {
+	        document.querySelectorAll('.heart').forEach(item => {
+	            item.addEventListener('click', function(event) {
+	                event.preventDefault();  // 防止預設的跳轉行為
+
+	                // 獲取 productId
+	                let productId = this.getAttribute('data-product-id');
+
+	                // 構造 API 請求數據
+	                let requestData = {
+	                    wishlistId: wishlistId,  // 從 localStorage 中獲取的 wishlistId
+	                    productId: productId
+	                };
+
+	                console.log('點擊的商品:', { productId, wishlistId });  // 調試信息
+	                // 發送 POST 請求到後端的 toggle API
+	                fetch('/wishlist/toggle', {
+	                    method: 'POST',
+	                    headers: {
+	                        'Content-Type': 'application/json'
+	                    },
+	                    body: JSON.stringify(requestData)
+	                })
+	                .then(response => response.json())
+	                .then(data => {
+	                    // 更新心形圖標的樣式
+	                    if (data) {
+	                        if (this.classList.contains('added-to-wishlist')) {
+	                            this.classList.remove('added-to-wishlist');  // 移除商品
+	                        } else {
+	                            this.classList.add('added-to-wishlist');  // 添加商品
+	                        }
+	                    }
+	                })
+	                .catch(error => {
+	                    console.error('Error:', error);
+	                });
+	            });
+	        });
+	    }
+
+	    // 初始化隨機加載 8 張商品
+	    loadRandomProducts();
+	});
+
+
 </script>
 
 
