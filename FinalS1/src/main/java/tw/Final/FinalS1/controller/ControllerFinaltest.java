@@ -111,4 +111,9 @@ public class ControllerFinaltest {
     public ResponseEntity<Map<String, Object>> changePassword(@RequestBody RegisterRequest request, HttpSession session) {
         return finalUserService.changePassword(request, session);
     }
+    
+    @GetMapping("/orderdetails")
+    public ResponseEntity<Map<String, Object>> orderDetails(HttpSession session){
+    	return finalUserService.userOrderDetails(session);
+    }
 }

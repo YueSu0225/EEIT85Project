@@ -72,7 +72,7 @@ public class ProductController {
 	
 	
 	
-	 // 获取所有商品（支持分页）
+	//仔入更多
 	@GetMapping
     public Map<String, Object> getAllProducts(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
@@ -86,7 +86,7 @@ public class ProductController {
         int page = offset / limit;
         Pageable pageable = PageRequest.of(page, limit);
 
-        // 调用服务层方法获取分页产品列表
+      
         Page<Product> productPage = productService.getAllProducts(pageable);
 
         List<Product> products = productPage.getContent();
@@ -176,7 +176,7 @@ public class ProductController {
 	            addProductVariants(product, variantsData); // 調用新增變體的私有方法
 	        }
 
-	        // 成功返回產品資料（包括變體）
+	        // 成功返回產品資料
 	        return ResponseEntity.ok(product);
 
 	    } catch (IllegalArgumentException e) {

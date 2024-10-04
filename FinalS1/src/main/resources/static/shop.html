@@ -72,7 +72,21 @@
 #load-more-button {
 	display: block;
 	margin: 0 auto;
+	}
+	
+/* 初始狀態的心形按鈕樣式 */
+.heart {
+    color: fff !important; /* 默認顏色，強制應用 */
+    transition: color 0.3s ease !important; /* 過渡效果，強制應用 */
 }
+
+/* 當心形按鈕被點擊後，變為紅色 */
+.added-to-wishlist {
+    color: red !important; /* 變成紅色 */
+    background-color: transparent !important; /* 背景變透明 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
+}	
+
 </style>
 
 </head>
@@ -743,49 +757,39 @@
 
 
 	<script>
-	// 全局變數
-	let selectedCategoryId = null;
-	let selectedTypeId = null;
-	let offset = 0; // 仅用于 loadAllProducts
-	const limit = 10; // 每次加载的商品数量
-	let totalProducts = 0; // 商品总数（仅用于 loadAllProducts）
-	let isLoading = false; // 是否正在加载中
+	document.addEventListener("DOMContentLoaded", function () {
+	    let selectedCategoryId = null;
+	    let selectedTypeId = null;
+	    let offset = 0; // 仅用于 loadAllProducts
+	    const limit = 10; // 每次加载的商品数量
+	    let totalProducts = 0; // 商品总数（仅用于 loadAllProducts）
+	    let isLoading = false; // 是否正在加载中
+	    const wishlistId = localStorage.getItem('wishlistId') || '';
 
-	// 获取 URL 查询参数的函数
-	function getQueryParam(param) {
-	    let urlParams = new URLSearchParams(window.location.search);
-	    return urlParams.get(param);
-	}
-
-	// 获取 category 和 type 参数的值
-	selectedCategoryId = getQueryParam('category');
-	selectedTypeId = getQueryParam('type');
-
-	// 根據分類與版型載入商品的函數
-	function loadProducts(categoryId, typeId) {
-	    let url = '/products';  // 初始化基礎 URL
-
-	    // 根據傳遞的 categoryId 和 typeId 動態構建 URL
-	    if (categoryId && typeId) {
-	        url = `/products/category/${categoryId}/type/${typeId}`;
-	    } else if (categoryId) {
-	        url = `/products/category/${categoryId}`;
-	    } else if (typeId) {
-	        url = `/products/type/${typeId}`;
+	    // 获取 URL 查询参数的函数
+	    function getQueryParam(param) {
+	        let urlParams = new URLSearchParams(window.location.search);
+	        return urlParams.get(param);
 	    }
-	    console.log('Fetching products from URL:', url); // 调试信息
 
-	    fetch(url)
-	        .then(response => response.json())
-	        .then(data => {
-	            let productList = document.getElementById('product-list');
-	            let noProductsMessage = document.getElementById('no-products-message');
-	            productList.innerHTML = "";  // 清空當前的商品列表
+	    // 获取 category 和 type 参数的值
+	    selectedCategoryId = getQueryParam('category');
+	    selectedTypeId = getQueryParam('type');
 
-	            if (Array.isArray(data) && data.length > 0) {
-	                // 隱藏提示訊息
-	                noProductsMessage.style.display = 'none';
-	                data.forEach(product => {
+	    // 呼叫 API 獲取隨機商品資料
+	    function loadRandomProducts() {
+	        fetch('/products/random')
+	            .then(response => response.json())
+	            .then(data => {
+	                let productList = document.getElementById('product-list');
+	                productList.innerHTML = ""; // 清空當前列表
+
+	                // 隨機打亂商品數據並選擇前 4 個商品
+	                let shuffledData = data.sort(() => 0.5 - Math.random());
+	                let selectedProducts = shuffledData.slice(0, 4); // 選擇 4 個商品
+
+	                // 動態插入商品資料
+	                selectedProducts.forEach(product => {
 	                    let productHTML = `
 	                        <div class="col-md-6 col-lg-3 ftco-animate1">
 	                            <div class="product">
@@ -800,7 +804,7 @@
 	                                    </div>
 	                                    <div class="bottom-area d-flex px-3">
 	                                        <div class="m-auto d-flex">
-	                                            <a href="#" class="heart d-flex justify-content-center align-items-center">
+	                                            <a href="#" class="heart d-flex justify-content-center align-items-center" data-product-id="${product.id}">
 	                                                <span><i class="ion-ios-heart"></i></span>
 	                                            </a>
 	                                        </div>
@@ -811,110 +815,214 @@
 	                    `;
 	                    productList.innerHTML += productHTML;
 	                });
-	                animateProducts();  // 呼叫動畫函數
 
-	                // 隐藏“加载更多”按钮
-	                document.getElementById('load-more-button').style.display = 'none';
+	                // 顯示所有被隱藏的 .ftco-animate 元素
+	                let animatedElements = document.querySelectorAll('.ftco-animate1');
+	                animatedElements.forEach(el => {
+	                    el.style.opacity = 1;       // 顯示透明度
+	                    el.style.visibility = 'visible';  // 取消隱藏
+	                });
 
-	            } else {
-	                noProductsMessage.style.display = 'block';
-	            }
-	        })
-	        .catch(error => console.error('Error fetching products:', error));
-	}
-
-	// 商品動畫效果的函數
-	function animateProducts() {
-	    let animatedElements = document.querySelectorAll('.ftco-animate1');
-	    animatedElements.forEach(el => {
-	        el.style.opacity = 1;
-	        el.style.visibility = 'visible';
-	    });
-	}
-
-	// 載入所有商品的函數（支持加載更多）
-	function loadAllProducts(reset = false) {
-	    if (isLoading) return;
-	    isLoading = true;
-
-	    if (reset) {
-	        offset = 0;
-	        totalProducts = 0;
-	        document.getElementById('product-list').innerHTML = '';
+	                // 綁定心形圖標點擊事件
+	                bindWishlistEvents();
+	            })
+	            .catch(error => console.error('Error fetching products:', error));
 	    }
 
-	    let url = `/products?offset=${offset}&limit=${limit}`;
+	    // 綁定心形圖標的點擊事件
+	    function bindWishlistEvents() {
+	        document.querySelectorAll('.heart').forEach(item => {
+	            item.addEventListener('click', function(event) {
+	                event.preventDefault();  // 防止預設的跳轉行為
 
-	    fetch(url)
-	        .then(response => response.json())
-	        .then(data => {
-	            isLoading = false;
-	            let productList = document.getElementById('product-list');
-	            let noProductsMessage = document.getElementById('no-products-message');
+	                // 獲取 productId
+	                let productId = this.getAttribute('data-product-id');
 
-	            if (!productList) {
-	                console.error('Cannot find element with id "product-list".');
-	                return;
-	            }
+	                // 構造 API 請求數據
+	                let requestData = {
+	                		// 從 localStorage 中獲取的 wishlistId
+	                    productId: productId
+	                };
 
-	            if (Array.isArray(data.products) && data.products.length > 0) {
-	                noProductsMessage.style.display = 'none';
-
-	                data.products.forEach(product => {
-	                    let productHTML = `
-	                        <div class="col-md-6 col-lg-3 ftco-animate1">
-	                            <div class="product">
-	                                <a href="product-single.html?productId=${product.id}" class="img-prod">
-	                                    <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
-	                                    <div class="overlay"></div>
-	                                </a>
-	                                <div class="text py-3 pb-4 px-3 text-center">
-	                                    <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
-	                                    <div class="pricing">
-	                                        <p class="price"><span class="price-sale">NT$${product.price}</span></p>
-	                                    </div>
-	                                    <div class="bottom-area d-flex px-3">
-	                                        <div class="m-auto d-flex">
-	                                            <a href="#" class="heart d-flex justify-content-center align-items-center">
-	                                                <span><i class="ion-ios-heart"></i></span>
-	                                            </a>
-	                                        </div>
-	                                     </div>
-	                               </div>
-	                            </div>
-	                        </div>
-	                    `;
-	                    productList.innerHTML += productHTML;
+	                console.log('點擊的商品:', { productId});  // 調試信息
+	                // 發送 POST 請求到後端的 toggle API
+	                fetch('/wishlist/toggle', {	                	
+	                    method: 'POST',
+	                    credentials: 'include',
+	                    headers: {
+	                        'Content-Type': 'application/json'
+	                    },
+	                    body: JSON.stringify(requestData)
+	                })
+	                .then(response => response.json())
+	                .then(data => {
+	                	console.log(data);
+	                    // 更新心形圖標的樣式
+	                    if (data) {
+	                        if (this.classList.contains('added-to-wishlist')) {
+	                            this.classList.remove('added-to-wishlist');  // 移除商品
+	                        } else {
+	                            this.classList.add('added-to-wishlist');  // 添加商品
+	                        }
+	                    }
+	                })
+	                .catch(error => {
+	                    console.error('Error:', error);
 	                });
-	                animateProducts();  // 呼叫動畫函數
+	            });
+	        });
+	    }
 
-	                offset += data.products.length;
-	                totalProducts = data.total;
+	    // 根據分類與版型載入商品的函數
+	    function loadProducts(categoryId, typeId) {
+	        let url = '/products';  // 初始化基礎 URL
 
-	                // 檢查是否還有更多商品
-	                if (offset >= totalProducts) {
-	                    document.getElementById('load-more-button').style.display = 'none';
+	        // 根據傳遞的 categoryId 和 typeId 動態構建 URL
+	        if (categoryId && typeId) {
+	            url = `/products/category/${categoryId}/type/${typeId}`;
+	        } else if (categoryId) {
+	            url = `/products/category/${categoryId}`;
+	        } else if (typeId) {
+	            url = `/products/type/${typeId}`;
+	        }
+	        console.log('Fetching products from URL:', url);
+
+	        fetch(url)
+	            .then(response => response.json())
+	            .then(data => {
+	                let productList = document.getElementById('product-list');
+	                let noProductsMessage = document.getElementById('no-products-message');
+	                productList.innerHTML = "";  // 清空當前的商品列表
+
+	                if (Array.isArray(data) && data.length > 0) {
+	                    
+	                    noProductsMessage.style.display = 'none';
+	                    data.forEach(product => {
+	                        let productHTML = `
+	                            <div class="col-md-6 col-lg-3 ftco-animate1">
+	                                <div class="product">
+	                                    <a href="product-single.html?productId=${product.id}" class="img-prod">
+	                                        <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
+	                                        <div class="overlay"></div>
+	                                    </a>
+	                                    <div class="text py-3 pb-4 px-3 text-center">
+	                                        <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
+	                                        <div class="pricing">
+	                                            <p class="price"><span class="price-sale">NT$${product.price}</span></p>
+	                                        </div>
+	                                        <div class="bottom-area d-flex px-3">
+	                                            <div class="m-auto d-flex">
+	                                                <a href="#" class="heart d-flex justify-content-center align-items-center" data-product-id="${product.id}">
+	                                                    <span><i class="ion-ios-heart"></i></span>
+	                                                </a>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        `;
+	                        productList.innerHTML += productHTML;
+	                    });
+	                    animateProducts();  // 呼叫動畫函數
 	                } else {
-	                    document.getElementById('load-more-button').style.display = 'block';
-	                }
-	            } else {
-	                if (reset) {
 	                    noProductsMessage.style.display = 'block';
 	                }
-	                document.getElementById('load-more-button').style.display = 'none';
-	            }
-	        })
-	        .catch(error => {
-	            isLoading = false;
-	            console.error('Error fetching products:', error);
-	        });
-	}
+	            })
+	            .catch(error => console.error('Error fetching products:', error));
+	    }
 
-	document.addEventListener("DOMContentLoaded", function() {
+	    // 商品動畫效果的函數
+	    function animateProducts() {
+	        let animatedElements = document.querySelectorAll('.ftco-animate1');
+	        animatedElements.forEach(el => {
+	            el.style.opacity = 1;
+	            el.style.visibility = 'visible';
+	        });
+	        bindWishlistEvents();
+	    }
+
+	    // 載入所有商品的函數（支持加載更多）
+	    function loadAllProducts(reset = false) {
+	        if (isLoading) return;
+	        isLoading = true;
+
+	        if (reset) {
+	            offset = 0;
+	            totalProducts = 0;
+	            document.getElementById('product-list').innerHTML = '';
+	        }
+
+	        let url = `/products?offset=${offset}&limit=${limit}`;
+
+	        fetch(url)
+	            .then(response => response.json())
+	            .then(data => {
+	                isLoading = false;
+	                let productList = document.getElementById('product-list');
+	                let noProductsMessage = document.getElementById('no-products-message');
+
+	                if (!productList) {
+	                    console.error('Cannot find element with id "product-list".');
+	                    return;
+	                }
+
+	                if (Array.isArray(data.products) && data.products.length > 0) {
+	                    noProductsMessage.style.display = 'none';
+
+	                    data.products.forEach(product => {
+	                        let productHTML = `
+	                            <div class="col-md-6 col-lg-3 ftco-animate1">
+	                                <div class="product">
+	                                    <a href="product-single.html?productId=${product.id}" class="img-prod">
+	                                        <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
+	                                        <div class="overlay"></div>
+	                                    </a>
+	                                    <div class="text py-3 pb-4 px-3 text-center">
+	                                        <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
+	                                        <div class="pricing">
+	                                            <p class="price"><span class="price-sale">NT$${product.price}</span></p>
+	                                        </div>
+	                                        <div class="bottom-area d-flex px-3">
+	                                            <div class="m-auto d-flex">
+                                                <a href="#" class="heart d-flex justify-content-center align-items-center" data-product-id="${product.id}">
+	                                                    <span><i class="ion-ios-heart"></i></span>
+	                                                </a>
+	                                            </div>
+	                                         </div>
+	                                   </div>
+	                                </div>
+	                            </div>
+	                        `;
+	                        productList.innerHTML += productHTML;
+	                    });
+	                    animateProducts();  // 呼叫動畫函數
+
+	                    offset += data.products.length;
+	                    totalProducts = data.total;
+
+	                    // 檢查是否還有更多商品
+	                    if (offset >= totalProducts) {
+	                        document.getElementById('load-more-button').style.display = 'none';
+	                    } else {
+	                        document.getElementById('load-more-button').style.display = 'block';
+	                    }
+	                } else {
+	                    if (reset) {
+	                        noProductsMessage.style.display = 'block';
+	                    }
+	                    document.getElementById('load-more-button').style.display = 'none';
+	                }
+	            })
+	            .catch(error => {
+	                isLoading = false;
+	                console.error('Error fetching products:', error);
+	            });
+	    }
+
 	    // 綁定版型按鈕的點擊事件
 	    document.querySelectorAll('.product-category li a').forEach(item => {
-	        item.addEventListener('click', function(event) {
-	            event.preventDefault(); // 防止預設的跳轉行為
+	        item.addEventListener('click', function (event) {
+	            event.preventDefault();
 
 	            // 移除所有 li 的 active 類
 	            document.querySelectorAll('.product-category li a').forEach(link => {
@@ -945,8 +1053,8 @@
 
 	    // 綁定分類按鈕的點擊事件
 	    document.querySelectorAll('.dropdown-item').forEach(item => {
-	        item.addEventListener('click', function(event) {
-	            event.preventDefault(); // 防止預設的跳轉行為
+	        item.addEventListener('click', function (event) {
+	            event.preventDefault();
 
 	            // 清除所有 active 類
 	            document.querySelectorAll('.dropdown-item').forEach(link => {
@@ -974,8 +1082,8 @@
 	    });
 
 	    // 綁定「所有商品」按鈕的點擊事件
-	    document.getElementById('all-products-category').addEventListener('click', function(event) {
-	        event.preventDefault();  // 防止跳轉
+	    document.getElementById('all-products-category').addEventListener('click', function (event) {
+	        event.preventDefault();
 	        selectedCategoryId = null;  // 清空分類選擇
 	        selectedTypeId = null;      // 清空版型選擇
 
@@ -992,7 +1100,7 @@
 	    });
 
 	    // 綁定“加載更多”按鈕點擊事件
-	    document.getElementById('load-more-button').addEventListener('click', function() {
+	    document.getElementById('load-more-button').addEventListener('click', function () {
 	        loadAllProducts();
 	    });
 
@@ -1007,7 +1115,11 @@
 	    } else {
 	        loadAllProducts(true);
 	    }
+
+	   
+	    loadAllProducts();
 	});
+
 
 
 
