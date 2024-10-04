@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<title>Vegefoods - Free Bootstrap 4 Template by Colorlib</title>
+<title>WEARtoWEAR/Home</title>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -32,10 +33,8 @@
 
 
 <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css">
+<link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
-
-
 <style>
 .carousel-inner img {
 	width: 100%;
@@ -54,24 +53,63 @@
 }
 
 .modal-body th, .modal-body td {
-	word-wrap: break-word; /* 自动换行 */
-	text-align: center; /* 居中对齐 */
+	word-wrap: break-word; 
+	text-align: center; 
 }
 
-/* 确保模态窗口在小屏幕上自适应 */
+
 @media ( max-width : 576px) {
 	.carousel-inner img {
-		height: 300px; /* 调整图片高度以适应小屏幕 */
+		height: 300px; 
 	}
+}
+
+/* 初始狀態的心形按鈕樣式 */
+.heart {
+    color: fff !important; /* 默認顏色，強制應用 */
+    transition: color 0.3s ease !important; /* 過渡效果，強制應用 */
+}
+
+/* 當心形按鈕被點擊後，變為紅色 */
+.added-to-wishlist {
+    color: red !important; /* 變成紅色 */
+    background-color: transparent !important; /* 背景變透明 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
 }
 </style>
 
 
+
+
 </head>
+
 <body class="goto-here">
+	<!-- <div class="py-1 bg-primary">
+		<div class="container">
+			<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
+				<div class="col-lg-12 d-block">
+					<div class="row d-flex">
+						<div class="col-md pr-4 d-flex topper align-items-center">
+							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
+									class="icon-phone2"></span></div>
+							<span class="text">+ 1235 2355 98</span>
+						</div>
+						<div class="col-md pr-4 d-flex topper align-items-center">
+							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
+									class="icon-paper-plane"></span></div>
+							<span class="text">youremail@email.com</span>
+						</div>
+						<div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
+							<span class="text">3-5 Business days delivery &amp; Free Returns</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
 	<div class="container">
 		<div>
-			<form action="#" class="search-form">
+			<form action="./AboutUs.html" class="search-form">
 				<div class="form-group">
 					<span class="icon ion-ios-search"></span> <input type="text"
 						class="form-control" placeholder="搜尋...">
@@ -93,8 +131,7 @@
 
 			<div class="collapse navbar-collapse col" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a href="Home.html"
-						class="nav-link">首頁</a></li>
+					<li class="nav-item"><a href="Home.html" class="nav-link">首頁</a></li>
 					<li class="nav-item"><a href="AboutUs.html" class="nav-link">關於我們</a></li>
 
 					<li class="nav-item dropdown"><a
@@ -102,18 +139,36 @@
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">商品</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
 							<a class="dropdown-item" href="shop.html">所有商品</a> <a
-								class="dropdown-item" href="shop.html?categoryid=1">男裝</a> <a
-								class="dropdown-item" href="shop.html?categoryid=2">女裝</a> <a
-								class="dropdown-item" href="shop.html?categoryid=3">童裝</a>
+								class="dropdown-item" href="shop.html?category=1">男裝</a> <a
+								class="dropdown-item" href="shop.html?category=2">女裝</a> <a
+								class="dropdown-item" href="shop.html?category=3">童裝</a>
 						</div></li>
+
+
 
 					<!-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
 					<li class="nav-item"><a href="contact.html" class="nav-link">聯繫我們</a></li>
 
-					<li class="nav-item cta cta-colored"><a href=""
-						class="nav-link"><span class="icon-person"></span></a></li>
+					<!-- <li class="nav-item dropdown cta cta-colored"><a href="#"
+						class="nav-link" id="sessionCheck"><span class="icon-person"></span></a>
+						<div class="dropdown-menu dropdown-menu-center"
+							aria-labelledby="sessionCheck">
+							<a class="dropdown-item" href="#">會員中心</a> <a
+								class="dropdown-item" href="#">登出</a>
+						</div></li> -->
+
+					<li class="nav-item dropdown cta cta-colored"><a href="#"
+						class="nav-link " id="sessionCheck" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> <span
+							class="icon-person"></span>
+					</a>
+						<div class="dropdown-menu" id="userDropdown"
+							style="display: none;">
+							<a class="dropdown-item" href="/Account.html">會員中心</a> <a
+								class="dropdown-item" href="#" id="logoutButton">登出</a>
+						</div></li>
 					<li class="nav-item cta cta-colored"><a href="wishlist.html"
-						class="nav-link"><span class="icon-heart"></span></a></li>
+						class="nav-link" id="sessionCheck"><span class="icon-heart"></span></a></li>
 					<li class="nav-item cta cta-colored"><a href="cart.html"
 						class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 
@@ -811,42 +866,6 @@
 	<script src="js/main.js"></script>
 
 	<script>
-		$(document).ready(function(){
-
-		var quantitiy=0;
-		   $('.quantity-right-plus').click(function(e){
-		        
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		            
-		            $('#quantity').val(quantity + 1);
-
-		          
-		            // Increment
-		        
-		    });
-
-		     $('.quantity-left-minus').click(function(e){
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		      
-		            // Increment
-		            if(quantity>0){
-		            $('#quantity').val(quantity - 1);
-		            }
-		    });
-		    
-		});
-		
-		
 		
 		
 		document.addEventListener("DOMContentLoaded", function() {
@@ -910,7 +929,7 @@
 		                    document.getElementById('price').innerText = `NT$${selectedVariant.price}`;
 		                    document.getElementById('stock').innerText = selectedVariant.stock;
 
-		                    // 更新轮播图片
+		                   
 		                    updateCarouselImages(selectedVariant);
 		                } else {
 		                    console.error('No variant found for the selected color and size.');
@@ -919,7 +938,7 @@
 		            .catch(error => console.error('Error fetching product details:', error));
 		    }
 
-		    // 更新轮播图片
+		  
 		    function updateCarouselImages(variant) {
 		        const carouselInner = document.getElementById('carousel-inner');
 
@@ -930,7 +949,7 @@
 		        if (variant.image3) images.push(variant.image3);
 
 		        images.forEach((image, index) => {
-		            // 轮播内的图片
+		            
 		            let carouselItem = document.createElement('div');
 		            carouselItem.classList.add('carousel-item');
 		            if (index === 0) carouselItem.classList.add('active');
@@ -938,14 +957,14 @@
 		            carouselInner.appendChild(carouselItem);
 		        });
 
-		        // 初始化轮播
+		       
 		        $('#carouselExampleIndicators').carousel();
 		    }
 
-		    // 动态生成颜色或尺寸选项的函数
+		  
 		    function populateSelectOptions(variants, selectElement, property) {
 		        const uniqueOptions = new Set(variants.map(variant => variant[property].name));
-		        selectElement.innerHTML = ''; // 清空选项
+		        selectElement.innerHTML = ''; 
 		        uniqueOptions.forEach(optionValue => {
 		            const option = document.createElement('option');
 		            option.value = optionValue;
@@ -962,9 +981,11 @@
 		
 		//推薦商品
 		document.addEventListener("DOMContentLoaded", function() {
+			 const wishlistId = localStorage.getItem('wishlistId') || '';
+			 
 		    // 呼叫 API 獲取商品資料
 		    function loadRandomProducts() {
-		    fetch('/products/random')  // 替換為你的 API 路徑
+		    fetch('/products/random')  
 		        .then(response => response.json())
 		        .then(data => {
 		            let productList = document.getElementById('product-list');
@@ -990,30 +1011,75 @@
 	                                    </div>
 	                                    <div class="bottom-area d-flex px-3">
 	    								<div class="m-auto d-flex">
-	    								
-	    									<a href="#" class="heart d-flex justify-content-center align-items-center ">
-	    										<span><i class="ion-ios-heart"></i></span>
+	    								  <a href="#" class="heart d-flex justify-content-center align-items-center" data-product-id="${product.id}">
+                                          <span><i class="ion-ios-heart"></i></span>
 	    									</a>
 	    								</div>
 	    							</div>
 	                                </div>
-
 	                            </div>
 	                        </div>
 	                    `;
 	                    productList.innerHTML += productHTML;
 	                });
+	    								
 
-	                // 顯示所有被隱藏的 .ftco-animate 元素
+		            // 顯示所有被隱藏的 .ftco-animate 元素
 	                let animatedElements = document.querySelectorAll('.ftco-animate1');
 	                animatedElements.forEach(el => {
 	                    el.style.opacity = 1;       // 顯示透明度
 	                    el.style.visibility = 'visible';  // 取消隱藏
 	                });
+
+	                // 當商品載入完成後綁定心形按鈕事件
+	                bindWishlistEvents();
 	            })
-	           
 	            .catch(error => console.error('Error fetching products:', error));
 	    }
+		    
+		    // 綁定心形圖標的點擊事件
+		    function bindWishlistEvents() {
+		        document.querySelectorAll('.heart').forEach(item => {
+		            item.addEventListener('click', function(event) {
+		                event.preventDefault();  // 防止預設的跳轉行為
+
+		                // 獲取 productId
+		                let productId = this.getAttribute('data-product-id');
+
+		                // 構造 API 請求數據
+		                let requestData = {
+		                		// 從 localStorage 中獲取的 wishlistId
+		                    productId: productId
+		                };
+
+		                console.log('點擊的商品:', { productId});  // 調試信息
+		                // 發送 POST 請求到後端的 toggle API
+		                fetch('/wishlist/toggle', {	                	
+		                    method: 'POST',
+		                    credentials: 'include',
+		                    headers: {
+		                        'Content-Type': 'application/json'
+		                    },
+		                    body: JSON.stringify(requestData)
+		                })
+		                .then(response => response.json())
+		                .then(data => {
+		                	console.log(data);
+		                    // 更新心形圖標的樣式
+		                    if (data) {
+		                        if (this.classList.contains('added-to-wishlist')) {
+		                            this.classList.remove('added-to-wishlist');  // 移除商品
+		                        } else {
+		                            this.classList.add('added-to-wishlist');  // 添加商品
+		                        }
+		                    }
+		                })
+		                .catch(error => {
+		                    console.error('Error:', error);
+		                });
+		            });
+		        });
+		    }    
 
 	    // 初始化隨機加載 4張商品
 	    loadRandomProducts();

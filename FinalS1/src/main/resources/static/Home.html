@@ -36,6 +36,19 @@
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
 <style>
+/* 初始狀態的心形按鈕樣式 */
+.heart {
+    color: fff !important; /* 默認顏色，強制應用 */
+    transition: color 0.3s ease !important; /* 過渡效果，強制應用 */
+}
+
+/* 當心形按鈕被點擊後，變為紅色 */
+.added-to-wishlist {
+    color: red !important; /* 變成紅色 */
+    background-color: transparent !important; /* 背景變透明 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
+}
+
 </style>
 
 
@@ -334,7 +347,7 @@
 
 	    // 呼叫 API 獲取所有商品資料
 	    function loadRandomProducts() {
-	        fetch('/products/random')  // 取得所有商品的 API 路徑
+	        fetch('/products/random')  
 	            .then(response => response.json())
 	            .then(data => {
 	                let productList = document.getElementById('product-list');
@@ -396,14 +409,15 @@
 
 	                // 構造 API 請求數據
 	                let requestData = {
-	                    wishlistId: wishlistId,  // 從 localStorage 中獲取的 wishlistId
+	                		// 從 localStorage 中獲取的 wishlistId
 	                    productId: productId
 	                };
 
-	                console.log('點擊的商品:', { productId, wishlistId });  // 調試信息
+	                console.log('點擊的商品:', { productId});  // 調試信息
 	                // 發送 POST 請求到後端的 toggle API
-	                fetch('/wishlist/toggle', {
+	                fetch('/wishlist/toggle', {	                	
 	                    method: 'POST',
+	                    credentials: 'include',
 	                    headers: {
 	                        'Content-Type': 'application/json'
 	                    },
@@ -411,6 +425,7 @@
 	                })
 	                .then(response => response.json())
 	                .then(data => {
+	                	console.log(data);
 	                    // 更新心形圖標的樣式
 	                    if (data) {
 	                        if (this.classList.contains('added-to-wishlist')) {

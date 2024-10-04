@@ -1,18 +1,23 @@
 package tw.Final.FinalS1.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import tw.Final.FinalS1.dto.WishlistDto;
 import tw.Final.FinalS1.model.Product;
 import tw.Final.FinalS1.model.ProductVariant;
+import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.model.WishlistItemsModel;
 import tw.Final.FinalS1.model.WishlistModel;
 import tw.Final.FinalS1.repository.ProductRepository;
 import tw.Final.FinalS1.repository.ProductVariantRepository;
+import tw.Final.FinalS1.repository.UserRepository;
 import tw.Final.FinalS1.repository.WishistItemsRepository;
 import tw.Final.FinalS1.repository.WishlistRepository;
 
@@ -27,12 +32,23 @@ public class WishlistService {
 	@Autowired
 	private WishistItemsRepository wishistItemsRepository;
 	
-	public WishlistModel addTowishlist(WishlistDto wishrequest) {
-		Long wishlistId = wishrequest.getWishlistId();
+	@Autowired
+	private UserRepository userRepository;
+	
+	public WishlistModel addTowishlist(WishlistDto wishrequest ,HttpSession session) {
+		//Long wishlistId = wishrequest.getWishlistId();
 		Long productId = wishrequest.getProductId();
+		
+	    String userUUID = (String) session.getAttribute("userUUID");
 
+	    // 根據 UUID 查詢用戶
+        UserModel user = userRepository.findByUuid(userUUID);
+        if (user == null) {
+            return null;
+        }
+    
 		// 確認喜愛清單
-		WishlistModel wishlist = wishlistRepository.findById(wishlistId)
+		WishlistModel wishlist = wishlistRepository.findById(user.getId())
 				.orElseThrow(() -> new RuntimeException("wishlist not found"));
 
 		// 查找商品
@@ -75,11 +91,20 @@ public class WishlistService {
 //		return wishlistRepository.save(wishlist);
 //	}
 	
-	public WishlistModel deleteWishlist(WishlistDto wishrequest) {
-		Long wishlistId = wishrequest.getWishlistId();
+	public WishlistModel deleteWishlist(WishlistDto wishrequest, HttpSession session) {
+	//	Long wishlistId = wishrequest.getWishlistId();
 		Long productId = wishrequest.getProductId();
+		
+	    String userUUID = (String) session.getAttribute("userUUID");
 
-		WishlistModel wishlist = wishlistRepository.findById(wishlistId)
+	    // 根據 UUID 查詢用戶
+        UserModel user = userRepository.findByUuid(userUUID);
+        if (user == null) {
+            return null;
+        }
+		
+
+		WishlistModel wishlist = wishlistRepository.findById(user.getId())
 				.orElseThrow(() -> new RuntimeException("Wishlist not found"));
 		
 		WishlistItemsModel itemToDelete = wishlist.getWishlistItems().stream()

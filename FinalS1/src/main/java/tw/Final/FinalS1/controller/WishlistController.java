@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpSession;
 import tw.Final.FinalS1.dto.WishlistDto;
+import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.model.WishlistItemsModel;
 import tw.Final.FinalS1.model.WishlistModel;
 import tw.Final.FinalS1.repository.UserRepository;
@@ -32,13 +34,26 @@ public class WishlistController {
 	@Autowired
 	private WishlistRepository wishlistRepository;
 	
+
+	
+	
+	
 	@PostMapping("/toggle")
-	public ResponseEntity<WishlistModel> toggleWishlistItem(@RequestBody WishlistDto wishlistRequest) {
-		Long wishlistId = wishlistRequest.getWishlistId();
+	public ResponseEntity<WishlistModel> toggleWishlistItem(@RequestBody WishlistDto wishlistRequest, HttpSession session) {
+	//	Long wishlistId = wishlistRequest.getWishlistId();
         Long productId = wishlistRequest.getProductId();
+	    String userUUID = (String) session.getAttribute("userUUID");
+	    System.out.println(userUUID);
+	    // 根據 UUID 查詢用戶
+        UserModel user = userRepository.findByUuid(userUUID);
+        if (user == null) {
+            return null;
+        }
+        
+        
         
         // 查找喜愛清單
-        WishlistModel wishlist = wishlistRepository.findById(wishlistId)
+        WishlistModel wishlist = wishlistRepository.findById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Wishlist not found"));
 
         // 檢查商品是否已存在於喜愛清單中
@@ -47,19 +62,19 @@ public class WishlistController {
 
         if (itemExists) {
             // 如果商品存在，則移除
-            return ResponseEntity.ok(wishlistService.deleteWishlist(wishlistRequest));
+            return ResponseEntity.ok(wishlistService.deleteWishlist(wishlistRequest, session));
         } else {
             // 如果商品不存在，則添加
-            return ResponseEntity.ok(wishlistService.addTowishlist(wishlistRequest));
+            return ResponseEntity.ok(wishlistService.addTowishlist(wishlistRequest, session));
         }
     }
 	
 
 	@PostMapping("/add")
-	public ResponseEntity<WishlistModel> addTowishlist(@RequestBody WishlistDto wishrequest) {
+	public ResponseEntity<WishlistModel> addTowishlist(@RequestBody WishlistDto wishrequest, HttpSession session) {
 		try {
 
-			WishlistModel addwishlist = wishlistService.addTowishlist(wishrequest);
+			WishlistModel addwishlist = wishlistService.addTowishlist(wishrequest, session);
 			return ResponseEntity.ok(addwishlist);
 
 		} catch (RuntimeException e) {
@@ -82,10 +97,10 @@ public class WishlistController {
 //	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity<String> deleteWishlist(@RequestBody WishlistDto wishrequest) {
+	public ResponseEntity<String> deleteWishlist(@RequestBody WishlistDto wishrequest, HttpSession session) {
 		try {
 
-			WishlistModel deleteWishlist = wishlistService.deleteWishlist(wishrequest);
+			WishlistModel deleteWishlist = wishlistService.deleteWishlist(wishrequest,session);
 			return ResponseEntity.ok("Items successfully deleted");
 
 		} catch (RuntimeException e) {
