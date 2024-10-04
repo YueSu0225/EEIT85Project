@@ -393,37 +393,41 @@ public class finalUserServiceImpl implements UserService{
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 	    }
 
-	    // 处理第一个订单，假设我们只关心第一个
-	    OrderModel order = orders.get(0);
-
 	    // 构建响应数据
 	    Map<String, Object> response = new HashMap<>();
-	    response.put("orderNumber", order.getEcpayNumber());
-	    response.put("totalPrice", order.getTotalPrice());
-	    response.put("orderStatus", order.getStatus());
+	    List<Map<String, Object>> orderList = new ArrayList<>();
 
-	    // 查询与该订单相关的所有订单项
-	    List<OrderItems> orderDetailsList = orderItemsRepository.findByOrderId(order.getId());
-	    List<Map<String, Object>> orderDetails = new ArrayList<>();
+	    // 遍历每个订单
+	    for (OrderModel order : orders) {
+	        Map<String, Object> orderData = new HashMap<>();
+	        orderData.put("orderNumber", order.getEcpayNumber());
+	        orderData.put("totalPrice", order.getTotalPrice());
+	        orderData.put("orderStatus", order.getStatus());
 
-	    // 将每个订单项的详情添加到列表中
-	    for (OrderItems orderItem : orderDetailsList) {
-	        Map<String, Object> itemDetails = new HashMap<>();
-	        itemDetails.put("detailsQuantity", orderItem.getQuantity());
-	        itemDetails.put("detailsPrice", orderItem.getPrice());
-	        itemDetails.put("detailsName", orderItem.getProductVariant().getProduct().getName());
-	        orderDetails.add(itemDetails);
+	        // 查询与该订单相关的所有订单项
+	        List<OrderItems> orderDetailsList = orderItemsRepository.findByOrderId(order.getId());
+	        List<Map<String, Object>> orderDetails = new ArrayList<>();
+
+	        // 将每个订单项的详情添加到列表中
+	        for (OrderItems orderItem : orderDetailsList) {
+	            Map<String, Object> itemDetails = new HashMap<>();
+	            itemDetails.put("detailsQuantity", orderItem.getQuantity());
+	            itemDetails.put("detailsPrice", orderItem.getPrice());
+	            itemDetails.put("detailsName", orderItem.getProductVariant().getProduct().getName());
+	            orderDetails.add(itemDetails);
+	        }
+
+	        // 如果订单项存在，添加到订单数据
+	        if (!orderDetails.isEmpty()) {
+	            orderData.put("orderItems", orderDetails);
+	        }
+
+	        // 将订单数据添加到订单列表
+	        orderList.add(orderData);
 	    }
 
-	    // 如果订单项为空，返回合适的错误信息
-	    if (orderDetails.isEmpty()) {
-	        Map<String, Object> errorResponse = new HashMap<>();
-	        errorResponse.put("message", "No order items found for this order");
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-	    }
-
-	    // 将订单项详情添加到响应中
-	    response.put("orderItems", orderDetails);
+	    // 将所有订单及其详情添加到响应中
+	    response.put("orders", orderList);
 
 	    return ResponseEntity.ok(response);
 	}
