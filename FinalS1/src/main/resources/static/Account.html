@@ -36,7 +36,26 @@
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
 
+<style>
+/*以下是 訂單下拉選單樣式
+  */
+.custom-select {
+    width: 100%; 
+    padding: 8px 12px; 
+    font-size: 16px; 
+    color: #333;
+    border: 1px solid #e0e0e0; 
+    border-radius: 4px; 
+    background-color: #f9f9f9; 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+}
 
+.custom-select:focus {
+    border-color: #b3b3b3; 
+    outline: none; 
+}
+
+</style>
 </head>
 
 <body class="goto-here">
@@ -140,7 +159,7 @@
 								</div>
 							</div>
 							<div class="ftco-animate member-ov-card">
-								<h6 class="mov-">無近期訂單</h6>
+								<h6 class="mov-" id="firstorder">無近期訂單</h6>
 							</div>
 						</div>
 						<div class="ftco-animate"></div>
@@ -187,8 +206,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="ftco-animate member-ov-card">
-							<h6 class="mov-">無近期訂單</h6>
+        					<div class="ftco-animate member-ov-card" id="order-list">
+            				<h6 class="mov-" id="noorder">無近期訂單</h6> 
 						</div>
 					</div>
 				</div>

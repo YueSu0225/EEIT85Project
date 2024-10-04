@@ -32,5 +32,8 @@ public interface UserService {
     public ResponseEntity<Map<String, Object>> forgetPassword(RegisterRequest request);
     	   	 
     public ResponseEntity<Map<String, Object>> changePassword(RegisterRequest request, HttpSession session);
+    
+	public ResponseEntity<Map<String, Object>> userOrderDetails(HttpSession session) ;
+
 	
 }
