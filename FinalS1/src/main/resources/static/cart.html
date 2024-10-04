@@ -108,52 +108,8 @@
 						        <th>Total</th>
 						      </tr>
 						    </thead>
-						    <tbody>
-						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(./Picture/k-7.jpg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Bell Pepper</h3>
-						        	<p>Far far away, behind the word mountains, far from the countries</p>
-						        </td>
-						        
-						        <td class="cart-size">L</td>
-
-								<td class="price">$4.90</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">$4.90</td>
-						      </tr><!-- END TR-->
-
-						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(./Picture/k-7.jpg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Bell Pepper</h3>
-						        	<p>Far far away, behind the word mountains, far from the countries</p>
-						        </td>
-						        
-								<td class="cart-size">M</td>
-
-						        <td class="price">$15.70</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">$15.70</td>
-						      </tr><!-- END TR-->
+						    <tbody  id="cart-items-body">
+						      <!--  商品顯示位置 -->
 						    </tbody>
 						  </table>
 					  </div>
@@ -362,6 +318,66 @@
 		    });
 		    
 		});
+		
+		// 页面加载后执行的代码
+        const cartId = sessionStorage.getItem('cartId');
+
+        if (cartId) {
+            fetchCartItems(cartId);
+        } else {
+            console.error('No cartId found in sessionStorage');
+        }
+		
+		// 请求后端，获取购物车商品数据
+		function fetchCartItems(cartId) {
+		    fetch('/cart/items/${cartId}')
+		        .then(response => {
+		            if (!response.ok) {
+		                throw new Error('Network response was not ok');
+		            }
+		            return response.json();
+		        })
+		        .then(cartItems => {
+		            displayCartItems(cartItems);
+		        })
+		        .catch(error => console.error('Error fetching cart items:', error));
+		}
+		fetchCartItems(cartId);
+		
+		
+		
+		// 将购物车商品渲染到页面
+		function displayCartItems(cartItems) {
+		    const cartItemsBody = document.getElementById('cart-items-body');
+		    cartItemsBody.innerHTML = '';  // 清空之前的内容
+
+		    cartItems.forEach(item => {
+		        const row = document.createElement('tr');
+		        row.classList.add('text-center');
+
+		        row.innerHTML = `
+		            <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+		            <td class="image-prod"><div class="img" style="background-image:url(${item.productVariant.product.imageUrl});"></div></td>
+		            <td class="product-name">
+		                <h3>${item.productVariant.product.name}</h3>
+		                <p>${item.productVariant.product.description}</p>
+		            </td>
+		            <td class="cart-size">${item.productVariant.size.name}</td>
+		            <td class="price">NT$${item.price}</td>
+		            <td class="quantity">
+		                <div class="input-group mb-3">
+		                    <input type="text" name="quantity" class="quantity form-control input-number" value="${item.quantity}" min="1" max="${item.productVariant.stock}">
+		                </div>
+		            </td>
+		            <td class="total">NT$${item.price * item.quantity}</td>
+		        `;
+
+		        cartItemsBody.appendChild(row);
+		    });
+		}
+
+		// 确保页面加载后调用 fetchCartItems
+		document.addEventListener('DOMContentLoaded', fetchCartItems);
 	</script>
     
   </body>

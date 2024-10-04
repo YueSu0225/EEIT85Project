@@ -10,9 +10,11 @@ import tw.Final.FinalS1.dto.CartItemsDto;
 import tw.Final.FinalS1.model.CartItemsModel;
 import tw.Final.FinalS1.model.CartModel;
 import tw.Final.FinalS1.model.ProductVariant;
+import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.repository.CartItemsRepository;
 import tw.Final.FinalS1.repository.CartRepository;
 import tw.Final.FinalS1.repository.ProductVariantRepository;
+import tw.Final.FinalS1.repository.UserRepository;
 
 @Service
 public class ShoppingCartServiceDto {
@@ -25,15 +27,24 @@ public class ShoppingCartServiceDto {
     @Autowired
     private CartItemsRepository cartItemsRepository;
     
+    @Autowired
+    private UserRepository userRepository;
+    
     
 
-    public CartModel addTocart(CartItemsDto cartRequest) {
-        Long cartId = cartRequest.getId();
+    public CartModel addTocart(CartItemsDto cartRequest, String userUUID) {
+//        Long cartId = cartRequest.getId();
         Long variantId = cartRequest.getVariantId();
         int quantity = cartRequest.getQuantity();
         
+     // 根據 userUUID 查找使用者
+        UserModel user = userRepository.findByUuid(userUUID);
+        if(user == null) {
+        	 throw new RuntimeException("User not found");
+        }
+        
         // 确保购物车存在
-        CartModel cart = cartRepository.findById(cartId)
+        CartModel cart = cartRepository.findById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
         // 查找产品变体
@@ -71,13 +82,17 @@ public class ShoppingCartServiceDto {
     }
     
     
-    public CartModel updateCart(CartItemsDto cartRequest) {
-    	Long cartId = cartRequest.getId();
+    public CartModel updateCart(CartItemsDto cartRequest, String userUUID) {
+//    	Long cartId = cartRequest.getId();
         Long variantId = cartRequest.getVariantId();
         int newquantity = cartRequest.getQuantity();
         
-        // 确保购物车存在
-        CartModel cart = cartRepository.findById(cartId)
+        UserModel user = userRepository.findByUuid(userUUID);
+        if(user == null) {
+        	 throw new RuntimeException("User not found");
+        }
+        
+        CartModel cart = cartRepository.findById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
         // 購物車中的商品
@@ -97,36 +112,18 @@ public class ShoppingCartServiceDto {
         return cartRepository.save(cart);
     }
     
-      
-//    public void removeFromcart(CartItemsDto cartRequest) {
-//   	 	Long cartId = cartRequest.getId();
-//        Long variantId = cartRequest.getVariantId();
-//        int quantity = cartRequest.getQuantity();
-//        
-//        CartModel cart = cartRepository.findById(cartId)
-//                .orElseThrow(() -> new RuntimeException("Cart not found"));
-//        
-//        for (CartItemsModel item : cart.getCartItems()) {	    	
-//            if (Objects.equals(item.getProductVariant().getId(), variantId)){  
-//            	int currentQuantity = item.getQuantity();
-//            	if(currentQuantity <= 0) {
-//            		cart.getCartItems().remove(item);
-//            	}else {
-//            		item.setQuantity(currentQuantity - 1);
-//            	}
-//                break;
-//            }
-//        }
-//		cartRepository.save(cart);
-//	}
-//    
     
-    public void deleteCartItem(CartItemsDto cartRequest) {
-    	 Long cartId = cartRequest.getId();
+    public void deleteCartItem(CartItemsDto cartRequest, String userUUID) {
+//    	 Long cartId = cartRequest.getId();
          Long variantId = cartRequest.getVariantId();
     	
-		CartModel cart = cartRepository.findById(cartId)
-				.orElseThrow(() -> new RuntimeException("Cart not found"));
+         UserModel user = userRepository.findByUuid(userUUID);
+         if(user == null) {
+         	 throw new RuntimeException("User not found");
+         }
+         
+         CartModel cart = cartRepository.findById(user.getId())
+                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 		
 		 // 查找要删除的商品项
 	    CartItemsModel itemToDelete = cart.getCartItems().stream()
@@ -141,18 +138,28 @@ public class ShoppingCartServiceDto {
 	}
     
     
-    public List<CartItemsModel> getCartItems(Long cartId){
+    public List<CartItemsModel> getCartItems(Long cartId, String userUUID){
     	
-		CartModel cart = cartRepository.findById(cartId)
-				.orElseThrow(() -> new RuntimeException("Cart not found"));
+    	UserModel user = userRepository.findByUuid(userUUID);
+        if(user == null) {
+        	 throw new RuntimeException("User not found");
+        }
+        
+        CartModel cart = cartRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
 		
 		return cart.getCartItems();
 	}
     
-    public int getTotalPrice(Long cartId) {
+    public int getTotalPrice(Long cartId, String userUUID) {
     	
-	CartModel cart = cartRepository.findById(cartId)
-				.orElseThrow(() -> new RuntimeException("Cart not found"));
+    	UserModel user = userRepository.findByUuid(userUUID);
+        if(user == null) {
+        	 throw new RuntimeException("User not found");
+        }
+        
+        CartModel cart = cartRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
 				
 //	return cart.getCartItems().stream()
 //			.map(CartItemsModel::getPrice)

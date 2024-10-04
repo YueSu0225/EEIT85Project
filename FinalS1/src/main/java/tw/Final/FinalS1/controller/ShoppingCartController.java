@@ -35,30 +35,35 @@ public class ShoppingCartController {
 	private HttpSession session;
 	
 	@PostMapping("/add")
-	public ResponseEntity<CartModel> addTocart(@RequestBody CartItemsDto cartRequest) {
-//		 String userUUID = (String) session.getAttribute("userUUID");
+	public ResponseEntity<CartModel> addTocart(@RequestBody CartItemsDto cartRequest, HttpSession session) {
+		 String userUUID = (String) session.getAttribute("userUUID");
 //		 UserModel user = userRepository.findByUuid(userUUID);
-//		 if(userUUID == null) {
-//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//		 }
+		 if(userUUID == null) {
+			 System.out.println("用戶未登入");
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		 }
 		
+		 System.out.println("收到的請求: " + cartRequest);
+		 
 		try {
-			 CartModel updateCart = shoppingCartServiceDto.addTocart(cartRequest);
+			 CartModel updateCart = shoppingCartServiceDto.addTocart(cartRequest, userUUID);
 			    return ResponseEntity.ok(updateCart);
 		}catch(RuntimeException e){
+			System.out.println("錯誤: " + e.getMessage());
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 	
 	@PostMapping("/update")
-	public ResponseEntity<CartModel> updateCart(@RequestBody CartItemsDto cartRequest) {
-//		 String userUUID = (String) session.getAttribute("userUUID");
-//		 if(userUUID == null) {
-//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//		 }
+	public ResponseEntity<CartModel> updateCart(@RequestBody CartItemsDto cartRequest, HttpSession session) {
+		 String userUUID = (String) session.getAttribute("userUUID");
+//		 UserModel user = userRepository.findByUuid(userUUID);
+		 if(userUUID == null) {
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		 }
 		
 		try {
-			 CartModel updateCart = shoppingCartServiceDto.updateCart(cartRequest);
+			 CartModel updateCart = shoppingCartServiceDto.updateCart(cartRequest, userUUID);
 			    return ResponseEntity.ok(updateCart);
 		}catch(RuntimeException e){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -66,14 +71,15 @@ public class ShoppingCartController {
 	}
 	
 	@DeleteMapping("/delete")
-	public ResponseEntity<String> delegteCartItem(@RequestBody CartItemsDto cartRequest){
-//		 String userUUID = (String) session.getAttribute("userUUID");
-//		 if(userUUID == null) {
-//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//		 }
+	public ResponseEntity<String> delegteCartItem(@RequestBody CartItemsDto cartRequest, HttpSession session){
+		 String userUUID = (String) session.getAttribute("userUUID");
+//		 UserModel user = userRepository.findByUuid(userUUID);
+		 if(userUUID == null) {
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		 }
 		
 		try {			
-			shoppingCartServiceDto.deleteCartItem(cartRequest);
+			shoppingCartServiceDto.deleteCartItem(cartRequest, userUUID);
 			return ResponseEntity.ok("Item successfully deleted");
 		}catch(RuntimeException e){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -82,24 +88,26 @@ public class ShoppingCartController {
 	
 	
 	@GetMapping("/items/{id}")
-	public ResponseEntity<List<CartItemsModel>> getCartItems(@PathVariable Long id){
-//		 String userUUID = (String) session.getAttribute("userUUID");
-//		 if(userUUID == null) {
-//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//		 }
+	public ResponseEntity<List<CartItemsModel>> getCartItems(@PathVariable Long id, HttpSession session){
+		 String userUUID = (String) session.getAttribute("userUUID");
+//		 UserModel user = userRepository.findByUuid(userUUID);
+		 if(userUUID == null) {
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		 }
 		
-		List<CartItemsModel> cartItems = shoppingCartServiceDto.getCartItems(id);
+		List<CartItemsModel> cartItems = shoppingCartServiceDto.getCartItems(id, userUUID);
 			return ResponseEntity.ok(cartItems);
 }
 	
 	@GetMapping("/total/{id}")
 	public ResponseEntity<Integer> getTotalPrice(@PathVariable Long id){		
-//		 String userUUID = (String) session.getAttribute("userUUID");
-//		 if(userUUID == null) {
-//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//		 }
+		 String userUUID = (String) session.getAttribute("userUUID");
+//		 UserModel user = userRepository.findByUuid(userUUID);
+		 if(userUUID == null) {
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		 }
 		
-			int totalPrice = shoppingCartServiceDto.getTotalPrice(id);
+			int totalPrice = shoppingCartServiceDto.getTotalPrice(id, userUUID);
 			return ResponseEntity.ok(totalPrice);
 	}
 	
