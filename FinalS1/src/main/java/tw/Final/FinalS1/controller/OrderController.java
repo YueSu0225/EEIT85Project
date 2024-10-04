@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import tw.Final.FinalS1.dto.OrderRequest;
+//import tw.Final.FinalS1.dto.OrderRequest;
 import tw.Final.FinalS1.dto.OrderResponse;
 import tw.Final.FinalS1.model.OrderModel;
 import tw.Final.FinalS1.service.OrderService;
@@ -22,17 +22,17 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    // 創建訂單的端點
-    @PostMapping("/create")
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
-        // 使用 orderRequest 創建訂單
-        OrderModel order = orderService.createOrder(orderRequest.getUserId(), orderRequest.getTotalPrice());
-
-        // 將訂單實體轉換為 DTO
-        OrderResponse orderResponse = orderService.convertToOrderResponse(order);
-
-        return new ResponseEntity<>(orderResponse, HttpStatus.CREATED);
-    }
+//    // 創建訂單的端點
+//    @PostMapping("/create")
+//    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
+//        // 使用 orderRequest 創建訂單
+//        OrderModel order = orderService.createOrder(orderRequest.getUserId(), orderRequest.getTotalPrice());
+//
+//        // 將訂單實體轉換為 DTO
+//        OrderResponse orderResponse = orderService.convertToOrderResponse(order);
+//
+//        return new ResponseEntity<>(orderResponse, HttpStatus.CREATED);
+//    }
 
     // 從購物車創建訂單
     @PostMapping("/create-from-cart")
