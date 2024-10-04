@@ -56,11 +56,7 @@ public class ShoppingCartServiceDto {
         for (CartItemsModel item : cart.getCartItems()) {
             if (Objects.equals(item.getProductVariant().getId(), variantId)){
                 item.setQuantity(item.getQuantity() + quantity);
-                // 更新價格
-                int price = productVariant.getPrice() * item.getQuantity();
-                item.setPrice(price);
-                // 以下為bigDecimal 計算有小數點的方法
-//                 item.setPrice(productVariant.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+               
                 itemExists = true;
                 break;
             }
@@ -69,12 +65,10 @@ public class ShoppingCartServiceDto {
         // 如果商品不存在，则添加新商品
         if (!itemExists) {
             CartItemsModel newItem = new CartItemsModel();
-            int price = productVariant.getPrice() * quantity;
             newItem.setCart(cart);
             newItem.setProductVariant(productVariant);
             newItem.setQuantity(quantity);
-            newItem.setPrice(price);
-//            newItem.setPrice(productVariant.getPrice().multiply(BigDecimal.valueOf(newItem.getQuantity())));
+            newItem.setPrice(productVariant.getPrice());
             cart.getCartItems().add(newItem);
         }
 
@@ -114,8 +108,6 @@ public class ShoppingCartServiceDto {
     
     
     public void deleteCartItem(CartItemsDto cartRequest, String userUUID) {
-//    	 Long cartId = cartRequest.getId();
-         Long variantId = cartRequest.getVariantId();
     	
          UserModel user = userRepository.findByUuid(userUUID);
          if(user == null) {
@@ -125,20 +117,13 @@ public class ShoppingCartServiceDto {
          CartModel cart = cartRepository.findById(user.getId())
                  .orElseThrow(() -> new RuntimeException("Cart not found"));
 		
-		 // 查找要删除的商品项
-	    CartItemsModel itemToDelete = cart.getCartItems().stream()
-	            .filter(item -> Objects.equals(item.getProductVariant().getId(), variantId))
-	            .findFirst()
-	            .orElseThrow(() -> new RuntimeException("Item not found in cart"));
-
-	    // 从购物车中移除商品项
-	    cart.getCartItems().remove(itemToDelete);
+         cart.getCartItems().removeIf(item -> item.getId().equals(cartRequest.getId()));
 		
 		cartRepository.save(cart);
 	}
     
     
-    public List<CartItemsModel> getCartItems(Long cartId, String userUUID){
+    public List<CartItemsModel> getCartItems(String userUUID){
     	
     	UserModel user = userRepository.findByUuid(userUUID);
         if(user == null) {
@@ -169,4 +154,6 @@ public class ShoppingCartServiceDto {
 	            .mapToInt(CartItemsModel::getPrice)  // 假設 getPrice 返回的是 int 型別
 	            .sum();  // 直接對整數進行加總
     }
+    
+   
 }

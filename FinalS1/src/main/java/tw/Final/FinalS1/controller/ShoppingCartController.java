@@ -21,6 +21,7 @@ import tw.Final.FinalS1.dto.CartItemsDto;
 import tw.Final.FinalS1.model.CartItemsModel;
 import tw.Final.FinalS1.model.CartModel;
 import tw.Final.FinalS1.model.UserModel;
+import tw.Final.FinalS1.repository.CartRepository;
 import tw.Final.FinalS1.repository.UserRepository;
 import tw.Final.FinalS1.service.ShoppingCartServiceDto;
 
@@ -33,6 +34,8 @@ public class ShoppingCartController {
 	private UserRepository userRepository;
 	@Autowired
 	private HttpSession session;
+	@Autowired
+	private CartRepository cartRepository;
 	
 	@PostMapping("/add")
 	public ResponseEntity<CartModel> addTocart(@RequestBody CartItemsDto cartRequest, HttpSession session) {
@@ -73,7 +76,7 @@ public class ShoppingCartController {
 	@DeleteMapping("/delete")
 	public ResponseEntity<String> delegteCartItem(@RequestBody CartItemsDto cartRequest, HttpSession session){
 		 String userUUID = (String) session.getAttribute("userUUID");
-//		 UserModel user = userRepository.findByUuid(userUUID);
+
 		 if(userUUID == null) {
 			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		 }
@@ -87,15 +90,15 @@ public class ShoppingCartController {
 	}
 	
 	
-	@GetMapping("/items/{id}")
-	public ResponseEntity<List<CartItemsModel>> getCartItems(@PathVariable Long id, HttpSession session){
+	@GetMapping("/items")
+	public ResponseEntity<List<CartItemsModel>> getCartItems(HttpSession session){
 		 String userUUID = (String) session.getAttribute("userUUID");
 //		 UserModel user = userRepository.findByUuid(userUUID);
 		 if(userUUID == null) {
 			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		 }
 		
-		List<CartItemsModel> cartItems = shoppingCartServiceDto.getCartItems(id, userUUID);
+		List<CartItemsModel> cartItems = shoppingCartServiceDto.getCartItems(userUUID);
 			return ResponseEntity.ok(cartItems);
 }
 	
@@ -110,5 +113,7 @@ public class ShoppingCartController {
 			int totalPrice = shoppingCartServiceDto.getTotalPrice(id, userUUID);
 			return ResponseEntity.ok(totalPrice);
 	}
+	
+	
 	
 }
