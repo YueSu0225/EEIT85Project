@@ -1,5 +1,6 @@
 package tw.Final.FinalS1.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +18,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.CartModel;
+import tw.Final.FinalS1.model.OrderItems;
+import tw.Final.FinalS1.model.OrderModel;
 import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.model.userInfoMedel;
 import tw.Final.FinalS1.model.WishlistModel;
 import tw.Final.FinalS1.repository.UserInfoRepository;
 import tw.Final.FinalS1.repository.UserRepository;
 import tw.Final.FinalS1.repository.CartRepository;
+import tw.Final.FinalS1.repository.OrderItemsRepository;
+import tw.Final.FinalS1.repository.OrderRepository;
 import tw.Final.FinalS1.repository.WishlistRepository;
 
 
@@ -37,6 +42,10 @@ public class finalUserServiceImpl implements UserService{
 	private UserInfoRepository userInfoRepository;
 	@Autowired
 	private WishlistRepository wishListRepository;
+	@Autowired
+	private OrderRepository orderRepository;
+	@Autowired
+	private OrderItemsRepository orderItemsRepository;
 	
 	
 
@@ -360,6 +369,65 @@ public class finalUserServiceImpl implements UserService{
 	        }
 	
 	}
+
+
+	@Override
+	public ResponseEntity<Map<String, Object>> userOrderDetails(HttpSession session) {
+	    String userUUID = (String) session.getAttribute("userUUID");
+	    UserModel user = userRepository.findByUuid(userUUID);
+	    
+	    // 检查用户是否存在
+	    if (user == null) {
+	        Map<String, Object> errorResponse = new HashMap<>();
+	        errorResponse.put("message", "User not found");
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+	    }
+
+	    // 查询与用户关联的所有订单
+	    List<OrderModel> orders = orderRepository.findByUserId(user.getId());
+	    
+	    // 如果没有订单，返回错误响应
+	    if (orders.isEmpty()) {
+	        Map<String, Object> errorResponse = new HashMap<>();
+	        errorResponse.put("message", "No orders found for this user");
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+	    }
+
+	    // 处理第一个订单，假设我们只关心第一个
+	    OrderModel order = orders.get(0);
+
+	    // 构建响应数据
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("orderNumber", order.getEcpayNumber());
+	    response.put("totalPrice", order.getTotalPrice());
+	    response.put("orderStatus", order.getStatus());
+
+	    // 查询与该订单相关的所有订单项
+	    List<OrderItems> orderDetailsList = orderItemsRepository.findByOrderId(order.getId());
+	    List<Map<String, Object>> orderDetails = new ArrayList<>();
+
+	    // 将每个订单项的详情添加到列表中
+	    for (OrderItems orderItem : orderDetailsList) {
+	        Map<String, Object> itemDetails = new HashMap<>();
+	        itemDetails.put("detailsQuantity", orderItem.getQuantity());
+	        itemDetails.put("detailsPrice", orderItem.getPrice());
+	        itemDetails.put("detailsName", orderItem.getProductVariant().getProduct().getName());
+	        orderDetails.add(itemDetails);
+	    }
+
+	    // 如果订单项为空，返回合适的错误信息
+	    if (orderDetails.isEmpty()) {
+	        Map<String, Object> errorResponse = new HashMap<>();
+	        errorResponse.put("message", "No order items found for this order");
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+	    }
+
+	    // 将订单项详情添加到响应中
+	    response.put("orderItems", orderDetails);
+
+	    return ResponseEntity.ok(response);
+	}
+
 	
 	
 
