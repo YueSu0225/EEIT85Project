@@ -21,15 +21,15 @@ public class EcpayServiceImpl implements EcpayService {
 	public String receiveECPayResponse(HttpServletRequest request) {
 		
 	    
-		// 获取所有的回传参数
+		// 收到回傳東西
 		Map<String, String[]> parameterMap = request.getParameterMap();
 
-		// 打印所有的回传参数
+		// 打印所有回傳
 		parameterMap.forEach((key, value) -> {
 			System.out.println(key + ": " + Arrays.toString(value));
 		
 		});
-		// 创建一个可读的返回字符串
+		// 創建回傳清單
 	    StringBuilder responseString = new StringBuilder();
 	    parameterMap.forEach((key, value) -> {
 	        responseString.append(key).append(": ").append(Arrays.toString(value)).append("\n");
