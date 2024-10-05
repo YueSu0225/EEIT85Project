@@ -92,39 +92,76 @@ public class WishlistService {
 //	}
 	
 	public WishlistModel deleteWishlist(WishlistDto wishrequest, HttpSession session) {
-	//	Long wishlistId = wishrequest.getWishlistId();
-		Long productId = wishrequest.getProductId();
-		
+	    Long productId = wishrequest.getProductId();
+
+	    // 從 session 中獲取用戶 UUID
 	    String userUUID = (String) session.getAttribute("userUUID");
+	    if (userUUID == null) {
+	        throw new RuntimeException("User not authorized");
+	    }
 
 	    // 根據 UUID 查詢用戶
-        UserModel user = userRepository.findByUuid(userUUID);
-        if (user == null) {
-            return null;
-        }
-		
+	    UserModel user = userRepository.findByUuid(userUUID);
+	    if (user == null) {
+	        throw new RuntimeException("User not found");
+	    }
 
-		WishlistModel wishlist = wishlistRepository.findById(user.getId())
-				.orElseThrow(() -> new RuntimeException("Wishlist not found"));
-		
-		WishlistItemsModel itemToDelete = wishlist.getWishlistItems().stream()
-										.filter(item -> Objects.equals(item.getProduct().getId(), productId))
-							            .findFirst()
-							            .orElseThrow(() -> new RuntimeException("Item not found in wishlist"));
-		
-		wishlist.getWishlistItems().remove(itemToDelete);
-		
-		return wishlistRepository.save(wishlist);
-		
+	    // 查找用戶的願望清單
+	    WishlistModel wishlist = wishlistRepository.findById(user.getId())
+	            .orElseThrow(() -> new RuntimeException("Wishlist not found"));
+
+	    // 查找願望清單中的項目
+	    WishlistItemsModel itemToDelete = wishlist.getWishlistItems().stream()
+	            .filter(item -> Objects.equals(item.getProduct().getId(), productId))
+	            .findFirst()
+	            .orElseThrow(() -> new RuntimeException("Item not found in wishlist"));
+
+	    // 從願望清單中移除該項目
+	    wishlist.getWishlistItems().remove(itemToDelete);
+
+	    // 保存更新後的願望清單並返回
+	    return wishlistRepository.save(wishlist);
+	}
+
+
+	
+	public List<WishlistItemsModel> getWishlistItems(Long userId) {
+	    // 通過 userId 查找對應的願望清單
+	    WishlistModel wishlist = wishlistRepository.findById(userId)
+	            .orElseThrow(() -> new RuntimeException("Wishlist not found"));
+
+	    return wishlist.getWishlistItems();
 	}
 	
-	public List<WishlistItemsModel> getWishlistItems(Long wishlistId) {
-		
-		WishlistModel wishlist = wishlistRepository.findById(wishlistId)
-				.orElseThrow(() -> new RuntimeException("Wishlist not found"));
-		
-		return wishlist.getWishlistItems();
+	public WishlistModel deleteWishlistByProductId(Long productId, HttpSession session) {
+	    // 從 session 中獲取用戶 UUID
+	    String userUUID = (String) session.getAttribute("userUUID");
+	    if (userUUID == null) {
+	        throw new RuntimeException("User not authorized");
+	    }
+
+	    // 根據 UUID 查詢用戶
+	    UserModel user = userRepository.findByUuid(userUUID);
+	    if (user == null) {
+	        throw new RuntimeException("User not found");
+	    }
+
+	    // 查找用戶的願望清單
+	    WishlistModel wishlist = wishlistRepository.findById(user.getId())
+	            .orElseThrow(() -> new RuntimeException("Wishlist not found"));
+
+	    // 查找願望清單中的項目
+	    WishlistItemsModel itemToDelete = wishlist.getWishlistItems().stream()
+	            .filter(item -> Objects.equals(item.getProduct().getId(), productId))
+	            .findFirst()
+	            .orElseThrow(() -> new RuntimeException("Item not found in wishlist"));
+
+	    // 從願望清單中移除該項目
+	    wishlist.getWishlistItems().remove(itemToDelete);
+
+	    // 保存更新後的願望清單
+	    return wishlistRepository.save(wishlist);
 	}
-	
+
 	
 }

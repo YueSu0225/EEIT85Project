@@ -33,42 +33,38 @@ public class WishlistController {
 	private UserRepository userRepository;
 	@Autowired
 	private WishlistRepository wishlistRepository;
-	
 
-	
-	
-	
 	@PostMapping("/toggle")
-	public ResponseEntity<WishlistModel> toggleWishlistItem(@RequestBody WishlistDto wishlistRequest, HttpSession session) {
-	//	Long wishlistId = wishlistRequest.getWishlistId();
-        Long productId = wishlistRequest.getProductId();
-	    String userUUID = (String) session.getAttribute("userUUID");
-	    System.out.println(userUUID);
-	    // 根據 UUID 查詢用戶
-        UserModel user = userRepository.findByUuid(userUUID);
-        if (user == null) {
-            return null;
-        }
-        
-        
-        
-        // 查找喜愛清單
-        WishlistModel wishlist = wishlistRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Wishlist not found"));
+	public ResponseEntity<WishlistModel> toggleWishlistItem(@RequestBody WishlistDto wishlistRequest,
+			HttpSession session) {
+		Long productId = wishlistRequest.getProductId();
+		String userUUID = (String) session.getAttribute("userUUID");
+		System.out.println(userUUID);
 
-        // 檢查商品是否已存在於喜愛清單中
-        boolean itemExists = wishlist.getWishlistItems().stream()
-                .anyMatch(item -> Objects.equals(item.getProduct().getId(), productId));
+		// 根據 UUID 查詢用戶
+		UserModel user = userRepository.findByUuid(userUUID);
+		if (user == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
 
-        if (itemExists) {
-            // 如果商品存在，則移除
-            return ResponseEntity.ok(wishlistService.deleteWishlist(wishlistRequest, session));
-        } else {
-            // 如果商品不存在，則添加
-            return ResponseEntity.ok(wishlistService.addTowishlist(wishlistRequest, session));
-        }
-    }
-	
+		// 查找喜愛清單
+		WishlistModel wishlist = wishlistRepository.findById(user.getId())
+				.orElseThrow(() -> new RuntimeException("Wishlist not found"));
+
+		// 檢查商品是否已存在於喜愛清單中
+		boolean itemExists = wishlist.getWishlistItems().stream()
+				.anyMatch(item -> Objects.equals(item.getProduct().getId(), productId));
+
+		if (itemExists) {
+			// 如果商品存在，則移除
+			WishlistModel updatedWishlist = wishlistService.deleteWishlist(wishlistRequest, session);
+			return ResponseEntity.ok(updatedWishlist);
+		} else {
+			// 如果商品不存在，則添加
+			WishlistModel updatedWishlist = wishlistService.addTowishlist(wishlistRequest, session);
+			return ResponseEntity.ok(updatedWishlist);
+		}
+	}
 
 	@PostMapping("/add")
 	public ResponseEntity<WishlistModel> addTowishlist(@RequestBody WishlistDto wishrequest, HttpSession session) {
@@ -95,28 +91,50 @@ public class WishlistController {
 //			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 //		}
 //	}
+	@DeleteMapping("/delete/{productId}")
+	public ResponseEntity<String> deleteWishlist(@PathVariable Long productId, HttpSession session) {
+		String userUUID = (String) session.getAttribute("userUUID");
+		if (userUUID == null) {
+			throw new RuntimeException("User not authorized");
+		}
+		System.out.println("User UUID: " + userUUID);
 
-	@DeleteMapping("/delete")
-	public ResponseEntity<String> deleteWishlist(@RequestBody WishlistDto wishrequest, HttpSession session) {
 		try {
+			System.out.println("Received DELETE request for productId: " + productId);
 
-			WishlistModel deleteWishlist = wishlistService.deleteWishlist(wishrequest,session);
-			return ResponseEntity.ok("Items successfully deleted");
+			// 調用 deleteWishlistByProductId 方法
+			wishlistService.deleteWishlistByProductId(productId, session);
 
+			return ResponseEntity.ok("Item successfully deleted");
 		} catch (RuntimeException e) {
-
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			System.out.println("Error during deletion: " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
 		}
 	}
-	
-	@GetMapping("/items/{id}")
-	public ResponseEntity<List<WishlistItemsModel>> getWishlistItems(@PathVariable Long id){
-		
-		List<WishlistItemsModel> wishlistItems = wishlistService.getWishlistItems(id);
-		
+
+	@GetMapping("/items")
+	public ResponseEntity<?> getWishlistItems(HttpSession session) {
+		// 從 session 中獲取 userUUID
+		String userUUID = (String) session.getAttribute("userUUID");
+		System.out.println("User UUID from session: " + userUUID);
+
+		if (userUUID == null) {
+			// 如果 session 中沒有 userUUID，返回未授權
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+		}
+
+		// 根據 UUID 查詢用戶
+		UserModel user = userRepository.findByUuid(userUUID);
+		if (user == null) {
+			// 如果找不到用戶，返回未授權
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+		}
+
+		// 調用 service 來獲取願望清單
+		List<WishlistItemsModel> wishlistItems = wishlistService.getWishlistItems(user.getId());
+		System.out.println("Wishlist items: " + wishlistItems);
+
 		return ResponseEntity.ok(wishlistItems);
 	}
-	
-	
 
 }

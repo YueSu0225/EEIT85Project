@@ -38,17 +38,16 @@
 <style>
 /* 初始狀態的心形按鈕樣式 */
 .heart {
-    color: fff !important; /* 默認顏色，強制應用 */
-    transition: color 0.3s ease !important; /* 過渡效果，強制應用 */
+	color: fff !important; /* 默認顏色，強制應用 */
+	transition: color 0.3s ease !important; /* 過渡效果，強制應用 */
 }
 
 /* 當心形按鈕被點擊後，變為紅色 */
 .added-to-wishlist {
-    color: red !important; /* 變成紅色 */
-    background-color: transparent !important; /* 背景變透明 */
-    transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
+	color: red !important; /* 變成紅色 */
+	background-color: transparent !important; /* 背景變透明 */
+	transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
 }
-
 </style>
 
 
@@ -341,13 +340,36 @@
 	</section>
 
 	<script>
-	document.addEventListener("DOMContentLoaded", function() {
-	    // 假設用戶已經登入並且 `wishlistId` 已經存儲在 localStorage 中
-	    const wishlistId = localStorage.getItem('wishlistId') || ''; // 確保從 localStorage 獲取 wishlistId
+	document.addEventListener("DOMContentLoaded", function () {
+	    let wishlistItems = []; // 保存當前用戶的願望清單商品 ID
+
+	    // 初始化頁面，載入願望清單和商品
+	    initializeWishlist();
+	    loadRandomProducts();
+
+	    // 初始化願望清單，保存商品 ID
+	    function initializeWishlist() {
+	        fetch('/wishlist/items', {
+	            method: 'GET',
+	            headers: {
+	                'Content-Type': 'application/json'
+	            }
+	        })
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Failed to fetch wishlist items');
+	            }
+	            return response.json();
+	        })
+	        .then(data => {
+	            wishlistItems = data.map(item => item.product.id); // 保存願望清單中的商品 ID
+	        })
+	        .catch(error => console.error('Error fetching wishlist:', error));
+	    }
 
 	    // 呼叫 API 獲取所有商品資料
 	    function loadRandomProducts() {
-	        fetch('/products/random')  
+	        fetch('/products/random')
 	            .then(response => response.json())
 	            .then(data => {
 	                let productList = document.getElementById('product-list');
@@ -359,6 +381,9 @@
 
 	                // 動態插入商品資料
 	                selectedProducts.forEach(product => {
+	                    let inWishlist = wishlistItems.includes(product.id); // 檢查該商品是否在願望清單中
+	                    let heartClass = inWishlist ? 'added-to-wishlist' : '';
+
 	                    let productHTML = `
 	                        <div class="col-md-6 col-lg-3 ftco-animate1">
 	                            <div class="product">
@@ -373,7 +398,8 @@
 	                                    </div>
 	                                    <div class="bottom-area d-flex px-3">
 	                                        <div class="m-auto d-flex">
-	                                            <a href="#" class="heart d-flex justify-content-center align-items-center" data-product-id="${product.id}">
+	                                            <a href="#" class="heart d-flex justify-content-center align-items-center ${heartClass}" data-product-id="${product.id}" data-product-name="${product.name}" 
+	                                            data-product-price="${product.price}" data-product-image="${product.image}" data-in-wishlist="${inWishlist}">
 	                                                <span><i class="ion-ios-heart"></i></span>
 	                                            </a>
 	                                        </div>
@@ -385,14 +411,7 @@
 	                    productList.innerHTML += productHTML;
 	                });
 
-	                // 顯示所有被隱藏的 .ftco-animate 元素
-	                let animatedElements = document.querySelectorAll('.ftco-animate1');
-	                animatedElements.forEach(el => {
-	                    el.style.opacity = 1;       // 顯示透明度
-	                    el.style.visibility = 'visible';  // 取消隱藏
-	                });
-
-	                // 當商品載入完成後綁定心形按鈕事件
+	                // 綁定心形按鈕事件
 	                bindWishlistEvents();
 	            })
 	            .catch(error => console.error('Error fetching products:', error));
@@ -401,21 +420,25 @@
 	    // 綁定心形圖標的點擊事件
 	    function bindWishlistEvents() {
 	        document.querySelectorAll('.heart').forEach(item => {
-	            item.addEventListener('click', function(event) {
+	            item.addEventListener('click', function (event) {
 	                event.preventDefault();  // 防止預設的跳轉行為
 
-	                // 獲取 productId
+	                // 獲取商品信息
 	                let productId = this.getAttribute('data-product-id');
+	                let productName = this.getAttribute('data-product-name');
+	                let productPrice = this.getAttribute('data-product-price');
+	                let productImage = this.getAttribute('data-product-image');
+	                let inWishlist = this.getAttribute('data-in-wishlist') === 'true';
 
 	                // 構造 API 請求數據
 	                let requestData = {
-	                		// 從 localStorage 中獲取的 wishlistId
 	                    productId: productId
 	                };
 
-	                console.log('點擊的商品:', { productId});  // 調試信息
+	                console.log('點擊的商品:', { productId });
+
 	                // 發送 POST 請求到後端的 toggle API
-	                fetch('/wishlist/toggle', {	                	
+	                fetch('/wishlist/toggle', {
 	                    method: 'POST',
 	                    credentials: 'include',
 	                    headers: {
@@ -425,14 +448,18 @@
 	                })
 	                .then(response => response.json())
 	                .then(data => {
-	                	console.log(data);
+	                    console.log(data);
 	                    // 更新心形圖標的樣式
-	                    if (data) {
-	                        if (this.classList.contains('added-to-wishlist')) {
-	                            this.classList.remove('added-to-wishlist');  // 移除商品
-	                        } else {
-	                            this.classList.add('added-to-wishlist');  // 添加商品
-	                        }
+	                    if (inWishlist) {
+	                        this.classList.remove('added-to-wishlist');
+	                        this.setAttribute('data-in-wishlist', 'false');
+	                        showTemporaryNotification(`已從願望清單移除: ${productName}`, productImage);
+	                        wishlistItems = wishlistItems.filter(id => id != productId); // 從願望清單中移除商品
+	                    } else {
+	                        this.classList.add('added-to-wishlist');
+	                        this.setAttribute('data-in-wishlist', 'true');
+	                        showTemporaryNotification(`已加入願望清單: ${productName}, NT$${productPrice}`, productImage);
+	                        wishlistItems.push(productId); // 添加商品到願望清單
 	                    }
 	                })
 	                .catch(error => {
@@ -442,11 +469,69 @@
 	        });
 	    }
 
-	    // 初始化隨機加載 8 張商品
-	    loadRandomProducts();
+	    // 顯示臨時通知
+	    function showTemporaryNotification(message, productImage = null) {
+	        const notification = document.createElement('div');
+	        notification.className = 'temporary-notification';
+	        notification.innerHTML = `
+	            <div class="notification-content">
+	                ${productImage ? `<img src="data:image/jpeg;base64,${productImage}" alt="商品圖片" class="notification-image">` : ''}
+	                <div class="notification-text">${message}</div>
+	            </div>
+	        `;
+	        document.body.appendChild(notification);
+
+	        setTimeout(() => {
+	            notification.remove();
+	        }, 1000);
+	    }
 	});
 
 
+	    function addItemToWishlist(productId, productName, productPrice, productImage) {
+	        console.log(`商品已加入願望清單: 名稱: ${productName}, 價格: ${productPrice}`);
+	    }
+
+	    
+	    function removeItemFromWishlist(productId) {
+	        console.log(`商品已從願望清單移除: ID: ${productId}`);
+	    }
+
+	
+
+	
+	const style = document.createElement('style');
+	style.innerHTML = `
+	.temporary-notification {
+	    position: fixed;
+	    top: 20px;
+	    right: 20px;
+	    background-color: #f1f1f1;
+	    color: #333;
+	    padding: 15px;
+	    border-radius: 8px;
+	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	    z-index: 1000;
+	    display: flex;
+	    align-items: center;
+	    opacity: 0.95;
+	}
+	.notification-content {
+	    display: flex;
+	    align-items: center;
+	}
+	.notification-image {
+	    width: 50px;
+	    height: 50px;
+	    margin-right: 15px;
+	    border-radius: 4px;
+	    object-fit: cover;
+	}
+	.notification-text {
+	    font-size: 14px;
+	}
+	`;
+	document.head.appendChild(style);
 </script>
 
 
