@@ -48,6 +48,66 @@
 	background-color: transparent !important; /* 背景變透明 */
 	transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
 }
+
+.modal {
+	display: none; /* 隱藏 */
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content {
+	background-color: white;
+	padding: 15px; /* 調整內邊距以減少空間 */
+	width: 300px; /* 限制寬度使其更小 */
+	border-radius: 5px; /* 輕微的圓角以看起來更柔和 */
+	text-align: center;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加輕微陰影以突出模態框 */
+}
+
+.modal-content p {
+	margin-bottom: 15px; /* 調整段落間距使其更緊湊 */
+}
+
+.btn {
+	padding: 8px 16px; /* 調整按鈕大小 */
+	margin: 5px; /* 調整按鈕之間的距離 */
+	border: none;
+	cursor: pointer;
+}
+
+.btn-danger1 {
+    background-color: #D8BFAA;  /* 柔和的米黃色 */
+    color: white;  /* 白色文字 */
+    border-radius: 25px;  /* 圓角按鈕 */
+    padding: 10px 20px;  /* 增加按鈕內邊距 */
+    border: none;
+    font-size: 16px;  /* 增加字體大小 */
+    transition: background-color 0.3s ease;  /* 增加背景色變化過渡效果 */
+}
+
+
+
+.btn-secondary1 {
+    background-color:#E5E8E1;  /* 柔和的灰米色 */
+    color: white;
+    border-radius: 25px;  /* 圓角按鈕 */
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;  /* 同樣的過渡效果 */
+}
+
+
+
+
+
 </style>
 
 
@@ -337,11 +397,19 @@
 			</div>
 
 		</div>
+		<div id="loginModal" class="modal">
+			<div class="modal-content">
+				<p>請先登入。</p>
+				<button class="btn btn-danger1" id="loginButton">登入</button>
+				<button class="btn btn-secondary1" id="closeModalButton">關閉</button>
+			</div>
+		</div>
 	</section>
 
 	<script>
 	document.addEventListener("DOMContentLoaded", function () {
 	    let wishlistItems = []; // 保存當前用戶的願望清單商品 ID
+	    
 
 	    // 初始化頁面，載入願望清單和商品
 	    initializeWishlist();
@@ -422,7 +490,8 @@
 	        document.querySelectorAll('.heart').forEach(item => {
 	            item.addEventListener('click', function (event) {
 	                event.preventDefault();  // 防止預設的跳轉行為
-
+	                
+	           
 	                // 獲取商品信息
 	                let productId = this.getAttribute('data-product-id');
 	                let productName = this.getAttribute('data-product-name');
@@ -446,7 +515,14 @@
 	                    },
 	                    body: JSON.stringify(requestData)
 	                })
-	                .then(response => response.json())
+	                .then(response => {
+	                    if (response.status === 401) {
+	                        // 未授權，提示用戶登入
+	                       showModal();
+	                        throw new Error('User not authenticated'); // 拋出錯誤來中止操作
+	                    }
+	                    return response.json();
+	                })
 	                .then(data => {
 	                    console.log(data);
 	                    // 更新心形圖標的樣式
@@ -468,6 +544,23 @@
 	            });
 	        });
 	    }
+	    function showModal() {
+	        const modal = document.getElementById('loginModal');
+	        modal.style.display = 'flex';  // 使用 'flex' 來讓模態框垂直和水平居中
+	    }
+
+	    // 隱藏模態框
+	    function closeModal() {
+	        const modal = document.getElementById('loginModal');
+	        modal.style.display = 'none';
+	    }
+
+	    // 綁定按鈕點擊事件
+	    document.getElementById('loginButton').addEventListener('click', function() {
+	        window.location.href = '/Signin.html';  // 跳轉到登入頁面
+	    });
+
+	    document.getElementById('closeModalButton').addEventListener('click', closeModal);
 
 	    // 顯示臨時通知
 	    function showTemporaryNotification(message, productImage = null) {

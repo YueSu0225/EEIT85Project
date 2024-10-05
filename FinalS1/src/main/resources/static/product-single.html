@@ -53,29 +53,84 @@
 }
 
 .modal-body th, .modal-body td {
-	word-wrap: break-word; 
-	text-align: center; 
+	word-wrap: break-word;
+	text-align: center;
 }
-
 
 @media ( max-width : 576px) {
 	.carousel-inner img {
-		height: 300px; 
+		height: 300px;
 	}
 }
 
 /* 初始狀態的心形按鈕樣式 */
 .heart {
-    color: fff !important; /* 默認顏色，強制應用 */
-    transition: color 0.3s ease !important; /* 過渡效果，強制應用 */
+	color: fff !important; /* 默認顏色，強制應用 */
+	transition: color 0.3s ease !important; /* 過渡效果，強制應用 */
 }
 
 /* 當心形按鈕被點擊後，變為紅色 */
 .added-to-wishlist {
-    color: red !important; /* 變成紅色 */
-    background-color: transparent !important; /* 背景變透明 */
-    transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
+	color: red !important; /* 變成紅色 */
+	background-color: transparent !important; /* 背景變透明 */
+	transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
 }
+
+.modal {
+	display: none; /* 隱藏 */
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content {
+	background-color: white;
+	padding: 15px; /* 調整內邊距以減少空間 */
+	width: 300px; /* 限制寬度使其更小 */
+	border-radius: 5px; /* 輕微的圓角以看起來更柔和 */
+	text-align: center;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加輕微陰影以突出模態框 */
+}
+
+.modal-content p {
+	margin-bottom: 15px; /* 調整段落間距使其更緊湊 */
+}
+
+.btn {
+	padding: 8px 16px; /* 調整按鈕大小 */
+	margin: 5px; /* 調整按鈕之間的距離 */
+	border: none;
+	cursor: pointer;
+}
+
+.btn-danger1 {
+    background-color: #D8BFAA;  /* 柔和的米黃色 */
+    color: white;  /* 白色文字 */
+    border-radius: 25px;  /* 圓角按鈕 */
+    padding: 10px 20px;  /* 增加按鈕內邊距 */
+    border: none;
+    font-size: 16px;  /* 增加字體大小 */
+    transition: background-color 0.3s ease;  /* 增加背景色變化過渡效果 */
+}
+
+
+
+.btn-secondary1 {
+    background-color:#E5E8E1;  /* 柔和的灰米色 */
+    color: white;
+    border-radius: 25px;  /* 圓角按鈕 */
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;  /* 同樣的過渡效果 */
+}
+
 </style>
 
 
@@ -198,187 +253,199 @@
 
 
 	<div class="container product-page">
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row">
-                <!-- 图片区域 -->
-                <div class="col-lg-6">
-                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                        <!-- 轮播图片区域 -->
-                        <div class="carousel-inner" id="carousel-inner">
-                            <!-- 动态生成的轮播项 -->
-                        </div>
-                        <!-- 左右切换按钮（保留功能，隐藏显示） -->
-                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                            <!-- 我们将通过 CSS 隐藏这些箭头 -->
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">上一张</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">下一张</span>
-                        </a>
-                    </div>
-                </div>
+		<section class="ftco-section">
+			<div class="container">
+				<div class="row">
+					<!-- 图片区域 -->
+					<div class="col-lg-6">
+						<div id="carouselExampleIndicators" class="carousel slide"
+							data-ride="carousel">
+							<!-- 轮播图片区域 -->
+							<div class="carousel-inner" id="carousel-inner">
+								<!-- 动态生成的轮播项 -->
+							</div>
+							<!-- 左右切换按钮（保留功能，隐藏显示） -->
+							<a class="carousel-control-prev"
+								href="#carouselExampleIndicators" role="button"
+								data-slide="prev"> <!-- 我们将通过 CSS 隐藏这些箭头 --> <span
+								class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+								class="sr-only">上一张</span>
+							</a> <a class="carousel-control-next"
+								href="#carouselExampleIndicators" role="button"
+								data-slide="next"> <span class="carousel-control-next-icon"
+								aria-hidden="true"></span> <span class="sr-only">下一张</span>
+							</a>
+						</div>
+					</div>
 
-                <!-- 商品详情区域 -->
-                <div class="col-lg-6 product-details pl-md-5 ftco-animate">
-                    <!-- 商品名称 -->
-                    <h3 id="product-name">商品名称</h3>
-                    <!-- 商品描述 -->
-                    <p id="description">商品描述</p>
-                    <!-- 商品价格 -->
-                    <p class="price"><span id="price">NT$</span></p>
-                    <!-- 尺寸表和库存 -->
-                    <div class="row mb-0" style="font-size: 12px">
-                        <div class="col-md-6">
-                            <div class="d-flex">
-                                <a href="#" data-toggle="modal" data-target="#sizeChartModal">尺寸表</a>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="content d-flex">
-                                <span> 库存: <span id="stock"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+					<!-- 商品详情区域 -->
+					<div class="col-lg-6 product-details pl-md-5 ftco-animate">
+						<!-- 商品名称 -->
+						<h3 id="product-name">商品名称</h3>
+						<!-- 商品描述 -->
+						<p id="description">商品描述</p>
+						<!-- 商品价格 -->
+						<p class="price">
+							<span id="price">NT$</span>
+						</p>
+						<!-- 尺寸表和库存 -->
+						<div class="row mb-0" style="font-size: 12px">
+							<div class="col-md-6">
+								<div class="d-flex">
+									<a href="#" data-toggle="modal" data-target="#sizeChartModal">尺寸表</a>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="content d-flex">
+									<span> 库存: <span id="stock"></span>
+									</span>
+								</div>
+							</div>
+						</div>
 
-                    <!-- 颜色和尺寸选择 -->
-                    <div class="row mt-4">
-                        <!-- 颜色选择 -->
-                        <div class="col-md-6">
-                            <div class="form-group d-flex">
-                                <div class="select-wrap" style="width: 200px;">
-                                    <div class="icon">
-                                        <span class="ion-ios-arrow-down"></span>
-                                    </div>
-                                    <select name="" id="color-select" class="form-control">
-                                        <!-- 动态生成颜色选项 -->
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 尺寸选择 -->
-                        <div class="col-md-6">
-                            <div class="form-group d-flex">
-                                <div class="select-wrap" style="width: 200px;">
-                                    <div class="icon">
-                                        <span class="ion-ios-arrow-down"></span>
-                                    </div>
-                                    <select name="" id="size-select" class="form-control">
-                                        <!-- 动态生成尺寸选项 -->
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+						<!-- 颜色和尺寸选择 -->
+						<div class="row mt-4">
+							<!-- 颜色选择 -->
+							<div class="col-md-6">
+								<div class="form-group d-flex">
+									<div class="select-wrap" style="width: 200px;">
+										<div class="icon">
+											<span class="ion-ios-arrow-down"></span>
+										</div>
+										<select name="" id="color-select" class="form-control">
+											<!-- 动态生成颜色选项 -->
+										</select>
+									</div>
+								</div>
+							</div>
+							<!-- 尺寸选择 -->
+							<div class="col-md-6">
+								<div class="form-group d-flex">
+									<div class="select-wrap" style="width: 200px;">
+										<div class="icon">
+											<span class="ion-ios-arrow-down"></span>
+										</div>
+										<select name="" id="size-select" class="form-control">
+											<!-- 动态生成尺寸选项 -->
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
 
-                    <!-- 数量调整 -->
-                    <div class="w-100">
-                        <div class="input-group d-flex mb-3 w-75">
-                            <span class="input-group-btn mr-2">
-                                <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
-                                    <i class="ion-ios-remove"></i>
-                                </button>
-                            </span>
-                            <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1">
-                            <span class="input-group-btn ml-2">
-                                <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-                                    <i class="ion-ios-add"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
+						<!-- 数量调整 -->
+						<div class="w-100">
+							<div class="input-group d-flex mb-3 w-75">
+								<span class="input-group-btn mr-2">
+									<button type="button" class="quantity-left-minus btn"
+										data-type="minus" data-field="">
+										<i class="ion-ios-remove"></i>
+									</button>
+								</span> <input type="text" id="quantity" name="quantity"
+									class="form-control input-number" value="1" min="1"> <span
+									class="input-group-btn ml-2">
+									<button type="button" class="quantity-right-plus btn"
+										data-type="plus" data-field="">
+										<i class="ion-ios-add"></i>
+									</button>
+								</span>
+							</div>
+						</div>
 
-                    <!-- 加入购物车按钮 -->
-                    <p>
-                        <a href="#" class="btn btn-black py-3 px-5"  onclick="addToCart();">Add to Cart</a>
-                    </p>
+						<!-- 加入购物车按钮 -->
+						<p>
+							<a href="#" class="btn btn-black py-3 px-5"
+								onclick="addToCart();">Add to Cart</a>
+						</p>
 
-                </div>
+					</div>
 
-            </div>
-        </div>
-    </section>
-</div>
-
-
-<div class="modal fade" id="sizeChartModal" tabindex="-1" role="dialog" aria-labelledby="sizeChartModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document"> <!-- 使用 modal-lg 增大模态窗口宽度 -->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="sizeChartModalLabel"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="关闭">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- 尺寸表内容 -->
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead class="thead-light">
-                    <tr>
-                    <th>尺寸</th>
-                    <th>胸圍 (cm)</th>
-                    <th>腰圍 (cm)</th>
-                    <th>臀圍 (cm)</th>
-                    <th>適合年齡</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>S</td>
-                    <td>88-92</td>
-                    <td>74-78</td>
-                    <td>90-94</td>
-                    <td>成人</td>
-                </tr>
-                <tr>
-                    <td>M</td>
-                    <td>94-98</td>
-                    <td>80-84</td>
-                    <td>96-100</td>
-                    <td>成人</td>
-                </tr>
-                <tr>
-                    <td>L</td>
-                    <td>100-104</td>
-                    <td>86-90</td>
-                    <td>102-106</td>
-                    <td>成人</td>
-                </tr>
-                <tr>
-                    <td>2-8歲</td>
-                    <td>60-80</td>
-                    <td>55-75</td>
-                    <td>60-80</td>
-                    <td>2~8歲</td>
-                </tr>
-                <tr>
-                    <td>8-14歲</td>
-                    <td>80-100</td>
-                    <td>70-90</td>
-                    <td>80-100</td>
-                    <td>8~14歲</td>
-                </tr>
-            </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+				</div>
+			</div>
+		</section>
+	</div>
 
 
-		
-							
-						
+	<div class="modal fade" id="sizeChartModal" tabindex="-1" role="dialog"
+		aria-labelledby="sizeChartModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg"
+			role="document">
+			<!-- 使用 modal-lg 增大模态窗口宽度 -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="sizeChartModalLabel"></h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="关闭">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 尺寸表内容 -->
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead class="thead-light">
+								<tr>
+									<th>尺寸</th>
+									<th>胸圍 (cm)</th>
+									<th>腰圍 (cm)</th>
+									<th>臀圍 (cm)</th>
+									<th>適合年齡</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>S</td>
+									<td>88-92</td>
+									<td>74-78</td>
+									<td>90-94</td>
+									<td>成人</td>
+								</tr>
+								<tr>
+									<td>M</td>
+									<td>94-98</td>
+									<td>80-84</td>
+									<td>96-100</td>
+									<td>成人</td>
+								</tr>
+								<tr>
+									<td>L</td>
+									<td>100-104</td>
+									<td>86-90</td>
+									<td>102-106</td>
+									<td>成人</td>
+								</tr>
+								<tr>
+									<td>2-8歲</td>
+									<td>60-80</td>
+									<td>55-75</td>
+									<td>60-80</td>
+									<td>2~8歲</td>
+								</tr>
+								<tr>
+									<td>8-14歲</td>
+									<td>80-100</td>
+									<td>70-90</td>
+									<td>80-100</td>
+									<td>8~14歲</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">關閉</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-	 	<!--  <div class="row">
+
+
+
+
+
+	<!--  <div class="row">
 			
 			<div class="col-md-6">
 				<div id="carouselExampleIndicators" class="carousel slide"
@@ -576,6 +643,13 @@
 		<div class="container">
 			<div class="row" id="product-list">
 				<!-- 商品列表將動態插入到這裡 -->
+			</div>
+			<div id="loginModal" class="modal">
+				<div class="modal-content">
+					<p>請先登入。</p>
+					<button class="btn btn-danger1" id="loginButton">登入</button>
+					<button class="btn btn-secondary1" id="closeModalButton">關閉</button>
+				</div>
 			</div>
 		</div>
 
@@ -1086,7 +1160,14 @@
 	                    },
 	                    body: JSON.stringify(requestData)
 	                })
-	                .then(response => response.json())
+	                .then(response => {
+	                    if (response.status === 401) {
+	                        // 未授權，提示用戶登入
+	                        showModal();
+	                        throw new Error('User not authenticated'); // 拋出錯誤來中止操作
+	                    }
+	                    return response.json();
+	                })
 	                .then(data => {
 	                    console.log(data);
 	                    // 更新心形圖標的樣式
@@ -1108,6 +1189,24 @@
 	            });
 	        });
 	    }
+	    function showModal() {
+	        const modal = document.getElementById('loginModal');
+	        modal.style.display = 'flex';  // 使用 'flex' 來讓模態框垂直和水平居中
+	    }
+
+	    // 隱藏模態框
+	    function closeModal() {
+	        const modal = document.getElementById('loginModal');
+	        modal.style.display = 'none';
+	    }
+
+	    // 綁定按鈕點擊事件
+	    document.getElementById('loginButton').addEventListener('click', function() {
+	        window.location.href = '/Signin.html';  // 跳轉到登入頁面
+	    });
+
+	    document.getElementById('closeModalButton').addEventListener('click', closeModal);
+
 
 	    // 顯示臨時通知
 	    function showTemporaryNotification(message, productImage = null) {
@@ -1262,7 +1361,6 @@
 
 
 
-								
 
 
 
@@ -1273,10 +1371,11 @@
 
 
 
-		
-		
-		
-		
+
+
+
+
+
 
 
 
