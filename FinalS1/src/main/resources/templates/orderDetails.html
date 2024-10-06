@@ -1,0 +1,25 @@
+<!-- orderDetails.html -->
+<div th:fragment="orderDetailsContent">
+    <h2 class="mt-4">訂單詳情</h2>
+    <table class="table table-bordered mt-3">
+        <thead class="table-secondary">
+            <tr>
+                <th>商品名稱</th>
+                <th>數量</th>
+                <th>單價</th>
+               <!-- <th>小計</th>-->
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="item : ${orderItems}">
+                <td th:text="${item.productVariant.product.name}">商品名稱</td>
+                <td th:text="${item.quantity}">數量</td>
+                <td th:text="${item.price}">單價</td>
+                <!--<td th:text="${item.subtotal}">小計</td>-->
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-right">
+        <h4>總價：<span th:text="${orderTotal}">0</span></h4>
+    </div>
+</div>

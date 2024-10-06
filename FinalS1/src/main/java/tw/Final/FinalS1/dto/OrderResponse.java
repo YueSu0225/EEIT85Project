@@ -11,8 +11,8 @@ public class OrderResponse {
     private BigDecimal totalPrice;
     private String status;
     private String ecpayNumber;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+//    private LocalDateTime createdAt;
+//    private LocalDateTime updatedAt;
     private List<OrderItemResponse> orderItems;
 
     // 無參構造函數
@@ -26,8 +26,8 @@ public class OrderResponse {
         this.totalPrice = totalPrice;
         this.status = status;
         this.ecpayNumber = ecpayNumber;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
         this.orderItems = orderItems;
     }
 
@@ -71,21 +71,21 @@ public class OrderResponse {
 		this.ecpayNumber = ecpayNumber;
 	}
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+//	public LocalDateTime getCreatedAt() {
+//		return createdAt;
+//	}
+//
+//	public void setCreatedAt(LocalDateTime createdAt) {
+//		this.createdAt = createdAt;
+//	}
+//
+//	public LocalDateTime getUpdatedAt() {
+//		return updatedAt;
+//	}
+//
+//	public void setUpdatedAt(LocalDateTime updatedAt) {
+//		this.updatedAt = updatedAt;
+//	}
 
 	public List<OrderItemResponse> getOrderItems() {
 		return orderItems;

@@ -30,22 +30,22 @@ public class OrderItems {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+//    @Column(name = "created_at", nullable = false, updatable = false)
+//    private LocalDateTime createdAt;
+//
+//    @Column(name = "updated_at", nullable = false)
+//    private LocalDateTime updatedAt;
 
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+//    @PrePersist
+//    protected void onCreate() {
+//        this.createdAt = LocalDateTime.now();
+//        this.updatedAt = LocalDateTime.now();
+//    }
+//
+//    @PreUpdate
+//    protected void onUpdate() {
+//        this.updatedAt = LocalDateTime.now();
+//    }
 
     // 無參構造函數
     public OrderItems() {}
@@ -92,18 +92,18 @@ public class OrderItems {
         this.price = price;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+//    public LocalDateTime getCreatedAt() {
+//        return createdAt;
+//    }
 
     // createdAt 的 setter 通常不需要，因為由 @PrePersist 管理
     // public void setCreatedAt(LocalDateTime createdAt) {
     //     this.createdAt = createdAt;
     // }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+//    public LocalDateTime getUpdatedAt() {
+//        return updatedAt;
+//    }
 
     // updatedAt 的 setter 通常不需要，因為由 @PreUpdate 管理
     // public void setUpdatedAt(LocalDateTime updatedAt) {

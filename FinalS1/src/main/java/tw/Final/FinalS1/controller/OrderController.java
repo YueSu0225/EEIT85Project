@@ -73,10 +73,9 @@ public class OrderController {
     @PutMapping("/{orderId}/status")
     public ResponseEntity<OrderResponse> updateOrderStatus(@PathVariable Long orderId, @RequestBody String status) {
         OrderModel updatedOrder = orderService.updateOrderStatus(orderId, status);
-
+        
         // 將訂單實體轉換為 DTO
         OrderResponse orderResponse = orderService.convertToOrderResponse(updatedOrder);
-
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 
