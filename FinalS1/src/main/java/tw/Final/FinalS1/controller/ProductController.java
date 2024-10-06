@@ -188,7 +188,7 @@ public class ProductController {
 	    }
 	}
 
-	private void addProductVariants(Product product, List<Map<String, Object>> variantsData) throws Exception {
+	public void addProductVariants(Product product, List<Map<String, Object>> variantsData) throws Exception {
 	    for (Map<String, Object> variantData : variantsData) {
 	        // 提取變體數據
 	        Long colorId = variantData.get("color") != null ? Long.valueOf(variantData.get("color").toString()) : null;
@@ -240,86 +240,89 @@ public class ProductController {
 
 	
 
-
-
-
-
-
-	
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Product> updateProduct(@PathVariable Long id,@RequestBody Map<String,Object> productDetails){
 		
 		
-		 
-        String name = (String) productDetails.get("name");
-        String description = (String) productDetails.get("description");
-        Long categoryId = Long.valueOf(productDetails.get("category_id").toString());
-        Long typeId = Long.valueOf(productDetails.get("type_id").toString());
-        int price = Integer.parseInt(productDetails.get("price").toString());
-        String imageBase64 = (String) productDetails.get("image");
+		
+		String name = (String) productDetails.get("name");
+		String description = (String) productDetails.get("description");
+		Long categoryId = Long.valueOf(productDetails.get("category_id").toString());
+		Long typeId = Long.valueOf(productDetails.get("type_id").toString());
+		int price = Integer.parseInt(productDetails.get("price").toString());
+		String imageBase64 = (String) productDetails.get("image");
 		
 		Category category = categoryService.getCategoryById(categoryId);
-	    Type type = typeService.getTypeById(typeId);
-	    if (category == null || type == null) {
-	        return ResponseEntity.badRequest().body(null);
-	    }
-	    
-	   Product product = productService.getProductById(id);
-	   
-	   product.setName(name);
-	   product.setDescription(description);
-	   product.setCategory(category);  
-	   product.setType(type);          
-	   product.setPrice(price);
-	   product.setImage(imageBase64);
-       product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-
-	   
-	   Product updatedProduct = productService.updateProduct(id, product);
-	   return ResponseEntity.ok(updatedProduct);
+		Type type = typeService.getTypeById(typeId);
+		if (category == null || type == null) {
+			return ResponseEntity.badRequest().body(null);
+		}
+		
+		Product product = productService.getProductById(id);
+		
+		product.setName(name);
+		product.setDescription(description);
+		product.setCategory(category);  
+		product.setType(type);          
+		product.setPrice(price);
+		product.setImage(imageBase64);
+		product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		
+		
+		Product updatedProduct = productService.updateProduct(id, product);
+		return ResponseEntity.ok(updatedProduct);
 		
 		
 	}
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-	        productService.deleteProduct(id);
-	        return ResponseEntity.noContent().build();
+		productService.deleteProduct(id);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/category/{categoryId}")
 	public List<Product> getProductsByCategory(@PathVariable Long categoryId) {
-	    return productService.getProductsByCategory(categoryId);
+		return productService.getProductsByCategory(categoryId);
 	}
 	
-	@GetMapping("/check")
-	public ResponseEntity<Product> checkProductName(@RequestParam String name) {
-	    Optional<Product> productOpt = productService.checkProductByName(name);
-	    
-	    if (productOpt.isPresent()) {
-	        return ResponseEntity.ok(productOpt.get());
-	    } else {
-	        return ResponseEntity.notFound().build();
-	    }
-	}
+	
 	
 	@GetMapping("/type/{typeId}")
 	public List<Product> getProductsByType(@PathVariable Long typeId) {
-	    return productService.getProductsByType(typeId);
+		return productService.getProductsByType(typeId);
 	}
 	
 	@GetMapping("/category/{categoryId}/type/{typeId}")
 	public ResponseEntity<List<Product>> getProductsByCategoryAndType(
-	        @PathVariable Long categoryId,
-	        @PathVariable Long typeId) {
-	    List<Product> products = productService.findByCategoryAndType(categoryId, typeId);
-	    return ResponseEntity.ok(products);
+			@PathVariable Long categoryId,
+			@PathVariable Long typeId) {
+		List<Product> products = productService.findByCategoryAndType(categoryId, typeId);
+		return ResponseEntity.ok(products);
 	}
-
-
 	
-	 
+	@GetMapping("/check")
+	public ResponseEntity<Product> checkProductName(@RequestParam String name) {
+		Optional<Product> productOpt = productService.checkProductByName(name);
+		
+		if (productOpt.isPresent()) {
+			return ResponseEntity.ok(productOpt.get());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 	
-
-
-
+	
+	
+	
+	
+	
+	
+	
+	
 }
+
+
+
+
+
+	

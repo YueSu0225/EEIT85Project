@@ -19,8 +19,7 @@ public class ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	@Autowired
-	private ProductVariantRepository productVariantRepository;
+	
 
 	public Product findByName(String name) {
 		return productRepository.findByName(name).orElse(null); // 如果沒有找到，返回 null
@@ -93,4 +92,14 @@ public class ProductService {
 		return productRepository.findByName(productName);
 	}
 
+	// 查詢名稱包含關鍵字的商品
+    public List<Product> searchProductsByName(String key) {
+        if (key == null || key.isEmpty()) {
+            return productRepository.findAll();  // 如果沒有搜尋關鍵字，返回所有商品
+        } else {
+            return productRepository.findByNameContainingIgnoreCase(key);  // 根據名稱模糊查詢
+        }
+    }
+    
+    
 }

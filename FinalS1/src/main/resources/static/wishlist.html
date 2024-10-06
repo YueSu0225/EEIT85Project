@@ -35,44 +35,58 @@
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
 <style>
-    
-    .modal {
-        display: none; /* 隱藏 */
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
-        justify-content: center;
-        align-items: center;
-    }
-    .modal-content {
-        background-color: white;
-        padding: 15px; /* 調整內邊距以減少空間 */
-        width: 300px; /* 限制寬度使其更小 */
-        border-radius: 5px; /* 輕微的圓角以看起來更柔和 */
-        text-align: center;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* 添加輕微陰影以突出模態框 */
-    }
-    .modal-content p {
-        margin-bottom: 15px; /* 調整段落間距使其更緊湊 */
-    }
-    .btn {
-        padding: 8px 16px; /* 調整按鈕大小 */
-        margin: 5px; /* 調整按鈕之間的距離 */
-        border: none;
-        cursor: pointer;
-    }
-    .btn-danger1 {
-        background-color:#e3dcd2;
-        color: white;
-    }
-    .btn-secondary1 {
-        background-color:  #FFFFFF;
-        color: white;
-    }
+.modal {
+	display: none; /* 隱藏 */
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content {
+	background-color: white;
+	padding: 15px; /* 調整內邊距以減少空間 */
+	width: 300px; /* 限制寬度使其更小 */
+	border-radius: 5px; /* 輕微的圓角以看起來更柔和 */
+	text-align: center;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加輕微陰影以突出模態框 */
+}
+
+.modal-content p {
+	margin-bottom: 15px; /* 調整段落間距使其更緊湊 */
+}
+
+.btn {
+	padding: 8px 16px; /* 調整按鈕大小 */
+	margin: 5px; /* 調整按鈕之間的距離 */
+	border: none;
+	cursor: pointer;
+}
+
+.btn-danger1 {
+	background-color: #D8BFAA; /* 柔和的米黃色 */
+	color: white; /* 白色文字 */
+	border-radius: 25px; /* 圓角按鈕 */
+	padding: 10px 20px; /* 增加按鈕內邊距 */
+	border: none;
+	font-size: 18px; /* 增加字體大小 */
+	transition: background-color 0.3s ease; /* 增加背景色變化過渡效果 */
+}
+
+.btn-secondary1 {
+	background-color: #E5E8E1; /* 柔和的灰米色 */
+	color: white;
+	border-radius: 25px; /* 圓角按鈕 */
+	padding: 10px 20px;
+	border: none;
+	font-size: 18px;
+	transition: background-color 0.3s ease; /* 同樣的過渡效果 */
+}
 </style>
 
 
@@ -160,12 +174,12 @@
 									<th>商品</th>
 									<th>價格</th>
 									<th>&nbsp;</th>
-									
+
 
 								</tr>
 							</thead>
 							<tbody id="wishlist-items">
-							
+
 								<!-- 願望清單項目將在這裡動態生成 -->
 							</tbody>
 						</table>
@@ -173,7 +187,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div id="confirmModal" class="modal">
 			<div class="modal-content">
 				<p>確定要刪除此商品嗎？</p>

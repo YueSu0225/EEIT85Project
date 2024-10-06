@@ -28,6 +28,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	Optional<Product> findByName(String name);  // 返回 Optional 以便於處理空值
 
 	
+	 List<Product> findByNameContainingIgnoreCase(String name);
+	
 	
 
 

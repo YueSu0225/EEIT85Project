@@ -113,42 +113,25 @@ public class ProductVariantController {
     }
 
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<ProductVariant> updateProductVariant(@PathVariable Long id, @RequestBody Map<String, Object> variantDetails) {
-    	ProductVariant existingVariant = productVariantService.getProductVariantById(id);
+    @PutMapping("/update/{variantid}")
+    public ResponseEntity<ProductVariant> updateProductVariant(@PathVariable Long variantid, @RequestBody Map<String, Object> variantDetails) {
+    	ProductVariant existingVariant = productVariantService.getProductVariantById(variantid);
         if (existingVariant == null) {
             return ResponseEntity.notFound().build();
         }
-        
-        Long productId  = Long.valueOf(variantDetails.get("product_id").toString());
-    	Long colorId = Long.valueOf(variantDetails.get("color_id").toString());
-    	Long sizeId = Long.valueOf(variantDetails.get("size_id").toString());
-	    int price = Integer.parseInt(variantDetails.get("price").toString());
-	    int stock = Integer.parseInt(variantDetails.get("stock").toString());
-	    String imageBase64 =(String) variantDetails.get("image");
-
-        
-        Product product = productService.getProductById(productId);
-        Color color = colorService.getColorById(colorId);
-        Size size = sizeService.getSizeById(sizeId);
-        
-        if (product == null || color == null || size == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        
-        existingVariant.setProduct(product);
-        existingVariant.setColor(color);
-        existingVariant.setSize(size);
+        int price = Integer.parseInt(variantDetails.get("price").toString());
+        int stock = Integer.parseInt(variantDetails.get("stock").toString());
         existingVariant.setPrice(price);  
         existingVariant.setStock(stock);
-        existingVariant.setImage(imageBase64);
-	    existingVariant.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-
-	    ProductVariant updatedVariant = productVariantService.updateProductVariant(id, existingVariant);
-	    
-	    return ResponseEntity.ok(updatedVariant);
+        
+        existingVariant.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        
+        ProductVariant updatedVariant = productVariantService.updateProductVariant(variantid, existingVariant);
+        
+        return ResponseEntity.ok(updatedVariant);
     }
-    
+        
+        
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProductVariant(@PathVariable Long id) {
     	productVariantService.deleteProductVariant(id);
@@ -164,14 +147,27 @@ public class ProductVariantController {
     //用productid 找到該商品變體相對應庫存
     @GetMapping("/{productId}/variant")
     public ProductVariant getVariantByProductAndAttributes(
-            @PathVariable Long productId,
-            @RequestParam Long colorId,
-            @RequestParam Long sizeId) {
-        return productVariantService.getVariantByAttributes(productId, colorId, sizeId);
+    		@PathVariable Long productId,
+    		@RequestParam Long colorId,
+    		@RequestParam Long sizeId) {
+    	return productVariantService.getVariantByAttributes(productId, colorId, sizeId);
     }
 }
 
+
+    	
+	    
+
         
+       
+        
+        
+       
+        
+        
+        
+        
+    
         
         
 

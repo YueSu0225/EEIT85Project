@@ -47,16 +47,16 @@ public class ProductVariant {
     private int stock;
 
     @Lob
-    @Column(name = "image", columnDefinition = "LONGTEXT")
+    @Column(name = "image", columnDefinition = "LONGTEXT", nullable = true)
     private String image;
     
     @Lob
-    @Column(name = "image2", columnDefinition = "LONGTEXT")
+    @Column(name = "image2", columnDefinition = "LONGTEXT", nullable = true)
     private String image2;
 
     
     @Lob
-    @Column(name = "image3", columnDefinition = "LONGTEXT")
+    @Column(name = "image3", columnDefinition = "LONGTEXT" ,nullable = true)
     private String image3;
 
 

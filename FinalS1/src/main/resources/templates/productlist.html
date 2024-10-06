@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+.product-image {
+	width: 50px !important;
+	height: 50px !important;
+	object-fit: cover; /* 確保圖片被裁剪成合適的比例，不會拉伸 */
+	border: 1px solid #ddd; /* 增加邊框，讓圖片更清晰 */
+}
+</style>
+
+<head th:include="CMShead"></head>
+
+
+<body>
+	<div class="container">
+		<h1 class="text-center">商品管理</h1>
+
+		<!-- 查詢表單 -->
+		<div class="search-bar mb-4">
+			<form action="#" th:action="@{/productlist}" method="get">
+				<div class="input-group">
+					<input type="text" class="form-control" id="search" name="key"
+						placeholder="輸入商品名稱">
+					<div class="input-group-append">
+						<button class="btn btn-primary" type="submit">搜尋</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<!-- 商品列表表格 -->
+		<table class="table table-bordered mt-3 ">
+			<thead class="table-secondary">
+				<tr>
+					<th></th>
+					<th>名稱</th>
+					<th>版型</th>
+					<th>種類</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody th:each="product : ${products}">
+				<tr>
+					<td style="width: 20px; height: 20px;"><img
+						th:src="'data:image/jpeg;base64,' + ${product.image}" alt="商品圖片"
+						class="product-image"></td>
+					<td th:text="${product.name}">產品名稱</td>
+					<td th:text="${product.type.name}">版型</td>
+					<td th:text="${product.category.name}">種類</td>
+					<td>
+						<button class="btn btn-primary btn-sm"
+							th:onclick="'toggleVariants(' + ${product.id} + ')'">查看</button>
+						<button class="btn btn-danger btn-sm"
+							th:onclick="'deleteProduct(' + ${product.id} + ')'">刪除</button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5">
+						<div th:id="'variant-container-' + ${product.id}"
+							class="variant-container">
+							<!-- 變體內容將在這裡動態加載 -->
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<script th:inline="javascript">
+    function toggleVariants(productId) {
+        const variantContainer = document.getElementById(`variant-container-${productId}`);
+        
+        if (variantContainer.style.display === 'none' || variantContainer.style.display === '') {
+            variantContainer.style.display = 'block';
+            variantContainer.innerHTML = '載入中...';
+
+            fetch(`/product/${productId}/variants`)
+                .then(response => response.json())
+                .then(variants => {
+                    if (variants.length === 0) {
+                        variantContainer.innerHTML = '<p>沒有找到變體。</p>';
+                        return;
+                    }
+
+                    let variantTable = `<table class="table table-sm table-bordered variant-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>顏色</th>
+                                                    <th>尺寸</th>
+                                                    <th>庫存</th>
+                                                    <th>價格</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>`;
+
+                                            variants.forEach(variant => {
+                                            variantTable += `<tr>
+                                                                <td>${variant.color.name}</td>
+                                                                <td>${variant.size.name}</td>
+                                                                <td><input type="number" id="stock-${variant.id}" value="${variant.stock}" /></td>
+                                                                <td><input type="number" id="price-${variant.id}" value="${variant.price}" /></td>
+                                                                <td>
+                                                                    <button class="btn btn-primary btn-sm" onclick="submitVariantUpdate(${variant.id})">提交</button>
+                                                                </td>
+                                                            </tr>`;
+                                        });
+
+
+                    variantTable += '</tbody></table>';
+                    variantContainer.innerHTML = variantTable;
+                })
+                .catch(error => {
+                    console.error('Error fetching variants:', error);
+                    variantContainer.innerHTML = '<p>加載變體時發生錯誤。</p>';
+                });
+        } else {
+            variantContainer.style.display = 'none';
+        }
+    }
+    
+ // 顯示編輯彈窗
+   function submitVariantUpdate(variantId) {
+    	 const newStock = document.getElementById(`stock-${variantId}`).value;
+    	 const newPrice = document.getElementById(`price-${variantId}`).value;
+
+    	 const requestBody = {
+    		        stock: newStock,
+    		        price: newPrice
+    		    };
+
+            fetch(`product-variants/update/${variantId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // 更新成功，更新頁面顯示的庫存和價格
+                    document.getElementById(`stock-${variantId}`).innerText = newStock;
+                    document.getElementById(`price-${variantId}`).innerText = newPrice;
+                    alert("更新成功！");
+                } else {
+                    alert("更新失敗！");
+                }
+            })
+            .catch(error => {
+                console.error('Error updating variant:', error);
+                alert("更新過程中發生錯誤！");
+            });
+        }
+    
+    </script>
+
+	<footer th:include="CMSfooter"></footer>
+</body>
+</html>
