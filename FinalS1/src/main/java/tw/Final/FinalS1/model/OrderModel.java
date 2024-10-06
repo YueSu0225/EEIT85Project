@@ -51,11 +51,11 @@ public class OrderModel {
     @Column(name = "ecpay_number")
     private String ecpayNumber;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+//    @Column(name = "created_at")
+//    private LocalDateTime createdAt;
+//
+//    @Column(name = "updated_at")
+//    private LocalDateTime updatedAt;
 
     // 無參構造函數（JPA要求）
     public OrderModel() {}
@@ -66,8 +66,8 @@ public class OrderModel {
         this.totalPrice = totalPrice;
         this.status = status;
         this.ecpayNumber = ecpayNumber;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
     }
 
     // Getter 和 Setter 方法
@@ -120,19 +120,19 @@ public class OrderModel {
         this.ecpayNumber = ecpayNumber;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+//    public LocalDateTime getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(LocalDateTime createdAt) {
+//        this.createdAt = createdAt;
+//    }
+//
+//    public LocalDateTime getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public void setUpdatedAt(LocalDateTime updatedAt) {
+//        this.updatedAt = updatedAt;
+//    }
 }

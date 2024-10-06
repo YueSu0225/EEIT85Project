@@ -10,8 +10,8 @@ public class OrderItemResponse {
     private String productName;
     private int quantity;
     private BigDecimal price;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+//    private LocalDateTime createdAt;
+//    private LocalDateTime updatedAt;
 
     // 無參構造函數
     public OrderItemResponse() {}
@@ -24,8 +24,8 @@ public class OrderItemResponse {
         this.productName = productName;
         this.quantity = quantity;
         this.price = price;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
     }
 
 	public Long getId() {
@@ -68,21 +68,21 @@ public class OrderItemResponse {
 		this.price = price;
 	}
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+//	public LocalDateTime getCreatedAt() {
+//		return createdAt;
+//	}
+//
+//	public void setCreatedAt(LocalDateTime createdAt) {
+//		this.createdAt = createdAt;
+//	}
+//
+//	public LocalDateTime getUpdatedAt() {
+//		return updatedAt;
+//	}
+//
+//	public void setUpdatedAt(LocalDateTime updatedAt) {
+//		this.updatedAt = updatedAt;
+//	}
 
     // Getter 和 Setter 方法（根據需要添加）
     
