@@ -84,21 +84,6 @@ public class OrderService {
         return orderRepository.searchOrders(keyword, pageable);
     }
     
-    // 10/06 新增
- // 获取订单项列表
-    public List<OrderItems> getOrderItemsByOrderId(Long orderId) {
-        OrderModel order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("订单未找到"));
-        return order.getOrderItems();
-    }
-
-    // 获取订单总价
-    public BigDecimal getOrderTotal(Long orderId) {
-        List<OrderItems> orderItems = getOrderItemsByOrderId(orderId);
-        return orderItems.stream()
-                .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
 
     // 更新订单状态
 //    public void updateOrderStatus(Long orderId, String status) {
@@ -151,15 +136,24 @@ public class OrderService {
         order.setUserId(userId);
 
         // 修正总价计算方式，将 int 转换为 BigDecimal
+//        BigDecimal totalPrice = cartItems.stream()
+//                .map(item -> BigDecimal.valueOf(item.getPrice()))  // 将 int 转换为 BigDecimal
+//                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+     // 計算訂單總價，將每個購物車項目的價格乘以數量
         BigDecimal totalPrice = cartItems.stream()
-                .map(item -> BigDecimal.valueOf(item.getPrice()))  // 将 int 转换为 BigDecimal
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(item -> BigDecimal.valueOf(item.getPrice()).multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);  // 將所有價格相加
+        
+        
         order.setTotalPrice(totalPrice);
         order.setStatus("已付款");
         order.setEcpayNumber(generateEcpayNumber());
 //        order.setCreatedAt(LocalDateTime.now());
 //        order.setUpdatedAt(LocalDateTime.now());
 
+        
+        
         // 初始化 orderItems 集合（如果尚未初始化）
         if (order.getOrderItems() == null) {
             order.setOrderItems(new ArrayList<>());
@@ -213,4 +207,19 @@ public class OrderService {
         return orderResponse;
     }
 
+    // 10/06 新增前端訂單管理查看詳情
+    // 获取订单项列表
+    public List<OrderItems> getOrderItemsByOrderId(Long orderId) {
+    	OrderModel order = orderRepository.findById(orderId)
+    			.orElseThrow(() -> new RuntimeException("订单未找到"));
+    	return order.getOrderItems();
+    }
+    
+    // 获取订单总价
+    public BigDecimal getOrderTotal(Long orderId) {
+    	List<OrderItems> orderItems = getOrderItemsByOrderId(orderId);
+    	return orderItems.stream()
+    			.map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+    			.reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }

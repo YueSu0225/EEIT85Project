@@ -7,15 +7,15 @@
                 <th>商品名稱</th>
                 <th>數量</th>
                 <th>單價</th>
-                <th>小計</th>
+               <!-- <th>小計</th>-->
             </tr>
         </thead>
         <tbody>
             <tr th:each="item : ${orderItems}">
-                <td th:text="${item.id}">商品名稱</td>
-                <!--<td th:text="${item.quantity}">數量</td>
+                <td th:text="${item.productVariant.product.name}">商品名稱</td>
+                <td th:text="${item.quantity}">數量</td>
                 <td th:text="${item.price}">單價</td>
-                <td th:text="${item.subtotal}">小計</td>-->
+                <!--<td th:text="${item.subtotal}">小計</td>-->
             </tr>
         </tbody>
     </table>
