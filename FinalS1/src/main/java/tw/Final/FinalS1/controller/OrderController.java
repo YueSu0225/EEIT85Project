@@ -36,8 +36,8 @@ public class OrderController {
 
     // 從購物車創建訂單
     @PostMapping("/create-from-cart")
-    public ResponseEntity<OrderResponse> createOrderFromCart(@RequestParam Long userId, @RequestParam Long cartId) {
-        OrderModel order = orderService.createOrderFromCart(userId, cartId);
+    public ResponseEntity<OrderResponse> createOrderFromCart(@RequestParam Long userId, @RequestParam Long cartId, @RequestParam String merchantTradeNo) {
+        OrderModel order = orderService.createOrderFromCart(userId, cartId,merchantTradeNo);
 
         // 將訂單實體轉換為 DTO
         OrderResponse orderResponse = orderService.convertToOrderResponse(order);

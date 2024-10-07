@@ -1,26 +1,40 @@
 package tw.Final.FinalS1.service;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
-import ecpay.payment.integration.ecpayOperator.EcpayFunction;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import tw.Final.FinalS1.dto.OrderResponse;
+import tw.Final.FinalS1.model.OrderModel;
+import tw.Final.FinalS1.model.UserModel;
+import tw.Final.FinalS1.repository.UserRepository;
 
 @Service
 public class EcpayServiceImpl implements EcpayService {
 
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private UserRepository userRepository;
+	@Autowired
+	private JavaMailSender javaMailSender;	
+	@Autowired
+	private TemplateEngine templateEngine;
+	
 	@Override
 	public String receiveECPayResponse(HttpServletRequest request) {
 		
-	    
 		// 收到回傳東西
 		Map<String, String[]> parameterMap = request.getParameterMap();
 
@@ -37,66 +51,73 @@ public class EcpayServiceImpl implements EcpayService {
 	    
 	    //RtnCode: [1] 付款完成
 	    
-	    // 返回所有参数的字符串
-	    return responseString.toString();
+	    // 檢查付款是否成功
+        String[] rtnCode = parameterMap.get("RtnCode");
+        if (rtnCode != null && "1".equals(rtnCode[0])) { // 確認付款 是否成功
+            String[] customField1 = parameterMap.get("CustomField1");
+            String[] customField2 = parameterMap.get("CustomField2");
+            Long userId = Long.parseLong(customField1[0]); // 解析userID
+            Long cartId = Long.parseLong(customField2[0]); // 解析cartID
+            String[] merchantTradeNo = parameterMap.get("MerchantTradeNo"); // 獲取MerchantTradeNo
+            String[] totalAmount = parameterMap.get("TradeAmt"); // 獲取總金額 
+            
 
-//		// 验证 CheckMacValue 来确保数据未被篡改
-//		String receivedCheckMacValue = request.getParameter("CheckMacValue");
-//		
-//		Map<String, String> params = new HashMap<>();
-//        if (parameterMap.isEmpty()) {
-//            System.out.println("No parameters found in request.");
-//        }
-//		 // 存储有效的参数
-//	    for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
-//	        String key = entry.getKey();
-//	        String[] value = entry.getValue();
-//	        System.out.println("鍵: " + key + ", 值: " + Arrays.toString(value)); // 调试输出
-//	        
-//	        if (value != null && value.length > 0 && !value[0].isEmpty()) { // 确保值不为空
-//	            params.put(key, value[0]);
-//	            System.out.println("已存入: " + key + " -> " + value[0]); // 添加存入调试
-//	        }else {
-//	        System.out.println("鍵: " + key + " 為空");
-//	        }
-//	    }
-//	    System.out.println("所有回傳參數: " + parameterMap);
-////		// 排除不參與計算的参数
-//		params.remove("CheckMacValue");
-//		
-//	    
-//	    System.out.println("计算 CheckMacValue 使用的参数: " + params);
-//	    
+            
+            // 調用 createOrderFromCart 方法
+            OrderModel order = orderService.createOrderFromCart(userId, cartId, merchantTradeNo[0]);
 
-//		// 使用綠界提供的工具來驗證 CheckMacValue
-//	    	String calculatedCheckMacValue = EcpayFunction.genCheckMacValue("5294y06JbISpM5x9", "v77hoKGq4kWxNNIS", params);
-//		
-//
-//		
-//		// 驗證 CheckMacValue
-//		if (receivedCheckMacValue != null && receivedCheckMacValue.equals(calculatedCheckMacValue)) {
-//			// CheckMacValue 驗證成功，處理其他邏輯
-//			
-//			System.out.println("收到的 CheckMacValue: " + receivedCheckMacValue);
-//			System.out.println("計算的 CheckMacValue: " + calculatedCheckMacValue);
-//
-//			String rtnCode = request.getParameter("RtnCode");
-//			if ("1".equals(rtnCode)) {
-//				System.out.println("交易成功");
-//				// 交易成功，更新訂單狀態
-//				return "1|OK"; // 回應綠界告知接收成功
-//			} else {
-//				System.out.println("交易失敗");
-//				// 交易失敗或其他狀況，記錄問題
-//				return "0|Fail";
-//			}
-//		} else {
-//			System.out.println("驗證失敗");
-//			// CheckMacValue 驗證失敗，可能資料被竄改
-//			return "0|CheckMacValueError";
-//		
-//		
-//	    }
+            // 將訂單實體轉換為 DTO
+            OrderResponse orderResponse = orderService.convertToOrderResponse(order);
+            
+            UserModel userModel = userRepository.findById(userId)
+            	    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+            String userEmail = userModel.getEmail();
+            
+         // 商品名稱,價格,數量
+            List<Map<String, Object>> itemDetails = orderResponse.getOrderItems().stream()
+                    .map(orderItem -> {
+                        Map<String, Object> itemDetail = new HashMap<>();
+                        itemDetail.put("productName", orderItem.getProductName());
+                        itemDetail.put("quantity", orderItem.getQuantity());
+                        itemDetail.put("price", orderItem.getPrice());
+                        return itemDetail;
+                    }).collect(Collectors.toList());
+
+            
+            
+         // 使用 Thymeleaf 生成内容
+            Context context = new Context();
+            context.setVariable("orderNumber", merchantTradeNo[0]);
+            context.setVariable("totalAmount", totalAmount[0]);
+            context.setVariable("itemNames", itemDetails);
+            context.setVariable("orderStatus", "已付款"); // 或者从 orderResponse 中获取状态
+            String emailContent = templateEngine.process("orderSuccess", context); 
+
+            try {
+                // 創建信件
+                MimeMessage message = javaMailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true); // true 表示支持附件
+                helper.setTo(userEmail);
+                helper.setSubject("訂單確認");
+                helper.setText(emailContent, true); // true 表示邮件内容为 HTML
+
+                // 發送信件
+                javaMailSender.send(message);
+            } catch (Exception e) {
+                e.printStackTrace(); // 打印错误信息
+            }
+            
+            
+            // 訂單成功信息
+            System.out.println("orderResponse: " + orderResponse.toString());
+            return "訂單已成功建立: " + orderResponse.toString();
+        } else {
+            // 處理未成功狀況
+            return "付款未成功，請檢查付款狀態。";
+        }
+
+
 	}
 
 }

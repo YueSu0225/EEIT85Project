@@ -124,7 +124,7 @@ public class OrderService {
 
     // 从购物车创建订单
     @Transactional
-    public OrderModel createOrderFromCart(Long userId, Long cartId) {
+    public OrderModel createOrderFromCart(Long userId, Long cartId ,String merchantTradeNo ) {
         // 步骤1：获取购物车项目
         List<CartItemsModel> cartItems = cartItemsRepository.findByCartId(cartId);
         if (cartItems.isEmpty()) {
@@ -148,7 +148,7 @@ public class OrderService {
         
         order.setTotalPrice(totalPrice);
         order.setStatus("已付款");
-        order.setEcpayNumber(generateEcpayNumber());
+        order.setEcpayNumber(merchantTradeNo);
 //        order.setCreatedAt(LocalDateTime.now());
 //        order.setUpdatedAt(LocalDateTime.now());
 

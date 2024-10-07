@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>訂單確認</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f7f7f7;
+	color: #333;
+	margin: 0;
+	padding: 20px;
+}
+
+.container {
+	max-width: 600px;
+	margin: 0 auto;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+}
+
+.card-header {
+	background-color: #4CAF50;
+	color: white;
+	padding: 15px;
+	border-radius: 8px 8px 0 0;
+	text-align: center;
+}
+
+.card-body {
+	padding: 15px;
+}
+
+.card-title {
+	font-size: 24px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.card-text {
+	font-size: 18px;
+	margin: 10px 0;
+}
+
+strong {
+	color: #4CAF50;
+}
+
+.footer {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 16px;
+}
+
+.button {
+	display: inline-block;
+	padding: 10px 15px;
+	background-color: #4CAF50;
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	margin-top: 15px;
+}
+
+.button:hover {
+	background-color: #45a049;
+}
+
+.item-list {
+	margin: 10px 0;
+	padding-left: 0;
+	list-style-type: none; /* 去掉列表项的默认样式 */
+}
+
+.item-list li {
+	padding: 5px 0; /* 每个商品的间距 */
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="card-header">
+			<h1>感謝您的支持!</h1>
+		</div>
+		<div class="card-body">
+			<h4 class="card-title">訂單信息</h4>
+			<p class="card-text">
+				訂單編號: <strong th:text="${orderNumber}"></strong>
+			</p>
+			<p class="card-text">訂單明細:</p>
+			<ul class="item-list">
+				<li th:each="item : ${itemNames}"><span
+					th:text="'商品名稱: ' + ${item.productName}"></span> | <span
+					th:text="'數量: ' + ${item.quantity}"></span> | <span
+					th:text="'價格: NT$' + ${item.price}"></span></li>
+			</ul>
+			<p class="card-text">
+				總金額: <strong th:text="${totalAmount}"></strong>
+			</p>
+			<p class="card-text">
+				訂單狀態: <strong th:text="${orderStatus}"></strong>
+			</p>
+			<div class="footer">
+				<p>&copy; 2024 WEARTOWEAR</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
