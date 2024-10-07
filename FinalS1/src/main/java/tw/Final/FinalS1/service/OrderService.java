@@ -113,7 +113,7 @@ public class OrderService {
 //            order.setUpdatedAt(LocalDateTime.now());
 
             // 清空订单的订单项目集合，将会删除订单项目
-            order.getOrderItems().clear();
+//            order.getOrderItems().clear();
 
             // 保存订单
             orderRepository.save(order);
