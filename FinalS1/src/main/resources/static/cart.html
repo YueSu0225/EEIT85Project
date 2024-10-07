@@ -115,20 +115,28 @@
 					  </div>
     			</div>
     		</div>
+    		
+    		<!-- 優惠券&總價 -->
     		<div class="row justify-content-end">
-    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    			<div class="col-lg-5 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
-    					<h3>Coupon Code</h3>
-    					<p>Enter your coupon code if you have one</p>
+    					<h3>優惠券</h3>
   						<form action="#" class="info">
 	              <div class="form-group">
-	              	<label for="">Coupon code</label>
+	              	<label for="">請輸入優惠序號</label>
 	                <input type="text" class="form-control text-left px-3" placeholder="">
 	              </div>
 	            </form>
     				</div>
+    				<!-- 
+    				
     				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
+    				 -->
     			</div>
+    			
+    			<div class="col-lg-2 mt-5 cart-wrap ftco-animate">
+    			</div>
+    			<!-- 
     			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
     					<h3>Estimate shipping and tax</h3>
@@ -150,32 +158,46 @@
     				</div>
     				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
     			</div>
-    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+    			 -->
+    			 
+    			<div class="col-lg-5 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
-    					<h3>Cart Totals</h3>
+    					<h3>付款詳情</h3>
     					<p class="d-flex">
-    						<span>Subtotal</span>
+    						<span>商品總額</span>
     						<span>$20.60</span>
     					</p>
     					<p class="d-flex">
-    						<span>Delivery</span>
+    						<span>運費</span>
     						<span>$0.00</span>
     					</p>
     					<p class="d-flex">
-    						<span>Discount</span>
+    						<span>優惠折扣</span>
     						<span>$3.00</span>
     					</p>
     					<hr>
     					<p class="d-flex total-price">
-    						<span>Total</span>
-    						<span>$17.60</span>
+    						<span>總付款金額</span>
+    						<span class=>$17.60</span>
     					</p>
     				</div>
-    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">結帳</a></p>
     			</div>
     		</div>
 			</div>
+			
+			<div id="confirmModal" class="modal">
+			<div class="modal-content">
+				<p>確定要刪除此商品嗎？</p>
+				<button id="confirmDelete" class="btn btn-danger1">確定</button>
+				<button id="cancelDelete" class="btn btn-secondary1">取消</button>
+			</div>
+		</div>
+			
+			
 		</section>
+		
+		
 
 		<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
       <div class="container py-4">
@@ -349,7 +371,9 @@
 
 		        row.innerHTML = `
 		            <td class="product-remove" data-id="${item.id}"><a href="#" class="delete-item"><span class="ion-ios-close"></span></a></td>
-		            <td class="image-prod"><div class="img" style="background-image:url(${item.productVariant.product.imageUrl});"></div></td>
+		            <td class="image-prod">
+		            <img src="data:image/jpeg;base64,${item.productVariant.product.image}"  style="width:150px;height:200px;">
+		            </td>
 		            <td class="product-name">
 		                <h3>${item.productVariant.product.name}</h3>
 		                <p>${item.productVariant.product.description}</p>
@@ -381,10 +405,19 @@
 		        const itemId = event.target.closest('.product-remove').dataset.id;
 		        
 		        //彈出框
-		        const confirmation = confirm("您確定要刪除這個商品嗎?");
-		        if(confirmation){
-		        	deleteCartItem(itemId, row);
-		        }
+		        const confirmModal = document.getElementById('confirmModal');
+		                confirmModal.style.display = 'flex';
+		                
+		                document.getElementById('confirmDelete').onclick = function () {
+		                    // 如果用戶確認，則執行刪除操作
+		                   deleteCartItem(itemId, row);
+		                    confirmModal.style.display = 'none';
+		                };
+
+		                document.getElementById('cancelDelete').onclick = function () {
+		                    // 如果用戶取消，隱藏模態框
+		                    confirmModal.style.display = 'none';
+		                };
 		    }
 		});
 		
@@ -411,7 +444,73 @@
 
 			    .catch(error => console.error('Error deleting item:', error));
 			}
-		    
+		
+		
+		
+		
+		
+		document.querySelectorAll('.quantity input').forEach(input => {
+		    input.addEventListener('change', function() {
+		        const quantity = parseInt(this.value);
+		        const variantId = this.closest('td.product-remove').getAttribute('data-id'); // 獲取對應的商品 ID
+		        
+		        if (quantity > 0) {
+		            // 發送更新請求到後端
+		            fetch('/cart/update', {
+		                method: 'POST',
+		                headers: {
+		                    'Content-Type': 'application/json'
+		                },
+		                body: JSON.stringify({
+		                    variantId: variantId,
+		                    quantity: quantity
+		                })
+		            })
+		            .then(response => response.json())
+		            .then(cartData => {
+		                if (cartData.success) {
+		                    // 更新購物車顯示和總價
+		                    updateCartDisplay(cartData);
+		                } else {
+		                    alert('更新購物車失敗！請重試。');
+		                }
+		            })
+		            .catch(error => console.error('Error updating cart:', error));
+		        } else {
+		            alert('數量不能小於1');
+		            this.value = 1; // 重置數量為1
+		        }
+		    });
+		});
+
+		// 更新購物車顯示和總價
+		function updateCartDisplay(cartData) {
+		    let subtotal = 0;
+		    const cartItemsContainer = document.querySelector('.cart-items');
+		    cartItemsContainer.innerHTML = ''; // 清空當前顯示的購物車
+
+		    // 遍歷購物車中的每個商品，生成新內容
+		    cartData.cartItems.forEach(item => {
+		        const itemElement = document.createElement('div');
+		        itemElement.classList.add('cart-item', 'd-flex', 'justify-content-between', 'align-items-center');
+
+		        itemElement.innerHTML = `
+		          <div class="item-name">${item.productName} (${item.variantName})</div>
+		          <div class="item-price">$${item.price.toFixed(2)}</div>
+		          <div class="item-quantity">x${item.quantity}</div>
+		        `;
+		        cartItemsContainer.appendChild(itemElement);
+		        subtotal += item.price * item.quantity;
+		    });
+
+		    const shipping = 0.00; // 運費固定為0
+		    const discount = 0.00; // 暫時沒有折扣
+		    const total = subtotal + shipping - discount;
+
+		    // 更新 HTML 中的總額和付款金額
+		    document.querySelector('.cart-total .subtotal').innerText = `$${subtotal.toFixed(2)}`;
+		    document.querySelector('.cart-total .total').innerText = `$${total.toFixed(2)}`;
+		}
 		
 	</script>
     

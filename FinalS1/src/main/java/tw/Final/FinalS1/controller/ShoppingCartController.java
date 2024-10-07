@@ -1,7 +1,9 @@
 package tw.Final.FinalS1.controller;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,11 +52,23 @@ public class ShoppingCartController {
 		 
 		try {
 			 CartModel updateCart = shoppingCartServiceDto.addTocart(cartRequest, userUUID);
-			    return ResponseEntity.ok(updateCart);
+			 
+			 Map<String, Object> response = new HashMap<>();
+			 response.put("success", true);
+			 response.put("items", updateCart.getCartItems());
+			 
+			 return ResponseEntity.ok(updateCart);
 		}catch(RuntimeException e){
 			System.out.println("錯誤: " + e.getMessage());
+			
+			 Map<String, Object> errorResponse = new HashMap<>();
+		     errorResponse.put("success", false);
+		     errorResponse.put("message", e.getMessage());
+		        
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+		
+		
 	}
 	
 	@PostMapping("/update")

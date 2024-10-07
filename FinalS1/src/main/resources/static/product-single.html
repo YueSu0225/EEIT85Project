@@ -1313,52 +1313,98 @@
 
 
 
-		function addToCart() {
-		    const quantity = document.getElementById('quantity').value || 1; // 默認數量為1
-		    const selectedColor = document.getElementById('color-select').value || initialColor;
-		    const selectedSize = document.getElementById('size-select').value || initialSize;
-	
-		    const urlParams = new URLSearchParams(window.location.search);
-		    const productId = urlParams.get('productId');
-		    console.log(productId); 			
-		    console.log("選擇的顏色:", selectedColor);
-		    console.log("選擇的尺寸:", selectedSize);
-		    console.log("數量:", quantity);
-		    
-		    fetch(`/product-variants/product/${productId}`)
-		        .then(response => response.json())
-		        .then(variants => {
-		            let selectedVariant = variants.find(variant => variant.color.name === selectedColor && variant.size.name === selectedSize);
-		            if (selectedVariant) {
-		                // 发送请求加入购物车
-		                fetch('/cart/add', {
-		                    method: 'POST',
-		                    headers: {
-		                        'Content-Type': 'application/json'
-		                    },
-		                    body: JSON.stringify({
-		                        variantId: selectedVariant.id, // 商品变体的ID
-		                        quantity: parseInt(quantity)    // 用户输入的数量
-		                    })
-		                })
-		                .then(response => {
-		                    if (response.ok) {
-		                        alert('商品已成功添加到購物車！');
-		                    } else {
-		                        alert('添加到購物車失敗！請重試。');
-		                    }
-		                })
-		                .catch(error => console.error('Error adding to cart:', error));
-		            } else {
-		                console.error('No variant found for the selected color and size.');
-		            }
-		        })
-		        .catch(error => console.error('Error fetching product details:', error));
-		}
+	function addToCart() {
+	    const quantity = document.getElementById('quantity').value || 1; // 默認數量為1
+	    const selectedColor = document.getElementById('color-select').value || initialColor;
+	    const selectedSize = document.getElementById('size-select').value || initialSize;
 
-		// 確保在點擊按鈕時調用 addToCart 函數
-		document.querySelector('.btn-add-to-cart').addEventListener('click', addToCart);
+	    const urlParams = new URLSearchParams(window.location.search);
+	    const productId = urlParams.get('productId');
+	    console.log("Product ID:", productId);
+	    console.log("選擇的顏色:", selectedColor);
+	    console.log("選擇的尺寸:", selectedSize);
+	    console.log("數量:", quantity);
+	    
+	    fetch(`/product-variants/product/${productId}`)
+	        .then(response => response.json())
+	        .then(variants => {
+	            let selectedVariant = variants.find(variant => variant.color.name === selectedColor && variant.size.name === selectedSize);
+	            if (selectedVariant) {
+	                // 发送请求加入购物车
+	                fetch('/cart/add', {
+	                    method: 'POST',
+	                    headers: {
+	                        'Content-Type': 'application/json'
+	                    },
+	                    body: JSON.stringify({
+	                        variantId: selectedVariant.id, // 商品变体的ID
+	                        quantity: parseInt(quantity)    // 用户输入的数量
+	                    })
+	                })
+	                .then(response => {
+	                	if (!response.ok) {
+	                        throw new Error('Network response was not ok');
+	                    }
+	                	
+	                	return response.json() // 後端提供購物車數據
+	                	
+	                })
+	                .then(cartData => { // 使用 cartData
+	                	console.log('Cart Data:', cartData);
+	                    if (cartData.success !== undefined && cartData.success) {
+	                        alert('商品已成功添加到購物車！');
+	                        updateCartDisplay(cartData.items); //使用 cartData.items 更新購物車顯示
+	                    } else {
+	                        alert('添加到購物車失敗！請重試。');
+	                    }
+	                })
+	                .catch(error => {
+	                    console.error('Error adding to cart:', error);
+	                    alert('添加到購物車時出現錯誤，請稍後重試。');
+	                });
+	            } else {
+	                console.error('No variant found for the selected color and size.');
+	                alert('選擇的顏色或尺寸不正確，請重試。');
+	            }
+	        })
+	        .catch(error => {
+	            console.error('Error fetching product details:', error);
+	            alert('獲取商品詳情時出現錯誤，請稍後重試。');
+	        });
+	}
 
+	// 確保在點擊按鈕時調用 addToCart 函數
+	document.querySelector('.btn-add-to-cart').addEventListener('click', addToCart);
+			
+	function updateCartDisplay(cartData) {
+	    let subtotal = 0;
+	    const cartItemsContainer = document.querySelector('.cart-items');
+	    cartItemsContainer.innerHTML = ''; // 清空當前內容
+
+	    cartItems.forEach(item => {
+	        const itemElement = document.createElement('div'); // 修正拼寫錯誤
+	        itemElement.classList.add('cart-item', 'd-flex', 'justify-content-between', 'align-items-center');
+	        
+	        // 正確使用 itemElement.innerHTML
+	        itemElement.innerHTML = `
+	            <div class="item-name">${item.productName} (${item.variantName})</div>
+	            <div class="item-price">$${item.price.toFixed(2)}</div>
+	            <div class="item-quantity">x${item.quantity}</div>
+	        `;
+	        
+	        cartItemsContainer.appendChild(itemElement);
+	        subtotal += item.price * item.quantity; // 更新小計
+	    });
+	    
+	    const shipping = 0.00; // 你的運費固定為0
+	    const discount = 0.00; // 暫時沒有折扣
+	    const total = subtotal + shipping - discount;
+
+	    // 更新 HTML 中的總額和付款金額
+	    document.querySelector('.cart-total .subtotal').innerText = `$${subtotal.toFixed(2)}`;
+	    document.querySelector('.cart-total .total').innerText = `$${total.toFixed(2)}`;
+	}
+		
 	</script>
 
 </body>

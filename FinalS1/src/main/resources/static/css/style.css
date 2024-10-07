@@ -2692,10 +2692,10 @@ input[type="button"].btn-block {
   padding: 0.25rem 1.5rem;
   clear: both;
   font-weight: 400;
-  color: #212529;
+  color: black;
   text-align: inherit;
   white-space: nowrap;
-  background-color: transparent;
+  background-color: #fff;
   border: 0; }
   .dropdown-item:first-child {
     border-top-left-radius: calc(0.25rem - 1px);
@@ -8047,7 +8047,7 @@ h1, h2, h3, h4, h5,
   padding: 0; }
   @media (max-width: 991.98px) {
     .ftco-navbar-light {
-      background: #000000 !important;
+      background: #e3dcd2 !important;
       position: relative;
       top: 0;
       padding: 10px 15px; } }
@@ -8057,7 +8057,7 @@ h1, h2, h3, h4, h5,
   .ftco-navbar-light .navbar-brand {
     color: #687477; }
     .ftco-navbar-light .navbar-brand:hover, .ftco-navbar-light .navbar-brand:focus {
-      color: #000000; }
+      color: #e3dcd2; }
     @media (max-width: 991.98px) {
       .ftco-navbar-light .navbar-brand {
         color: #fff; } }
@@ -8090,18 +8090,24 @@ h1, h2, h3, h4, h5,
           color: #fff; } }
   .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu {
     border: none;
-    background: #fff;
-    -webkit-box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
-    -moz-box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
-    box-shadow: 0px 10px 34px -20px rgba(0, 0, 0, 0.41);
+    background: transparent;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     -ms-border-radius: 0;
     border-radius: 0; }
+    @media (max-width: 991.98px) {
+    ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu {
+    background-color: #e3dcd2 !important;
+    }
+    .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu .dropdown-item{
+    color: #fff;
+    background-color: transparent;
+    	}
+    }
     .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu .dropdown-item {
       font-size: 14px; }
       .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu .dropdown-item:hover, .ftco-navbar-light .navbar-nav > .nav-item .dropdown-menu .dropdown-item:focus {
-        background: transparent;
+        background: #e3dcd2;
         color: #000000; }
   .ftco-navbar-light .navbar-nav > .nav-item.ftco-seperator {
     position: relative;
@@ -8130,13 +8136,14 @@ h1, h2, h3, h4, h5,
         padding-right: 7px; } }
     @media (max-width: 991.98px) {
       .ftco-navbar-light .navbar-nav > .nav-item.cta > a {
-        color: #000000;
-        background: #fff; } }
+        color: #fff;
+        background: #e3dcd2; } }
   .ftco-navbar-light .navbar-nav > .nav-item.active > a {
     color: #000000; }
     @media (max-width: 991.98px) {
       .ftco-navbar-light .navbar-nav > .nav-item.active > a {
         color: #fff; } }
+    
   .ftco-navbar-light .navbar-toggler {
     border: none;
     color: rgba(255, 255, 255, 0.5) !important;
@@ -8147,6 +8154,7 @@ h1, h2, h3, h4, h5,
     letter-spacing: .1em; }
     .ftco-navbar-light .navbar-toggler:focus {
       outline: none !important; }
+      
   .ftco-navbar-light.scrolled {
     position: fixed;
     right: 0;
@@ -8159,12 +8167,12 @@ h1, h2, h3, h4, h5,
     .ftco-navbar-light.scrolled .nav-item.active > a {
       color: #9FB3A7 !important; }
     .ftco-navbar-light.scrolled .nav-item.cta > a {
-      color: #fff !important;
-      background: #e3dcd2;
-      border: none !important; }
+      color: black !important;
+      background: #fff;
+      border:rgb(0, 0, 0)e !important; }
       .ftco-navbar-light.scrolled .nav-item.cta > a span {
         display: inline-block;
-        color: #fff !important; }
+        color: black !important; }
     .ftco-navbar-light.scrolled .nav-item.cta.cta-colored span {
       border-color: #e3dcd2; }
     @media (max-width: 991.98px) {
@@ -8204,6 +8212,17 @@ h1, h2, h3, h4, h5,
       transition: .3s all ease-out; }
     .ftco-navbar-light.scrolled .navbar-brand {
       color: #000000; }
+     .ftco-navbar-light.scrolled .navbar-nav > .nav-item .dropdown-menu .dropdown-item {
+     display: block;
+    width: 100%;
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: black;
+    text-align: inherit;
+    white-space: nowrap;
+    border: 0;
+     }
 
 .navbar-brand {
   font-weight: 800;
@@ -9031,7 +9050,7 @@ h1, h2, h3, h4, h5,
   padding-left: 15px;
   padding-right: 15px;
   background: transparent !important;
-  color: rgba(0, 0, 0, 0.4) !important;
+  color: black !important;
   font-size: 14px;
   border-radius: 0px;
   -webkit-box-shadow: none !important;
@@ -10093,4 +10112,60 @@ textarea.form-control {
     #As-sidebar ul {
       display: block; /* 大螢幕時保持垂直排列 */
   }
+}
+
+/* 確認刪除購物車 喜愛清單*/
+.modal {
+	display: none; /* 隱藏 */
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content {
+	background-color: white;
+	padding: 15px; /* 調整內邊距以減少空間 */
+	width: 300px; /* 限制寬度使其更小 */
+	border-radius: 5px; /* 輕微的圓角以看起來更柔和 */
+	text-align: center;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加輕微陰影以突出模態框 */
+}
+
+.modal-content p {
+	margin-bottom: 15px; /* 調整段落間距使其更緊湊 */
+}
+
+.btn {
+	padding: 8px 16px; /* 調整按鈕大小 */
+	margin: 5px; /* 調整按鈕之間的距離 */
+	border: none;
+	cursor: pointer;
+}
+
+.btn-danger1 {
+    background-color: #D8BFAA;  /* 柔和的米黃色 */
+    color: white;  /* 白色文字 */
+    border-radius: 25px;  /* 圓角按鈕 */
+    padding: 10px 20px;  /* 增加按鈕內邊距 */
+    border: none;
+    font-size: 18px;  /* 增加字體大小 */
+    transition: background-color 0.3s ease;  /* 增加背景色變化過渡效果 */
+}
+
+
+
+.btn-secondary1 {
+    background-color:#E5E8E1;  /* 柔和的灰米色 */
+    color: white;
+    border-radius: 25px;  /* 圓角按鈕 */
+    padding: 10px 20px;
+    border: none;
+    font-size: 18px;
+    transition: background-color 0.3s ease;  /* 同樣的過渡效果 */
 }
