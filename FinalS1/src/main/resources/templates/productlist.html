@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <style>
 .product-image {
-	width: 50px !important;
-	height: 50px !important;
+	width: 50px ;
+	height: 50px ;
 	object-fit: cover; /* 確保圖片被裁剪成合適的比例，不會拉伸 */
 	border: 1px solid #ddd; /* 增加邊框，讓圖片更清晰 */
 }
@@ -42,7 +42,7 @@
 			</thead>
 			<tbody th:each="product : ${products}">
 				<tr>
-					<td style="width: 20px; height: 20px;"><img
+					<td style="width: 50px; height: 50px;"><img
 						th:src="'data:image/jpeg;base64,' + ${product.image}" alt="商品圖片"
 						class="product-image"></td>
 					<td th:text="${product.name}">產品名稱</td>
@@ -68,6 +68,10 @@
 	</div>
 
 	<script th:inline="javascript">
+	
+	
+	
+	
     function toggleVariants(productId) {
         const variantContainer = document.getElementById(`variant-container-${productId}`);
         
