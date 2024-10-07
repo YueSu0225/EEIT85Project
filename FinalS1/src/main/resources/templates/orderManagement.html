@@ -2,94 +2,68 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="CMShead"></head>
 <body>
-    <div class="d-flex">
-        <!-- 侧边栏菜单 -->
-        <!--
-        <div class="sidebar p-3">
-            <h4 class="text-white">管理選單</h4>
-            <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link" th:href="@{/overview}">總覽</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/users}">用戶管理</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/productsupdate}">商品上架</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/products}">商品管理</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/orders}">訂單管理</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/content}">內容管理</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/payment-services}">支付與服務管理</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/customer-support}">客服管理</a></li>
-            </ul>
-        </div>
-        -->
-
-        <!-- 主内容区域 -->
-        <div class="container flex-grow-1 p-4">
-            <div class="content">
-                <h1 class="mt-5">訂單管理</h1>
-                <form action="/orders" method="get" class="form-inline mb-3">
-                    <div class="form-group">
-                        <input type="text" id="searchInput" name="key" class="form-control" placeholder="搜尋...">
-                        <button type="submit" class="btn btn-primary ml-2">搜尋</button>
-                    </div>
-                </form>
-
-                <table class="table table-bordered mt-3">
-                    <thead class="table-secondary">
-                        <tr>
-                            <th>訂單ID</th>
-                            <th>用戶ID</th>
-                            <th>總價</th>
-                            <th>狀態</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="order : ${ordersPage.content}">
-                            <td th:text="${order.id}">訂單ID</td>
-                            <td th:text="${order.userId}">用戶ID</td>
-                            <td th:text="${order.totalPrice}">總價</td>
-                            <td th:text="${order.status}">狀態</td>
-                            <td>
-                                <!-- 查看詳情按鈕 -->
-                                <button type="button" class="btn btn-info btn-sm"
-                                        data-toggle="modal"
-                                        data-target="#viewOrderModal"
-                                        th:attr="data-id=${order.id}">
-                                    查看詳情
-                                </button>
-
-                                <!-- 修改狀態按鈕 -->
-                                <button type="button" class="btn btn-warning btn-sm"
-                                        data-toggle="modal"
-                                        data-target="#editOrderModal"
-                                        th:attr="data-id=${order.id}, data-status=${order.status}">
-                                    修改狀態
-                                </button>
-
-                                <!-- 刪除按鈕 -->
-                                <a th:href="@{/orders/delete/{id}(id=${order.id})}" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除該訂單嗎？')">刪除</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- 分頁 -->
-                <div class="pagination mt-4">
-                    <ul class="pagination">
-                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                            <a class="page-link" th:href="@{/orders(page=${currentPage - 1}, size=5)}">上一頁</a>
-                        </li>
-                        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
-                            <a class="page-link" th:href="@{/orders(page=${i}, size=5)}" th:text="${i + 1}"></a>
-                        </li>
-                        <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
-                            <a class="page-link" th:href="@{/orders(page=${currentPage + 1}, size=5)}">下一頁</a>
-                        </li>
-                    </ul>
+    <div class="container">
+        <!-- 搜索區域 -->
+        <div class="content flex-grow-1 p-4">
+            <form action="/orders" method="get" class="form-inline mb-3" onsubmit="clearInput()">
+                <div class="form-group">
+                    <span class="icon ion-ios-search"></span>
+                    <input type="text" id="searchInput" name="key" class="form-control" placeholder="搜尋...">
+                    <button type="submit" class="btn btn-primary ml-2">搜尋</button>
                 </div>
-            </div>
+            </form>
+        </div>
+
+        <h1 class="mt-5">訂單管理</h1>
+
+        <!-- 訂單管理表格 -->
+        <table class="table table-bordered mt-3" style="text-align: center;">
+            <thead class="table-secondary">
+                <tr>
+                    <th>ID</th>
+                    <th>用戶ID</th>
+                    <th>總價</th>
+                    <th>狀態</th>
+                    <th>編號</th>
+                    <th>內容</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${ordersPage.content}">
+                    <td th:text="${order.id}">訂單ID</td>
+                    <td th:text="${order.userId}">用戶ID</td>
+                    <td th:text="${order.totalPrice}">總價</td>
+                    <td th:text="${order.status}">狀態</td>
+                    <td th:text="${order.ecpayNumber}">編號</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#viewOrderModal" th:attr="data-id=${order.id}">訂單內容</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editOrderModal" th:attr="data-id=${order.id}, data-status=${order.status}">修改狀態</button>
+                        <a th:href="@{/orders/delete/{id}(id=${order.id})}" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除該訂單嗎？')">刪除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 分頁功能 -->
+        <div class="pagination mt-4">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/orders(page=${currentPage - 1}, size=5)}">上一頁</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/orders(page=${i}, size=5)}" th:text="${i + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage + 1 >= totalPages} ? 'disabled'">
+                    <a class="page-link" th:href="@{/orders(page=${currentPage + 1}, size=5)}">下一頁</a>
+                </li>
+            </ul>
         </div>
     </div>
 
-    <!-- 查看詳情的模態框 -->
+    <!-- 查看詳情模態框 -->
     <div class="modal fade" id="viewOrderModal" tabindex="-1" role="dialog" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -100,9 +74,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="orderDetailsContent">
-                        <!-- 订单详情内容将在这里加载 -->
-                    </div>
+                    <div id="orderDetailsContent"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
@@ -111,7 +83,7 @@
         </div>
     </div>
 
-    <!-- 修改狀態的模態框 -->
+    <!-- 修改狀態模態框 -->
     <div class="modal fade" id="editOrderModal" tabindex="-1" role="dialog" aria-labelledby="editOrderModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form th:action="@{/orders/updateStatus}" method="post">
@@ -127,11 +99,11 @@
                         <div class="form-group">
                             <label for="orderStatus">訂單狀態</label>
                             <select class="form-control" id="orderStatus" name="status">
-                                <option value="Pending">待處理</option>
-                                <option value="Processing">處理中</option>
-                                <option value="Shipped">已發貨</option>
-                                <option value="Completed">已完成</option>
-                                <option value="Cancelled">已取消</option>
+                                <option value="待處理">待處理</option>
+                                <option value="處理中">處理中</option>
+                                <option value="已發貨">已發貨</option>
+                                <option value="已完成">已完成</option>
+                                <option value="已取消">已取消</option>
                             </select>
                         </div>
                     </div>
@@ -144,48 +116,50 @@
         </div>
     </div>
 
-    <!-- 引入必要的脚本 -->
-    <script th:src="@{/js/jquery.min.js}"></script>
-    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+	<!-- 引入必要的脚本 -->
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
-    <!-- 自定义脚本 -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    	// 查看詳情模態框
-    	$(document).on('show.bs.modal', '#viewOrderModal', function(event) {
-    	    const button = $(event.relatedTarget);
-    	    const orderId = button.data('id');
-    	    const modal = $(this);
+	<!-- 自定义脚本 -->
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// 查看詳情模態框
+			$(document).on(
+					'show.bs.modal',
+					'#viewOrderModal',
+					function(event) {
+						const button = $(event.relatedTarget);
+						const orderId = button.data('id');
+						const modal = $(this);
 
-    	    // 发送 AJAX 请求获取订单详情
-    	    $.ajax({
-    	        url: '/orders/' + orderId + '/details',
-    	        method: 'GET',
-    	        success: function(data) {
-    	            // 将订单详情填充到模态框中
-    	            modal.find('#orderDetailsContent').html(data);
-    	        },
-    	        error: function() {
-    	            modal.find('#orderDetailsContent').html('<p>无法加载订单详情。</p>');
-    	        }
-    	    });
-    	});
+						// 发送 AJAX 请求获取订单详情
+						$.ajax({
+							url : '/orders/' + orderId + '/details',
+							method : 'GET',
+							success : function(data) {
+								// 将订单详情填充到模态框中
+								modal.find('#orderDetailsContent').html(data);
+							},
+							error : function() {
+								modal.find('#orderDetailsContent').html(
+										'<p>無法獲取訂單詳情。</p>');
+							}
+						});
+					});
 
+			// 修改狀態模態框
+			$(document).on('show.bs.modal', '#editOrderModal', function(event) {
+				const button = $(event.relatedTarget);
+				const orderId = button.data('id');
+				const status = button.data('status');
+				const modal = $(this);
 
-
-        // 修改狀態模態框
-        $(document).on('show.bs.modal', '#editOrderModal', function(event) {
-            const button = $(event.relatedTarget);
-            const orderId = button.data('id');
-            const status = button.data('status');
-            const modal = $(this);
-
-            // 设置订单ID和当前状态
-            modal.find('#editOrderId').val(orderId);
-            modal.find('#orderStatus').val(status);
-        });
-    });
-    </script>
+				// 设置订单ID和当前状态
+				modal.find('#editOrderId').val(orderId);
+				modal.find('#orderStatus').val(status);
+			});
+		});
+	</script>
 
     <footer th:include="CMSfooter"></footer>
 </body>

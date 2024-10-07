@@ -42,17 +42,17 @@
 	object-fit: cover;
 }
 
-/* 优化模态窗口内的表格 */
-.modal-body {
-	padding: 20px;
+#sizeChartModal .modal-body {
+    padding: 20px;
+    overflow-x: hidden; /* 禁止橫向捲軸 */
 }
 
-.modal-body table {
+ #sizeChartModal .modal-body table {
 	width: 100%;
-	table-layout: fixed; /* 固定表格布局，避免内容过宽 */
+	table-layout: fixed; 
 }
 
-.modal-body th, .modal-body td {
+ #sizeChartModal .modal-body th, .modal-body td {
 	word-wrap: break-word;
 	text-align: center;
 }
@@ -76,7 +76,7 @@
 	transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
 }
 
-.modal {
+.modal1 {
 	display: none; /* 隱藏 */
 	position: fixed;
 	z-index: 1000;
@@ -89,7 +89,7 @@
 	align-items: center;
 }
 
-.modal-content {
+.modal1-content {
 	background-color: white;
 	padding: 15px; /* 調整內邊距以減少空間 */
 	width: 300px; /* 限制寬度使其更小 */
@@ -98,18 +98,22 @@
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加輕微陰影以突出模態框 */
 }
 
-.modal-content p {
+.modal1-content p {
 	margin-bottom: 15px; /* 調整段落間距使其更緊湊 */
 }
 
-.btn {
+.btn1 {
 	padding: 8px 16px; /* 調整按鈕大小 */
 	margin: 5px; /* 調整按鈕之間的距離 */
 	border: none;
 	cursor: pointer;
+	 
+	width: 100%;
+	text-align: center; /* 讓按鈕內的文字居中 */
+	
 }
 
-.btn-danger1 {
+.btn1-danger1 {
     background-color: #D8BFAA;  /* 柔和的米黃色 */
     color: white;  /* 白色文字 */
     border-radius: 25px;  /* 圓角按鈕 */
@@ -121,7 +125,7 @@
 
 
 
-.btn-secondary1 {
+.btn1-secondary1 {
     background-color:#E5E8E1;  /* 柔和的灰米色 */
     color: white;
     border-radius: 25px;  /* 圓角按鈕 */
@@ -130,7 +134,6 @@
     font-size: 18px;
     transition: background-color 0.3s ease;  /* 同樣的過渡效果 */
 }
-
 </style>
 
 
@@ -269,11 +272,11 @@
 								href="#carouselExampleIndicators" role="button"
 								data-slide="prev"> <!-- 我们将通过 CSS 隐藏这些箭头 --> <span
 								class="carousel-control-prev-icon" aria-hidden="true"></span> <span
-								class="sr-only">上一张</span>
+								class="sr-only">上一張</span>
 							</a> <a class="carousel-control-next"
 								href="#carouselExampleIndicators" role="button"
 								data-slide="next"> <span class="carousel-control-next-icon"
-								aria-hidden="true"></span> <span class="sr-only">下一张</span>
+								aria-hidden="true"></span> <span class="sr-only">下一張</span>
 							</a>
 						</div>
 					</div>
@@ -281,7 +284,7 @@
 					<!-- 商品详情区域 -->
 					<div class="col-lg-6 product-details pl-md-5 ftco-animate">
 						<!-- 商品名称 -->
-						<h3 id="product-name">商品名称</h3>
+						<h3 id="product-name">商品名稱</h3>
 						<!-- 商品描述 -->
 						<p id="description">商品描述</p>
 						<!-- 商品价格 -->
@@ -644,11 +647,11 @@
 			<div class="row" id="product-list">
 				<!-- 商品列表將動態插入到這裡 -->
 			</div>
-			<div id="loginModal" class="modal">
-				<div class="modal-content">
+			<div id="loginModal" class="modal1">
+				<div class="modal1-content">
 					<p>請先登入。</p>
-					<button class="btn btn-danger1" id="loginButton">登入</button>
-					<button class="btn btn-secondary1" id="closeModalButton">關閉</button>
+					<button class="btn1 btn1-danger1" id="loginButton">登入</button>
+					<button class="btn1 btn1-secondary1" id="closeModalButton">關閉</button>
 				</div>
 			</div>
 		</div>
@@ -1227,6 +1230,7 @@
 	            });
 	        });
 	    }
+	    
 	    function showModal() {
 	        const modal = document.getElementById('loginModal');
 	        modal.style.display = 'flex';  // 使用 'flex' 來讓模態框垂直和水平居中
@@ -1409,7 +1413,6 @@
 
 </body>
 </html>
-
 
 
 
