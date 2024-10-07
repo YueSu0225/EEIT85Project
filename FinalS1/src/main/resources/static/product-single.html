@@ -42,20 +42,42 @@
 	object-fit: cover;
 }
 
+#sizeChartModal {
+    z-index: 2000; /* 確保 modal 位於其他元素上方 */
+}
+
+#sizeChartModal .modal-backdrop {
+    z-index: 1999; /* 設置背景的 z-index 低於 modal */
+}
+
+#sizeChartModal .modal-dialog {
+    max-width: 90%; /* 調整寬度，確保更大的顯示空間 */
+    height: 90vh; /* 設置模態框高度為視窗的90% */
+}
+
+#sizeChartModal .modal-content {
+    height: 100%; /* 確保內容填充 modal 高度 */
+}
+
 #sizeChartModal .modal-body {
+    max-height: 80vh; /* 確保內容不會超過視窗的 80% */
+    overflow-y: auto; /* 啟用垂直滾動 */
     padding: 20px;
-    overflow-x: hidden; /* 禁止橫向捲軸 */
+    background-color: #ffffff; /* 背景色 */
+    color: #000000; /* 字體顏色 */
 }
 
- #sizeChartModal .modal-body table {
-	width: 100%;
-	table-layout: fixed; 
+
+#sizeChartModal .modal-body table {
+    width: 100%;
+    table-layout: fixed; /* 固定寬度，防止表格內容超出邊界 */
 }
 
- #sizeChartModal .modal-body th, .modal-body td {
-	word-wrap: break-word;
-	text-align: center;
+#sizeChartModal .modal-body th, #sizeChartModal .modal-body td {
+    word-wrap: break-word; /* 允許內容自動換行 */
+    text-align: center;
 }
+
 
 @media ( max-width : 576px) {
 	.carousel-inner img {
@@ -79,7 +101,7 @@
 .modal1 {
 	display: none; /* 隱藏 */
 	position: fixed;
-	z-index: 1000;
+	z-index: 1050;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -92,7 +114,7 @@
 .modal1-content {
 	background-color: white;
 	padding: 15px; /* 調整內邊距以減少空間 */
-	width: 300px; /* 限制寬度使其更小 */
+	 
 	border-radius: 5px; /* 輕微的圓角以看起來更柔和 */
 	text-align: center;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加輕微陰影以突出模態框 */
@@ -324,7 +346,7 @@
 							<!-- 尺寸选择 -->
 							<div class="col-md-6">
 								<div class="form-group d-flex">
-									<div class="select-wrap" style="width: 200px;">
+									<div class="select-wrap" style="width: 500px;">
 										<div class="icon">
 											<span class="ion-ios-arrow-down"></span>
 										</div>
@@ -374,7 +396,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-lg"
 			role="document">
 			<!-- 使用 modal-lg 增大模态窗口宽度 -->
-			<div class="modal-content">
+			<div class="modal1-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="sizeChartModalLabel"></h5>
 					<button type="button" class="close" data-dismiss="modal"
