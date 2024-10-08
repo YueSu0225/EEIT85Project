@@ -210,6 +210,11 @@ public class CMSviewController {
 		orderService.deleteOrder(id);
 		return "redirect:/orders";
 	}
+	
+	@GetMapping("/customer-support")
+	public String customerSupport() {
+		return "customerManagement";
+	}
 }
 
 	
