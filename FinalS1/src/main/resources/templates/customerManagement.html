@@ -7,52 +7,85 @@
 <title>後台管理員聊天</title>
 
 <!-- 通知按鈕 -->
-<button id="adminChatButton" class="btn btn-warning" style="width: 160px; height: 60px; right: 20px; bottom: 20px;">新訊息，點擊查看</button>
+<button id="adminChatButton" class="btn btn-warning" style="position: fixed; bottom: 20px; right: 20px;">新訊息，點擊查看</button>
 
-<!-- 管理員聊天窗口 -->
-<div id="adminchatWindow">
-    <div class="chat-header">
-        聊天
-        <button type="button" class="close" onclick="closeChat()">&times;</button>
-    </div>
-    <div class="chat-body" id="adminChatBox" style="height: 300px; overflow-y: auto;">
-        <!-- 聊天內容 -->
-    </div>
-    <div class="chat-footer">
-        <input type="text" id="adminmessageInput" class="form-control" placeholder="輸入消息...">
-        <button type="button" class="btn btn-primary ml-2" onclick="sendAdminMessage()">發送</button>
-    </div>
-</div>
-
+<div id="adminChatContainer" class="container mt-5"></div> <!-- 管理员聊天窗口容器 -->
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
     var adminSocket = new WebSocket("ws://localhost:8080/chat?admin=true");
-
-    adminSocket.onmessage = function(event) {
-        var chatBox = document.getElementById("adminChatBox");
-        chatBox.innerHTML += "<p>" + event.data + "</p>"; // 显示收到的消息
-        chatBox.scrollTop = chatBox.scrollHeight; // 保持滚动到底部
+    adminSocket.onopen = function() {
+        console.log("管理员 WebSocket 连接已建立");
     };
 
-    // 打开聊天窗口
-    document.getElementById("adminChatButton").addEventListener("click", function() {
-        document.getElementById("adminchatWindow").style.display = "block"; // 显示聊天窗口
-    });
+    adminSocket.onclose = function() {
+        console.log("管理员 WebSocket 连接已关闭");
+    };
+    adminSocket.onmessage = function(event) {
+        console.log("收到消息:", event.data);
+        var data = event.data.split(":");
+        
+        if (data.length === 2) {
+            var userUUID = data[0];
+            var message = data[1];
+            openAdminChatWindow(userUUID, message);
+            flashNewMessageButton();
+        } else {
+            console.error("消息格式不正确:", event.data);
+        }
+    };
 
-    function sendAdminMessage() {
-        var input = document.getElementById("adminmessageInput");
+    function flashNewMessageButton() {
+        var button = document.getElementById("adminChatButton");
+        button.classList.add("btn-flashing");
+        setTimeout(() => {
+            button.classList.remove("btn-flashing");
+        }, 3000);
+    }
+
+    function openAdminChatWindow(userUUID, message) {
+        let chatWindow = document.getElementById("adminChatContainer").querySelector(`#chatWindow-${userUUID}`);
+        
+        if (!chatWindow) {
+            chatWindow = document.createElement("div");
+            chatWindow.className = "chat-window";
+            chatWindow.id = `chatWindow-${userUUID}`;
+            chatWindow.innerHTML = `
+                <div class="chat-header d-flex justify-content-between">
+                    <span>用戶 ${userUUID}</span>
+                    <button type="button" class="close" onclick="closeAdminChat('${userUUID}')">&times;</button>
+                </div>
+                <div class="chat-body" id="chatBox-${userUUID}"></div>
+                <div class="chat-footer d-flex">
+                    <input type="text" id="adminMessageInput-${userUUID}" class="form-control" placeholder="输入消息...">
+                    <button type="button" class="btn btn-primary ml-2" onclick="sendAdminMessage('${userUUID}')">发送</button>
+                </div>`;
+            document.getElementById("adminChatContainer").appendChild(chatWindow);
+        }
+
+        var chatBox = document.getElementById(`chatBox-${userUUID}`);
+        chatBox.innerHTML += `<p>${message}</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendAdminMessage(userUUID) {
+        var input = document.getElementById(`adminMessageInput-${userUUID}`);
         var message = input.value;
-        var targetUUID = prompt("请输入要发送消息的用户 UUID"); // 管理员输入目标用户的 UUID
-        if (message.trim() !== "" && targetUUID) {
-            adminSocket.send(targetUUID + ":" + message); // 发送给指定用户
-            input.value = ""; // 清空输入框
+        if (message.trim() !== "") {
+        	console.log(`发送消息给: ${userUUID}: ${message}`);
+            adminSocket.send("admin:" + userUUID + ":" + message);
+            input.value = "";
         }
     }
 
-    function closeChat() {
-        document.getElementById("adminchatWindow").style.display = "none"; // 隐藏聊天窗口
-        adminSocket.close(); // 关闭 WebSocket
+    function closeAdminChat(userUUID) {
+        var chatWindow = document.getElementById(`chatWindow-${userUUID}`);
+        chatWindow.parentNode.removeChild(chatWindow);
     }
+
+    window.sendAdminMessage = sendAdminMessage; // 暴露到全局
+});
+
 </script>
 
 <footer th:include="CMSfooter"></footer>

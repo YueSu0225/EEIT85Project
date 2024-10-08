@@ -220,12 +220,12 @@
         id="chatButton">客💬服</button>
 
 <!-- 獨立的可拖動、可調整大小的聊天窗口 -->
-<div id="chatWindow">
+<div id="chatWindow" style="display:none;">
     <div class="chat-header">
         聊天
         <button type="button" class="close" onclick="closeChat()">&times;</button>
     </div>
-    <div class="chat-body" id="chatBox">
+     <div class="chat-body" id="chatBox" style="height: 300px; overflow-y: auto;">
         <!-- 聊天內容 -->
     </div>
     <div class="chat-footer">

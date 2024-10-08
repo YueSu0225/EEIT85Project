@@ -13,38 +13,63 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        String uuid = getUuidFromSession(session); // 从session中获取UUID
+        String query = session.getUri().getQuery();
 
-        if (uuid != null) {
-            // 将用户的session存储
-            userSessions.put(uuid, session);
-        } else {
+        if (query != null && query.contains("admin=true")) {
             // 将管理员的session存储
-            adminSessions.put(session, null);
+            adminSessions.put(session, "admin");
+            System.out.println("管理员已连接: " + session.getId());
+        } else {
+            String userUUID = getUuidFromSession(session); // 获取用户 UUID
+            if (userUUID != null) {
+                userSessions.put(userUUID, session); // 存储用户的session
+                System.out.println("用户已连接: " + userUUID);
+            } else {
+                System.out.println("警告: 用户 UUID 为 null，session: " + session.getId());
+            }
         }
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        String[] parts = payload.split(":"); // 假设消息格式为 "targetUUID:message"
+        String[] parts = payload.split(":");
 
-        if (parts.length == 2) {
-            String targetUUID = parts[0];
-            String chatMessage = parts[1];
+        if (parts.length == 3 && parts[0].equals("admin")) {
+            // 管理员发送消息
+        	String targetUUID = parts[1]; // 目标用户的 UUID
+            String chatMessage = parts[2]; // 聊天内容
 
-            // 如果目标用户存在，发送消息
+            // 发送消息给目标用户
             WebSocketSession userSession = userSessions.get(targetUUID);
             if (userSession != null && userSession.isOpen()) {
                 userSession.sendMessage(new TextMessage(chatMessage));
+                System.out.println("管理员发送消息给用户 " + targetUUID + ": " + chatMessage);
+            } else {
+                System.out.println(targetUUID + " 不在线或不存在");
+                System.out.println("当前用户会话列表: " + userSessions.keySet()); 
             }
-        } else {
-            // 管理员发送消息
+        } else if (parts.length == 2) {
+            // 用户发送消息
+            String targetUUID = parts[0]; // 目标用户的 UUID
+            String chatMessage = parts[1]; // 聊天内容
+
+            // 发送消息给目标用户
+            WebSocketSession userSession = userSessions.get(targetUUID);
+            if (userSession != null && userSession.isOpen()) {
+                userSession.sendMessage(new TextMessage(chatMessage));
+                System.out.println("用户 " + targetUUID + " 发送消息: " + chatMessage);
+            }
+
+            // 广播给所有管理员
             for (WebSocketSession adminSession : adminSessions.keySet()) {
                 if (adminSession.isOpen()) {
-                    adminSession.sendMessage(new TextMessage(payload)); // 广播给所有管理员
+                    adminSession.sendMessage(new TextMessage(targetUUID + ": " + chatMessage));
+                    System.out.println("广播消息给管理员: " + targetUUID + ": " + chatMessage);
                 }
             }
+        } else {
+            System.out.println("收到的消息格式无效: " + payload);
         }
     }
 
@@ -53,10 +78,17 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         // 清理连接
         userSessions.values().remove(session);
         adminSessions.remove(session);
+        System.out.println("连接已关闭: " + session.getId());
     }
 
     private String getUuidFromSession(WebSocketSession session) {
         // 从session中提取UUID
-        return session.getUri().getQuery().split("=")[1]; // 例: uuid=xxxx
+        String[] queryParams = session.getUri().getQuery().split("&");
+        for (String param : queryParams) {
+            if (param.startsWith("uuid=")) {
+                return param.split("=")[1]; // 例: uuid=xxxx
+            }
+        }
+        return null; // 返回 null 如果没有找到 UUID
     }
 }
