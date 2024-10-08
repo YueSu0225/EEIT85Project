@@ -69,7 +69,6 @@ public class ShoppingCartController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		
-		
 	}
 	
 	@PostMapping("/update")
