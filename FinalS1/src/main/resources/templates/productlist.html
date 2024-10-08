@@ -13,8 +13,20 @@
 
 
 <body>
+
+
 	<div class="container">
 		<h1 class="text-center">商品管理</h1>
+		
+		 <div class="select-category mb-4">
+            <label for="category" class="form-label">選擇分類:</label>
+            <select class="form-select" id="category" onchange="loadProductsByCategory()">
+                <option value="1">男裝</option>
+                <option value="2">女裝</option>
+                <option value="3">童裝</option>
+                
+            </select>
+        </div>
 
 		<!-- 查詢表單 -->
 		<div class="search-bar mb-4">
@@ -37,10 +49,11 @@
 					<th>名稱</th>
 					<th>版型</th>
 					<th>種類</th>
+					<th>價格</th>
 					<th></th>
 				</tr>
 			</thead>
-			<tbody th:each="product : ${products}">
+			<tbody id = "product-list" th:each="product : ${products}">
 				<tr>
 					<td style="width: 50px; height: 50px;"><img
 						th:src="'data:image/jpeg;base64,' + ${product.image}" alt="商品圖片"
@@ -48,6 +61,7 @@
 					<td th:text="${product.name}">產品名稱</td>
 					<td th:text="${product.type.name}">版型</td>
 					<td th:text="${product.category.name}">種類</td>
+					<td th:text="${product.price}">價格</td>
 					<td>
 						<button class="btn btn-primary btn-sm"
 							th:onclick="'toggleVariants(' + ${product.id} + ')'">查看</button>
@@ -156,7 +170,51 @@
                 alert("更新過程中發生錯誤！");
             });
         }
-    
+ 
+   function loadProductsByCategory() {
+	    var categoryId = document.getElementById("category").value;
+	    fetch(`/products/category/${categoryId}`)
+	        .then(response => response.json())
+	        .then(products => {
+	            var productList = document.getElementById('product-list');
+	            productList.innerHTML = ''; // 清空現有的列表
+
+	            if (products.length === 0) {
+	                productList.innerHTML = '<tr><td colspan="5">沒有找到商品。</td></tr>';
+	                return;
+	            }
+
+	            products.forEach(product => {
+	                let productRow = `<tr>
+	                                    <td style="width: 50px; height: 50px;">
+	                                        <img src="data:image/jpeg;base64,${product.image}" alt="商品圖片" class="product-image">
+	                                    </td>
+	                                    <td>${product.name}</td>
+	                                    <td>${product.type.name}</td>
+	                                    <td>${product.category.name}</td>
+	                                    <td>${product.price}</td>
+	                                    <td>
+	                                        <button class="btn btn-primary btn-sm" onclick="toggleVariants(${product.id})">查看</button>
+	                                        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">刪除</button>
+	                                    </td>
+	                                  </tr>
+	                                  <tr>
+	                                    <td colspan="5">
+	                                        <div id="variant-container-${product.id}" class="variant-container" style="display: none;">
+	                                            <!-- 變體內容將在這裡動態加載 -->
+	                                        </div>
+	                                    </td>
+	                                  </tr>`;
+
+	                productList.innerHTML += productRow;
+	            });
+	        })
+	        .catch(error => {
+	            console.error('Error fetching products:', error);
+	            productList.innerHTML = '<tr><td colspan="5">加載商品時發生錯誤。</td></tr>';
+	        });
+	}
+
     </script>
 
 	<footer th:include="CMSfooter"></footer>
