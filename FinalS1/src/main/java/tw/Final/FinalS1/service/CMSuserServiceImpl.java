@@ -44,6 +44,7 @@ public class CMSuserServiceImpl implements CMSuserService{
 		UserModel user = userRepository.findById(request.getId())
 				.orElseThrow(() -> new RuntimeException("用户不存在"));
 		user.setEmail(request.getEmail());
+		user.getUserInfoMedel().setName(request.getName());
 		user.getUserInfoMedel().setAddress(request.getStreet());
 		user.getUserInfoMedel().setPhone_number(request.getPhone());
 		
