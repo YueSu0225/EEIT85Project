@@ -1,0 +1,72 @@
+<!-- 後台管理員前端 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head th:include="CMShead">
+    
+</div>
+
+<title>後台管理員聊天</title>
+<!-- 管理員聊天窗口 -->
+   <!-- 獨立的可拖動、可調整大小的聊天窗口 -->
+    <div id="adminchatWindow">
+        <div class="chat-header">聊天
+            <button type="button" class="close" onclick="closeChat()">&times;</button>
+        </div>
+        <div class="chat-body" id="chatBox">
+            <!-- 聊天內容 -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="adminmessageInput" class="form-control" placeholder="輸入消息...">
+            <button type="button" class="btn btn-primary ml-2" onclick="sendMessage()">發送</button>
+        </div>
+    </div>
+
+<!-- 通知按鈕 -->
+<button id="adminChatButton" class="btn btn-warning " style="width: 160px; height: 60px; right: 20px; bottom: 20px; ">新訊息，點擊查看</button>
+
+<script>
+    var adminSocket = new WebSocket("ws://localhost:8080/chat?admin=true");
+
+    // WebSocket 接收訊息
+    adminSocket.onmessage = function(event) {
+        var message = event.data;
+        document.getElementById("adminChatButton").style.display = "block";  // 顯示通知按鈕
+        document.getElementById("adminChatButton").textContent = message;  // 顯示新消息
+    };
+
+    // 點擊通知按鈕後顯示聊天窗口
+    document.getElementById("adminChatButton").addEventListener("click", function() {
+        this.style.display = "none";  // 隱藏通知按鈕
+        document.getElementById("adminchatWindow").style.display = "block";  // 顯示聊天窗口
+    });
+
+    // 在輸入框按下 Enter 發送訊息
+    document.getElementById("adminmessageInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter" && this.value.trim() !== "") {
+            var message = this.value;
+            // 假設管理員想要發送給某個 UUID 的使用者
+            var targetUUID = prompt("請輸入要發送訊息的使用者 UUID");
+            if (targetUUID) {
+                adminSocket.send(targetUUID + ":" + message);  // 發送訊息給指定使用者
+                this.value = "";  // 清空輸入框
+            }
+        }
+    });
+ // 發送消息
+    function sendMessage() {
+        var input = document.getElementById("adminmessageInput");
+        var message = input.value;
+        if (message.trim() !== "") {
+            socket.send(message);
+            input.value = "";  // 清空輸入框
+        }
+    }
+    // 關閉聊天窗口
+    function closeChat() {
+        $("#adminchatWindow").hide();    // 隱藏聊天窗口
+        $(".btn-warning").show();   // 顯示按鈕
+    }
+
+</script>
+
+<footer th:include="CMSfooter"></footer>

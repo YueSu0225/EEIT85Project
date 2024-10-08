@@ -27,7 +27,77 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   </head>
+  <style>
+        /* 隐藏聊天窗口初始状态 */
+        #chatWindow {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            border: 1px solid #ddd;
+            background-color: white;
+            z-index: 1000;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;  /* 避免內容溢出 */
+        }
+
+
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            cursor: move;
+        }
+
+        .chat-body {
+            position: absolute;
+            top: 50px;
+            bottom: 50px;
+            width: 100%;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .chat-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+            display: flex;
+            background-color: #f1f1f1;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            padding: 5px;
+        }
+
+        .chat-footer button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        .btn-no-padding {
+    padding: 0 ; 
+}
+
+        /* 響應式設計 */
+        @media (max-width: 576px) {
+            #chatWindow {
+                width: 100%;  /* 小屏幕时占满宽度 */
+                height: 60%;  /* 高度设为60% */
+                bottom: 0;
+                right: 0;
+            }
+        }
+        
+    </style>
   <body class="goto-here">
 		<div class="container">
 			<div>
@@ -141,7 +211,29 @@
           </div>
         </div>
       </div>
+
+
+        <!-- 圓形浮動圖標 -->
+<button type="button" class="btn btn-primary rounded-circle fixed-bottom m-3 btn-no-padding" 
+        style="width: 60px; height: 60px; right: 20px; bottom: 20px;" 
+        onclick="openChat()">客💬服</button>
+<!-- 獨立的可拖動、可調整大小的聊天窗口 -->
+<div id="chatWindow">
+    <div class="chat-header">
+        聊天
+        <button type="button" class="close" onclick="closeChat()">&times;</button>
+    </div>
+    <div class="chat-body" id="chatBox">
+        <!-- 聊天內容 -->
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="messageInput" class="form-control" placeholder="輸入消息...">
+        <button type="button" class="btn btn-secondary ml-2" onclick="sendMessage()">發送</button>
+    </div>
+</div>
     </section>
+
+
 
     <footer class="ftco-footer ftco-section">
       <div class="container">
@@ -230,6 +322,10 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
+  <script src="myjs/customerService.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     
   </body>
 </html>
