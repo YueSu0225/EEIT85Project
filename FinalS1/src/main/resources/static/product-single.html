@@ -42,16 +42,15 @@
 	object-fit: cover;
 }
 
+
 #sizeChartModal {
-    z-index: 2000; /* 確保 modal 位於其他元素上方 */
+    z-index: 1050; /* 確保 modal 位於其他元素上方 */
 }
 
-#sizeChartModal .modal-backdrop {
-    z-index: 1999; /* 設置背景的 z-index 低於 modal */
-}
+
 
 #sizeChartModal .modal-dialog {
-    max-width: 90%; /* 調整寬度，確保更大的顯示空間 */
+    max-width: 60%; /* 調整寬度，確保更大的顯示空間 */
     height: 90vh; /* 設置模態框高度為視窗的90% */
 }
 
@@ -379,7 +378,7 @@
 
 						<!-- 加入购物车按钮 -->
 						<p>
-							<a href="#" class="btn btn-black py-3 px-5"
+							<a href="#" class="btn btn-black py-3 px-5"  id = "add-to-cart-button"
 								onclick="addToCart();">Add to Cart</a>
 						</p>
 
@@ -1057,6 +1056,23 @@
 
 		                    currentStock = selectedVariant.stock; // 更新庫存
 		                    validateQuantity();
+		                    
+		                    
+		                    const addToCartButton = document.getElementById('add-to-cart-button');
+		                    
+		                    if (currentStock === 0) {
+		                        // 禁用按鈕
+		                        addToCartButton.style.pointerEvents = 'none';
+		                        addToCartButton.style.opacity = '0.5'; // 改變透明度表示禁用狀態
+		                        addToCartButton.innerText = "已售完"; // 顯示已售完
+		                    } else {
+		                        // 啟用按鈕
+		                        addToCartButton.style.pointerEvents = 'auto';
+		                        addToCartButton.style.opacity = '1'; // 恢復透明度
+		                        addToCartButton.innerText = "加入購物車"; // 恢復正常文字
+		                    }
+		                    
+		                    
 		                    updateCarouselImages(selectedVariant);
 		                } else {
 		                    console.error('No variant found for the selected color and size.');

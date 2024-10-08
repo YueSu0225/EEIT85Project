@@ -1,3 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="CMShead"></head>
+<div class="container">
+<div class="section">
+<h2 class="text-center mb-4">商品上架</h2>
+<form id="product-form" method="post" enctype="multipart/form-data">
+<style>
+.image-preview {
+	width: 100%;
+	height: 200px;
+	background-color: #f8f9fa;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	color: #6c757d;
+	border: 1px dashed #ced4da;
+	margin-top: 10px;
+}
+
+.image-preview img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+}
+</style>
+			<!-- 第一行: 商品名稱 和 類別 -->
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="name">商品名稱:</label> <input type="text"
+						class="form-control" id="name" name="name" required
+						onblur="checkProductName();">
+				</div>
+				<div class="form-group col-md-6">
+					<label for="category">類別:</label> <select class="form-control"
+						id="category" name="category">
+						<!-- 使用Thymeleaf從後端加載類別選項 -->
+						<option th:each="category : ${categories}"
+							th:value="${category.id}" th:text="${category.name}"></option>
+					</select>
+				</div>
+			</div>
+
+			<!-- 第二行: 版型 和 尺寸 -->
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="type">版型:</label> <select class="form-control"
+						id="type" name="type">
+						<option th:each="type : ${types}" th:value="${type.id}"
+							th:text="${type.name}"></option>
+					</select>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="size">尺寸:</label> <select class="form-control"
+						id="size" name="size">
+						<option th:each="size : ${sizes}" th:value="${size.id}"
+							th:text="${size.name}"></option>
+					</select>
+				</div>
+			</div>
+
+			<!-- 第三行: 顏色 和 庫存 -->
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="color">顏色:</label>
+					<div class="input-group">
+						<select class="form-control" id="color" name="color">
+							<option th:each="color : ${colors}" th:value="${color.id}"
+								th:text="${color.name}"></option>
+						</select>
+						<div class="input-group-append">
+							<button type="button" class="btn btn-outline-secondary"
+								data-toggle="modal" data-target="#addColorModal">新增顏色</button>
+						</div>
+					</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="stock">庫存:</label> <input type="number"
+						class="form-control" id="stock" name="stock" required>
+				</div>
+			</div>
+
+			<!-- 顏色新增 Modal -->
+			<div class="modal fade" id="addColorModal" tabindex="-1"
+				role="dialog" aria-labelledby="addColorModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="addColorModalLabel">新增顏色</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="newColorName">顏色名稱:</label> <input type="text"
+									class="form-control" id="newColorName" placeholder="輸入顏色名稱">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">取消</button>
+							<button type="button" class="btn btn-primary"
+								id="saveColorButton">新增顏色</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 第四行: 價格 和 介紹 -->
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="price">價格:</label> <input type="number"
+						class="form-control" id="price" name="price" required>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="description">介紹:</label>
+					<textarea class="form-control" id="description" name="description"
+						rows="3" required></textarea>
+				</div>
+			</div>
+
+			<!-- 第五行: 上傳圖片 -->
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="image1">主商品圖:</label> <input type="file"
+						class="form-control-file" id="image1" name="image1"
+						accept="image/*" onchange="encodeImageFileAsURL(1);">
+					<div class="image-preview border rounded p-2" id="image-preview1">
+						<p>圖片1預覽將顯示在這裡...</p>
+					</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="image2">商品圖2:</label> <input type="file"
+						class="form-control-file" id="image2" name="image2"
+						accept="image/*" onchange="encodeImageFileAsURL(2);">
+					<div class="image-preview border rounded p-2" id="image-preview2">
+						<p>圖片2預覽將顯示在這裡...</p>
+					</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="image3">商品圖3:</label> <input type="file"
+						class="form-control-file" id="image3" name="image3"
+						accept="image/*" onchange="encodeImageFileAsURL(3);">
+					<div class="image-preview border rounded p-2" id="image-preview3">
+						<p>圖片3預覽將顯示在這裡...</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- 隱藏欄位儲存圖片的Base64值 -->
+			<input type="hidden" id="imageBase64_1" name="imageBase64_1">
+			<input type="hidden" id="imageBase64_2" name="imageBase64_2">
+			<input type="hidden" id="imageBase64_3" name="imageBase64_3">
+
+			<button type="submit" class="btn btn-primary btn-block">上架商品</button>
+
+
+
+			<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+			<script>
 function encodeImageFileAsURL(imageIndex) {
     var file = document.getElementById("image" + imageIndex).files[0];  // 根據imageIndex動態獲取圖片檔案
     var reader = new FileReader();
@@ -19,7 +184,7 @@ function checkProductName() {
                 if (response.ok) {
                     return response.json(); // 解析成 JSON
                 } else {
-                    throw new Error("產品不存在1");
+                    throw new Error("產品不存在");
                 }
             })
             .then(data => {
@@ -82,8 +247,16 @@ window.onload = function() {
 }    
     
 
-    document.getElementById('product-form').addEventListener('submit', function(event) {
-        event.preventDefault();
+let isSubmitting = false;
+
+document.getElementById('product-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    if (isSubmitting) {
+        return; // 防止重複提交
+    }
+    isSubmitting = true;
+
 
         // 構建商品數據，包括變體
         var productData = {
@@ -230,3 +403,7 @@ document.getElementById('saveColorButton').addEventListener('click', function() 
         alert("請輸入顏色名稱！");
     }
 });
+
+</script>
+
+			<footer th:include="CMSfooter"></footer>
