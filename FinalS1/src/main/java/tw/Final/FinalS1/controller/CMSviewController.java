@@ -26,16 +26,21 @@ import tw.Final.FinalS1.dto.RegisterRequest;
 
 import tw.Final.FinalS1.model.Product;
 import tw.Final.FinalS1.model.ProductVariant;
-
+import tw.Final.FinalS1.model.Category;
+import tw.Final.FinalS1.model.Type;
+import tw.Final.FinalS1.model.Size;
+import tw.Final.FinalS1.model.Color;
 import tw.Final.FinalS1.model.OrderItems;
 import tw.Final.FinalS1.model.OrderModel;
 
 import tw.Final.FinalS1.model.UserModel;
 import tw.Final.FinalS1.service.CMSuserService;
-
+import tw.Final.FinalS1.service.CategoryService;
+import tw.Final.FinalS1.service.ColorService;
 import tw.Final.FinalS1.service.ProductService;
 import tw.Final.FinalS1.service.ProductVariantService;
-
+import tw.Final.FinalS1.service.SizeService;
+import tw.Final.FinalS1.service.TypeService;
 import tw.Final.FinalS1.service.OrderService;
 
 
@@ -51,6 +56,18 @@ public class CMSviewController {
 	
 	@Autowired
 	private ProductVariantService productVariantService;
+	
+	@Autowired
+	private SizeService  sizeService;
+	
+	@Autowired
+	private ColorService colorService;
+	
+	@Autowired
+	private TypeService typeService;
+	
+	@Autowired
+	private CategoryService categoryService;
 	
 	
 	@Autowired
@@ -83,8 +100,17 @@ public class CMSviewController {
 		return "redirect:/users";
 	}
 	
+	@GetMapping("/delete/{id}")
+	public String deleteUser(@PathVariable Long id) {
+		cmSuserService.deleteUserById(id);
+		return "redirect:/users";
+	}
 	
 	
+	
+	
+	
+	//--------------------------------------------
 	// 產品清單頁面
 	@RequestMapping("/productlist")
 	public String productlist(@RequestParam(value = "key", required = false) String key, Model model) {
@@ -108,17 +134,29 @@ public class CMSviewController {
 		return productVariantService.getVariantsByProductId(productId);
 	}
 	
+	// 商品上架頁面的顯示
+	 @GetMapping("/products/add")
+	    public String showProductAddPage(Model model) {
+	        // 假設有CategoryService、TypeService等服務類別來處理數據獲取
+	        model.addAttribute("categories", categoryService.getAllCategories());
+	        model.addAttribute("types", typeService.getAllTypes());
+	        model.addAttribute("sizes", sizeService.getAllSizes());
+	        model.addAttribute("colors", colorService.getAllColors());
+	        model.addAttribute("product", new Product());  // 這裡可以是新的Product實體類
+	        return "productadd"; 
+	    }
+
+
 	
 	
 	
 	
 	
 	
-	@GetMapping("/delete/{id}")
-	public String deleteUser(@PathVariable Long id) {
-		cmSuserService.deleteUserById(id);
-		return "redirect:/users";
-	}
+	
+	
+	//--------------------------------------------
+	
 	
 	// 订单管理相关方法
 	
