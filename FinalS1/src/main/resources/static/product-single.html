@@ -1356,15 +1356,15 @@
 	        .then(variants => {
 	            let selectedVariant = variants.find(variant => variant.color.name === selectedColor && variant.size.name === selectedSize);
 	            if (selectedVariant) {
-	                // 发送请求加入购物车
+	                // 加到購物車
 	                fetch('/cart/add', {
 	                    method: 'POST',
 	                    headers: {
 	                        'Content-Type': 'application/json'
 	                    },
 	                    body: JSON.stringify({
-	                        variantId: selectedVariant.id, // 商品变体的ID
-	                        quantity: parseInt(quantity)    // 用户输入的数量
+	                        variantId: selectedVariant.id,
+	                        quantity: parseInt(quantity)   
 	                    })
 	                })
 	                .then(response => {
@@ -1377,9 +1377,9 @@
 	                })
 	                .then(cartData => { // 使用 cartData
 	                	console.log('Cart Data:', cartData);
-	                    if (cartData.success !== undefined && cartData.success) {
+	                
+	                    if (cartData.success) {
 	                        alert('商品已成功添加到購物車！');
-	                        updateCartDisplay(cartData.items); //使用 cartData.items 更新購物車顯示
 	                    } else {
 	                        alert('添加到購物車失敗！請重試。');
 	                    }
@@ -1402,34 +1402,7 @@
 	// 確保在點擊按鈕時調用 addToCart 函數
 	document.querySelector('.btn-add-to-cart').addEventListener('click', addToCart);
 			
-	function updateCartDisplay(cartData) {
-	    let subtotal = 0;
-	    const cartItemsContainer = document.querySelector('.cart-items');
-	    cartItemsContainer.innerHTML = ''; // 清空當前內容
-
-	    cartItems.forEach(item => {
-	        const itemElement = document.createElement('div'); // 修正拼寫錯誤
-	        itemElement.classList.add('cart-item', 'd-flex', 'justify-content-between', 'align-items-center');
-	        
-	        // 正確使用 itemElement.innerHTML
-	        itemElement.innerHTML = `
-	            <div class="item-name">${item.productName} (${item.variantName})</div>
-	            <div class="item-price">$${item.price.toFixed(2)}</div>
-	            <div class="item-quantity">x${item.quantity}</div>
-	        `;
-	        
-	        cartItemsContainer.appendChild(itemElement);
-	        subtotal += item.price * item.quantity; // 更新小計
-	    });
-	    
-	    const shipping = 0.00; // 你的運費固定為0
-	    const discount = 0.00; // 暫時沒有折扣
-	    const total = subtotal + shipping - discount;
-
-	    // 更新 HTML 中的總額和付款金額
-	    document.querySelector('.cart-total .subtotal').innerText = `$${subtotal.toFixed(2)}`;
-	    document.querySelector('.cart-total .total').innerText = `$${total.toFixed(2)}`;
-	}
+	
 		
 	</script>
 

@@ -128,7 +128,7 @@ public class OrderService {
         // 步骤1：获取购物车项目
         List<CartItemsModel> cartItems = cartItemsRepository.findByCartId(cartId);
         if (cartItems.isEmpty()) {
-            throw new IllegalArgumentException("购物车没有商品");
+            throw new IllegalArgumentException("購物車没有商品");
         }
 
         // 步骤2：创建订单并设置为已付款

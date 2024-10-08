@@ -1,6 +1,7 @@
 package tw.Final.FinalS1.controller;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class ShoppingCartController {
 	private CartRepository cartRepository;
 	
 	@PostMapping("/add")
-	public ResponseEntity<CartModel> addTocart(@RequestBody CartItemsDto cartRequest, HttpSession session) {
+	public ResponseEntity<Map<String, Object>> addTocart(@RequestBody CartItemsDto cartRequest, HttpSession session) {
 		 String userUUID = (String) session.getAttribute("userUUID");
 //		 UserModel user = userRepository.findByUuid(userUUID);
 		 if(userUUID == null) {
@@ -57,7 +58,7 @@ public class ShoppingCartController {
 			 response.put("success", true);
 			 response.put("items", updateCart.getCartItems());
 			 
-			 return ResponseEntity.ok(updateCart);
+			 return ResponseEntity.ok(response);
 		}catch(RuntimeException e){
 			System.out.println("錯誤: " + e.getMessage());
 			
@@ -72,18 +73,24 @@ public class ShoppingCartController {
 	}
 	
 	@PostMapping("/update")
-	public ResponseEntity<CartModel> updateCart(@RequestBody CartItemsDto cartRequest, HttpSession session) {
+	public ResponseEntity<Map<String, Object>> updateCart(@RequestBody CartItemsDto cartRequest, HttpSession session) {
 		 String userUUID = (String) session.getAttribute("userUUID");
 //		 UserModel user = userRepository.findByUuid(userUUID);
 		 if(userUUID == null) {
-			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("success", false));
 		 }
 		
 		try {
 			 CartModel updateCart = shoppingCartServiceDto.updateCart(cartRequest, userUUID);
-			    return ResponseEntity.ok(updateCart);
+			 
+			 Map<String, Object> response = new HashMap<>();
+		     response.put("success", true);
+		     response.put("cartItems", updateCart.getCartItems());
+			 
+			 return ResponseEntity.ok(response);
 		}catch(RuntimeException e){
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("success", false));
 		}
 	}
 	

@@ -1,6 +1,6 @@
 package tw.Final.FinalS1.service;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -88,7 +88,10 @@ public class ShoppingCartServiceDto {
         
         CartModel cart = cartRepository.findById(user.getId())
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
-
+        
+        ProductVariant productVariant = productVariantRepository.findById(variantId)
+                .orElseThrow(() -> new RuntimeException("Productvariant not found"));
+        
         // 購物車中的商品
         CartItemsModel itemsToUpdate = cart.getCartItems().stream()
         						.filter(item -> Objects.equals(item.getProductVariant().getId(), variantId))
@@ -97,8 +100,9 @@ public class ShoppingCartServiceDto {
         // 更新或移除
         if(newquantity > 0) {
         	itemsToUpdate.setQuantity(newquantity);
-        	int newprice = itemsToUpdate.getProductVariant().getPrice() * newquantity;
-        	itemsToUpdate.setPrice(newprice);
+        	itemsToUpdate.setPrice(productVariant.getPrice());
+//        	int newprice = itemsToUpdate.getProductVariant().getPrice() * newquantity;
+//        	itemsToUpdate.setPrice(newprice);
 //        	itemsToUpdate.setPrice(itemsToUpdate.getProductVariant().getPrice().multiply(BigDecimal.valueOf(newquantity)));
         }else {
         	cart.getCartItems().remove(itemsToUpdate);
