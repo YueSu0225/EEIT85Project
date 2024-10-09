@@ -133,7 +133,7 @@
 			</div>
 
 			<!-- 優惠券&總價 -->
-			<div class="row justify-content-end">
+			<div class="row justify-content-end" id="cart-summary-section" style="display: none;">
 				<div class="col-lg-5 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
 						<h3>優惠券</h3>
@@ -144,37 +144,8 @@
 							</div>
 						</form>
 					</div>
-					<!-- 
-    				
-    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
-    				 -->
 				</div>
-
 				<div class="col-lg-2 mt-5 cart-wrap ftco-animate"></div>
-				<!-- 
-    			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-    				<div class="cart-total mb-3">
-    					<h3>Estimate shipping and tax</h3>
-    					<p>Enter your destination to get a shipping estimate</p>
-  						<form action="#" class="info">
-	              <div class="form-group">
-	              	<label for="">Country</label>
-	                <input type="text" class="form-control text-left px-3" placeholder="">
-	              </div>
-	              <div class="form-group">
-	              	<label for="country">State/Province</label>
-	                <input type="text" class="form-control text-left px-3" placeholder="">
-	              </div>
-	              <div class="form-group">
-	              	<label for="country">Zip/Postal Code</label>
-	                <input type="text" class="form-control text-left px-3" placeholder="">
-	              </div>
-	            </form>
-    				</div>
-    				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
-    			</div>
-    			 -->
-
 				<div class="col-lg-5 mt-5 cart-wrap ftco-animate">
 					<div class="cart-total mb-3">
 						<h3>付款詳情</h3>
@@ -380,6 +351,10 @@
 		});
 		
 		
+		document.addEventListener('DOMContentLoaded', function() {   
+		    fetchCartItems();
+		});
+		
 		// 購物車數據
 		function fetchCartItems() {
 		    fetch('/cart/items')
@@ -391,11 +366,15 @@
 		        })
 		        .then(cartItems => {
 		            displayCartItems(cartItems);
+		            
+		            if (cartItems.length > 0) {
+		                document.getElementById('cart-summary-section').style.display = 'block';
+		            } else {
+		                document.getElementById('cart-summary-section').style.display = 'none';
+		            }
 		        })
 		        .catch(error => console.error('Error fetching cart items:', error));
 		}
-		
-		
 		
 		
 		// 將購物車內容丟到頁面
@@ -434,7 +413,7 @@
 		        const quantityInput = row.querySelector('.quantity input');
 		        quantityInput.addEventListener('change', function() {
 		            const newQuantity = parseInt(this.value);
-		            console.log('新数量:', newQuantity);
+		            console.log('新數量:', newQuantity);
 		            const variantId = this.getAttribute('data-variant-id');
 		
 		            if (newQuantity > 0) {
@@ -452,22 +431,22 @@
 		                .then(response => {
 		                    if (!response.ok) {
 		                        return response.json().then(err => {
-		                            throw new Error(err.message || '更新购物车失败');
+		                            throw new Error(err.message || '更新購物車失敗');
 		                        });
 		                    }
 		                    return response.json(); // 返回 JSON
 		                })
 		                .then(cartData => {
 		                    if (cartData.success) {
-		                        console.log('更新后的购物车数据:', cartData);
+		                        console.log('更新購物車的數據:', cartData);
 		                        displayCartItems(cartData.cartItems); // 使用返回的 cartItems 更新显示
 		                    } else {
-		                        alert('更新购物车失败！请重试。');
+		                        alert('更新購物車失敗!請重試。');
 		                    }
 		                })
 		                .catch(error => console.error('Error updating cart:', error));
 		            } else {
-		                alert('数量不可小于1');
+		                alert('數量不可小於1');
 		                this.value = 1; // 重置回1
 		            }
 		        });
@@ -537,6 +516,8 @@
 
 			    .catch(error => console.error('Error deleting item:', error));
 			}
+		
+		
 		
 	
 		// 确保页面加载后调用 fetchCartItems
