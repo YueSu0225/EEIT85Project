@@ -72,13 +72,13 @@ public class ProductController {
 	
 	
 	
-	//仔入更多
+	//載入更多
 	@GetMapping
     public Map<String, Object> getAllProducts(
             @RequestParam(value = "offset", defaultValue = "0") int offset,
             @RequestParam(value = "limit", defaultValue = "8") int limit) {
 
-        // 防止负数和过大的 limit
+        // 防止負数和過大的 limit
         if (offset < 0) offset = 0;
         if (limit <= 0) limit = 8;
         if (limit > 100) limit = 100;
