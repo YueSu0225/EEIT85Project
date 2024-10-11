@@ -215,11 +215,23 @@ public class CMSviewController {
 	public String customerSupport() {
 		return "customerManagement";
 	}
-}
+
 
 	
-	
-	
+//page功能 測試
+@GetMapping("/loadPageContent")
+public String loadPageContent(@RequestParam("page") String page,Model model) {
+	switch(page) {
+	case"user":
+		return "fragments/userManagemant :: content";
+	case"productlist":
+		return "fragments/productlist :: content";
+	 default:
+         // 如果沒有匹配的情況，返回 "not found" 頁面
+         return "fragments/notFound :: content";	
+		}
+	}
+}
 	
 	
 	
