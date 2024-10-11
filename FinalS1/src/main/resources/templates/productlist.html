@@ -179,12 +179,21 @@
 	            var productList = document.getElementById('product-list');
 	            productList.innerHTML = ''; // 清空現有的列表
 
+	            console.log('選擇的分類ID:', categoryId);
+	            console.log('取得的商品:', products);
+
 	            if (products.length === 0) {
 	                productList.innerHTML = '<tr><td colspan="5">沒有找到商品。</td></tr>';
 	                return;
 	            }
 
 	            products.forEach(product => {
+	                // 檢查每個商品的分類ID是否與選擇的categoryId一致
+	                if (product.category.id !== parseInt(categoryId)) {
+	                    console.warn(`商品 ${product.name} 的分類ID與選擇的不一致`);
+	                    return; // 跳過這個不符合的商品
+	                }
+
 	                let productRow = `<tr>
 	                                    <td style="width: 50px; height: 50px;">
 	                                        <img src="data:image/jpeg;base64,${product.image}" alt="商品圖片" class="product-image">
@@ -214,6 +223,7 @@
 	            productList.innerHTML = '<tr><td colspan="5">加載商品時發生錯誤。</td></tr>';
 	        });
 	}
+
 
     </script>
 

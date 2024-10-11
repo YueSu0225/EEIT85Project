@@ -97,10 +97,10 @@
 	transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
 }
 
-.modal1 {
+.modal {
 	display: none; /* 隱藏 */
 	position: fixed;
-	z-index: 1050;
+	z-index: 1000;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -110,31 +110,27 @@
 	align-items: center;
 }
 
-.modal1-content {
+.modal-content {
 	background-color: white;
 	padding: 15px; /* 調整內邊距以減少空間 */
-	 
+	width: 300px; /* 限制寬度使其更小 */
 	border-radius: 5px; /* 輕微的圓角以看起來更柔和 */
 	text-align: center;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加輕微陰影以突出模態框 */
 }
 
-.modal1-content p {
+.modal-content p {
 	margin-bottom: 15px; /* 調整段落間距使其更緊湊 */
 }
 
-.btn1 {
+.btn {
 	padding: 8px 16px; /* 調整按鈕大小 */
 	margin: 5px; /* 調整按鈕之間的距離 */
 	border: none;
 	cursor: pointer;
-	 
-	width: 100%;
-	text-align: center; /* 讓按鈕內的文字居中 */
-	
 }
 
-.btn1-danger1 {
+.btn-danger1 {
     background-color: #D8BFAA;  /* 柔和的米黃色 */
     color: white;  /* 白色文字 */
     border-radius: 25px;  /* 圓角按鈕 */
@@ -146,7 +142,7 @@
 
 
 
-.btn1-secondary1 {
+.btn-secondary1 {
     background-color:#E5E8E1;  /* 柔和的灰米色 */
     color: white;
     border-radius: 25px;  /* 圓角按鈕 */
@@ -155,6 +151,7 @@
     font-size: 18px;
     transition: background-color 0.3s ease;  /* 同樣的過渡效果 */
 }
+
 </style>
 
 
@@ -668,13 +665,13 @@
 			<div class="row" id="product-list">
 				<!-- 商品列表將動態插入到這裡 -->
 			</div>
-			<div id="loginModal" class="modal1">
-				<div class="modal1-content">
-					<p>請先登入。</p>
-					<button class="btn1 btn1-danger1" id="loginButton">登入</button>
-					<button class="btn1 btn1-secondary1" id="closeModalButton">關閉</button>
-				</div>
+			<div id="loginModal" class="modal">
+			<div class="modal-content">
+				<p>請先登入。</p>
+				<button class="btn btn-danger1" id="loginButton">登入</button>
+				<button class="btn btn-secondary1" id="closeModalButton">關閉</button>
 			</div>
+		</div>
 		</div>
 
 
@@ -962,6 +959,8 @@
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
 	<script src="js/google-map.js"></script>
 	<script src="js/main.js"></script>
+	<script src="myjs/leo.js"></script>
+	
 
 	<script>
 		

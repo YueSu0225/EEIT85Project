@@ -163,10 +163,11 @@
 
 	<section class="ftco-section ftco-cart">
 		<div class="container">
-			<div class="row">
+			<div class="row"  id="wishlist-item-table"
+							style="display: none">
 				<div class="col-md-12 ftco-animate">
 					<div class="cart-list">
-						<table class="table">
+						<table class="table" >
 							<thead class="thead-primary">
 								<tr class="text-center">
 									<th>&nbsp;</th>
@@ -188,6 +189,8 @@
 			</div>
 		</div>
 
+		
+
 		<div id="confirmModal" class="modal">
 			<div class="modal-content">
 				<p>確定要刪除此商品嗎？</p>
@@ -196,7 +199,9 @@
 			</div>
 		</div>
 	</section>
-
+<section class="ftco-section ftco-cart" id="empty-wish-container">
+			<!-- 沒有商品顯示區域 -->
+		</section>
 	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
 		<div class="container py-4">
 			<div class="row d-flex justify-content-center py-5">
@@ -207,9 +212,8 @@
 				<div class="col-md-6 d-flex align-items-center">
 					<form action="#" class="subscribe-form">
 						<div class="form-group d-flex">
-							<input type="text" class="form-control"
-								placeholder="請輸入電子信箱"> <input type="submit"
-								value="訂閱" class="submit px-3">
+							<input type="text" class="form-control" placeholder="請輸入電子信箱">
+							<input type="submit" value="訂閱" class="submit px-3">
 						</div>
 					</form>
 				</div>
@@ -265,7 +269,7 @@
 								<li><a href="#" class="py-2 d-block">隱私政策</a></li>
 								<li><a href="#" class="py-2 d-block">常見問題</a></li>
 							</ul>
-							
+
 						</div>
 					</div>
 				</div>
@@ -287,35 +291,35 @@
 
 
 
-	<!-- loader -->
-	<div id="ftco-loader" class="show fullscreen">
-		<svg class="circular" width="48px" height="48px">
+			<!-- loader -->
+			<div id="ftco-loader" class="show fullscreen">
+				<svg class="circular" width="48px" height="48px">
 			<circle class="path-bg" cx="24" cy="24" r="22" fill="none"
-				stroke-width="4" stroke="#eeeeee" />
+						stroke-width="4" stroke="#eeeeee" />
 			<circle class="path" cx="24" cy="24" r="22" fill="none"
-				stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg>
-	</div>
+						stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg>
+			</div>
 
 
-	<script src="js/jquery.min.js"></script>
-	<script src="js/jquery-migrate-3.0.1.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.easing.1.3.js"></script>
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/jquery.stellar.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.magnific-popup.min.js"></script>
-	<script src="js/aos.js"></script>
-	<script src="js/jquery.animateNumber.min.js"></script>
-	<script src="js/bootstrap-datepicker.js"></script>
-	<script src="js/scrollax.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	<script src="js/google-map.js"></script>
-	<script src="js/main.js"></script>
+			<script src="js/jquery.min.js"></script>
+			<script src="js/jquery-migrate-3.0.1.min.js"></script>
+			<script src="js/popper.min.js"></script>
+			<script src="js/bootstrap.min.js"></script>
+			<script src="js/jquery.easing.1.3.js"></script>
+			<script src="js/jquery.waypoints.min.js"></script>
+			<script src="js/jquery.stellar.min.js"></script>
+			<script src="js/owl.carousel.min.js"></script>
+			<script src="js/jquery.magnific-popup.min.js"></script>
+			<script src="js/aos.js"></script>
+			<script src="js/jquery.animateNumber.min.js"></script>
+			<script src="js/bootstrap-datepicker.js"></script>
+			<script src="js/scrollax.min.js"></script>
+			<script
+				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+			<script src="js/google-map.js"></script>
+			<script src="js/main.js"></script>
 
-	<script>
+			<script>
 		$(document).ready(function(){
 
 		var quantitiy=0;
@@ -352,99 +356,131 @@
 		});
 		
 		document.addEventListener('DOMContentLoaded', function () {
-		    // 呼叫 API 取得願望清單
-		    fetch(`/wishlist/items`, {
-		        method: 'GET',
-		        headers: {
-		            'Content-Type': 'application/json'
-		        }
-		    })
-		    .then(response => response.json())
-		    .then(data => {
-		        let wishlistItemsHtml = '';
-		        const wishlistContainer = document.getElementById('wishlist-items'); 
-		        
-		        data.forEach(item => {
-		            const product = item.product;
+		    // 更新願望清單的函式
+		    function updateWishlist() {
+		        // 呼叫 API 取得願望清單
+		        fetch(`/wishlist/items`, {
+		            method: 'GET',
+		            headers: {
+		                'Content-Type': 'application/json'
+		            }
+		        })
+		        .then(response => response.json())
+		        .then(data => {
+		            let wishlistItemsHtml = '';
+		            const wishlistContainer = document.getElementById('wishlist-items');
+		            const wishlistitemtable = document.getElementById('wishlist-item-table');
+		            const emptywishContainer = document.getElementById('empty-wish-container');
+		            
+		            if (data.length > 0) {
+		                // 如果有商品，顯示清單並清空空列表的內容
+		                wishlistitemtable.style.display = 'flex';
+		                emptywishContainer.innerHTML = '';
+		            } else {
+		                // 如果沒有商品，隱藏清單並顯示空列表的提示訊息
+		                wishlistitemtable.style.display = 'none';
+		                emptywishContainer.innerHTML = ''; // 確保先清空內容
+		                const emptyWishlist = document.createElement('div');
+		                
+		                emptyWishlist.innerHTML = `
+		                    <div class="container text-center">
+		                        <h5>您的喜愛清單沒有商品</h5>
+		                        <a href="shop.html">查看更多商品</a>
+		                    </div>
+		                `;
+		                
+		                emptywishContainer.appendChild(emptyWishlist);
+		            }
+		            
+		            // 更新願望清單的項目
+		            data.forEach(item => {
+		                const product = item.product;
 
-		            wishlistItemsHtml += `
-		                <tr class="text-center" data-id="${product.id}">
-		                    <td class="product-remove">
-		                        <a href="#" class="delete-item"><span class="ion-ios-close"></span></a>
-		                    </td>
-		                    <td class="image-prod">
-		                        <img src="data:image/jpeg;base64,${product.image}" alt="${product.name}" style="width:150px;height:200px;">
-		                    </td>
-		                    <td class="product-name">
-		                        <h3>${product.name}</h3>
-		                        <p>${product.description}</p>
-		                    </td>
-		                    <td class="price">$${product.price}</td>
-		                    <td class="product-btn">
-		                        <div class="mb-3">
-		                            <a href="product-single.html?productId=${product.id}" class="btn btn-primary">查看商品</a>
-		                        </div>
-		                    </td>
-		                </tr>
-		            `;
-		        });
-
-		        const wishlistItemsElement = document.getElementById('wishlist-items');
-		        wishlistItemsElement.innerHTML = wishlistItemsHtml;
-
-		        // 綁定刪除按鈕事件，顯示自定義確認框
-		        wishlistItemsElement.querySelectorAll('.delete-item').forEach(button => {
-		            button.addEventListener('click', function (e) {
-		                e.preventDefault();
-		                const itemId = this.closest('tr').getAttribute('data-id');
-
-		                // 顯示自定義確認模態框
-		                const confirmModal = document.getElementById('confirmModal');
-		                confirmModal.style.display = 'flex';
-
-		                // 綁定確認和取消按鈕的事件
-		                document.getElementById('confirmDelete').onclick = function () {
-		                    // 如果用戶確認，則執行刪除操作
-		                    deleteWishlistItem(itemId);
-		                    confirmModal.style.display = 'none';
-		                };
-
-		                document.getElementById('cancelDelete').onclick = function () {
-		                    // 如果用戶取消，隱藏模態框
-		                    confirmModal.style.display = 'none';
-		                };
+		                wishlistItemsHtml += `
+		                    <tr class="text-center" data-id="${product.id}">
+		                        <td class="product-remove">
+		                            <a href="#" class="delete-item"><span class="ion-ios-close"></span></a>
+		                        </td>
+		                        <td class="image-prod">
+		                            <img src="data:image/jpeg;base64,${product.image}" alt="${product.name}" style="width:150px;height:200px;">
+		                        </td>
+		                        <td class="product-name">
+		                            <h3>${product.name}</h3>
+		                            <p>${product.description}</p>
+		                        </td>
+		                        <td class="price">$${product.price}</td>
+		                        <td class="product-btn">
+		                            <div class="mb-3">
+		                                <a href="product-single.html?productId=${product.id}" class="btn btn-primary">查看商品</a>
+		                            </div>
+		                        </td>
+		                    </tr>
+		                `;
 		            });
+
+		            // 更新心願清單的 HTML
+		            const wishlistItemsElement = document.getElementById('wishlist-items');
+		            wishlistItemsElement.innerHTML = wishlistItemsHtml;
+
+		            // 綁定刪除按鈕事件
+		            wishlistItemsElement.querySelectorAll('.delete-item').forEach(button => {
+		                button.addEventListener('click', function (e) {
+		                    e.preventDefault();
+		                    const itemId = this.closest('tr').getAttribute('data-id');
+
+		                    // 顯示自定義確認模態框
+		                    const confirmModal = document.getElementById('confirmModal');
+		                    confirmModal.style.display = 'flex';
+
+		                    // 綁定確認和取消按鈕的事件
+		                    document.getElementById('confirmDelete').onclick = function () {
+		                        // 如果用戶確認，則執行刪除操作
+		                        deleteWishlistItem(itemId);
+		                        confirmModal.style.display = 'none';
+		                    };
+
+		                    document.getElementById('cancelDelete').onclick = function () {
+		                        // 如果用戶取消，隱藏模態框
+		                        confirmModal.style.display = 'none';
+		                    };
+		                });
+		            });
+		        })
+		        .catch(error => {
+		            console.error('無法取得願望清單資料:', error);
 		        });
-		    })
-		    .catch(error => {
-		        console.error('無法取得願望清單資料:', error);
-		    });
+		    }
+
+		    // 刪除願望清單項目的函式
+		    function deleteWishlistItem(productId) {
+		        fetch(`/wishlist/delete/${productId}`, {
+		            method: 'DELETE',
+		            headers: {
+		                'Content-Type': 'application/json'
+		            }
+		        })
+		        .then(response => {
+		            if (!response.ok) {
+		                throw new Error('Network response was not ok');
+		            }
+		            // 刪除成功後，重新更新願望清單
+		            updateWishlist();
+		        })
+		        .catch(error => {
+		            console.error('刪除心願清單項目時發生錯誤:', error);
+		        });
+		    }
+
+		    // 頁面載入時，首次更新願望清單
+		    updateWishlist();
 		});
 
-		// 刪除願望清單項目的函數
-		function deleteWishlistItem(productId) {
-		    fetch(`/wishlist/delete/${productId}`, {
-		        method: 'DELETE',
-		        headers: {
-		            'Content-Type': 'application/json'
-		        }
-		    })
-		    .then(response => response.text())
-		    .then(message => {
-		        console.log(message);
-		        // 成功刪除後移除該項目行
-		        document.querySelector(`tr[data-id="${productId}"]`).remove();
-		    })
-		    .catch(error => {
-		        console.error('Error deleting wishlist item:', error);
-		    });
-		}
 
+	
 
 		
 
 
 	</script>
-
 </body>
 </html>
