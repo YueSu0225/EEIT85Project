@@ -35,6 +35,7 @@
 <link rel="stylesheet" href="css/flaticon.css">
 <link rel="stylesheet" href="css/icomoon.css">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/loginmodal.css">
 <style>
 .carousel-inner img {
 	width: 100%;
@@ -97,60 +98,7 @@
 	transition: background-color 0.3s ease, color 0.3s ease; /* 確保有過渡效果 */
 }
 
-.modal {
-	display: none; /* 隱藏 */
-	position: fixed;
-	z-index: 1000;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
-	justify-content: center;
-	align-items: center;
-}
 
-.modal-content {
-	background-color: white;
-	padding: 15px; /* 調整內邊距以減少空間 */
-	width: 300px; /* 限制寬度使其更小 */
-	border-radius: 5px; /* 輕微的圓角以看起來更柔和 */
-	text-align: center;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 添加輕微陰影以突出模態框 */
-}
-
-.modal-content p {
-	margin-bottom: 15px; /* 調整段落間距使其更緊湊 */
-}
-
-.btn {
-	padding: 8px 16px; /* 調整按鈕大小 */
-	margin: 5px; /* 調整按鈕之間的距離 */
-	border: none;
-	cursor: pointer;
-}
-
-.btn-danger1 {
-    background-color: #D8BFAA;  /* 柔和的米黃色 */
-    color: white;  /* 白色文字 */
-    border-radius: 25px;  /* 圓角按鈕 */
-    padding: 10px 20px;  /* 增加按鈕內邊距 */
-    border: none;
-    font-size: 18px;  /* 增加字體大小 */
-    transition: background-color 0.3s ease;  /* 增加背景色變化過渡效果 */
-}
-
-
-
-.btn-secondary1 {
-    background-color:#E5E8E1;  /* 柔和的灰米色 */
-    color: white;
-    border-radius: 25px;  /* 圓角按鈕 */
-    padding: 10px 20px;
-    border: none;
-    font-size: 18px;
-    transition: background-color 0.3s ease;  /* 同樣的過渡效果 */
-}
 
 </style>
 
@@ -667,7 +615,7 @@
 			</div>
 			<div id="loginModal" class="modal">
 			<div class="modal-content">
-				<p>請先登入。</p>
+				<p>請先登入後再進行操作，謝謝。</p>
 				<button class="btn btn-danger1" id="loginButton">登入</button>
 				<button class="btn btn-secondary1" id="closeModalButton">關閉</button>
 			</div>
@@ -677,143 +625,7 @@
 
 
 
-		<!--  	<div class="container">
-			<div class="row">
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src=""
-							alt="Colorlib Template"> <span class="status">30%</span>
-							<div class="overlay"></div> </a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3>
-								<a href="#">Black Paint</a>
-							</h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price">
-										<span class="mr-2 price-dc">$120.00</span><span
-											class="price-sale">$80.00</span>
-									</p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a> <a href="#"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a> <a href="#"
-										class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src=""
-							alt="Colorlib Template">
-							<div class="overlay"></div> </a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3>
-								<a href="#">Green Paint</a>
-							</h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price">
-										<span>$120.00</span>
-									</p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a> <a href="#"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a> <a href="#"
-										class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src=""
-							alt="Colorlib Template">
-							<div class="overlay"></div> </a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3>
-								<a href="#">Grey Paint</a>
-							</h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price">
-										<span>$120.00</span>
-									</p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a> <a href="#"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a> <a href="#"
-										class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6 col-lg-3 ftco-animate">
-					<div class="product">
-						<a href="#" class="img-prod"><img class="img-fluid" src=""
-							alt="Colorlib Template">
-							<div class="overlay"></div> </a>
-						<div class="text py-3 pb-4 px-3 text-center">
-							<h3>
-								<a href="#">White Paint</a>
-							</h3>
-							<div class="d-flex">
-								<div class="pricing">
-									<p class="price">
-										<span>$120.00</span>
-									</p>
-								</div>
-							</div>
-							<div class="bottom-area d-flex px-3">
-								<div class="m-auto d-flex">
-									<a href="#"
-										class="add-to-cart d-flex justify-content-center align-items-center text-center">
-										<span><i class="ion-ios-menu"></i></span>
-									</a> <a href="#"
-										class="buy-now d-flex justify-content-center align-items-center mx-1">
-										<span><i class="ion-ios-cart"></i></span>
-									</a> <a href="#"
-										class="heart d-flex justify-content-center align-items-center ">
-										<span><i class="ion-ios-heart"></i></span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>-->
+		
 	</section>
 
 	<section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
@@ -1354,68 +1166,7 @@
 
 
 
-	function addToCart() {
-	    const quantity = document.getElementById('quantity').value || 1; // 默認數量為1
-	    const selectedColor = document.getElementById('color-select').value || initialColor;
-	    const selectedSize = document.getElementById('size-select').value || initialSize;
-
-	    const urlParams = new URLSearchParams(window.location.search);
-	    const productId = urlParams.get('productId');
-	    console.log("Product ID:", productId);
-	    console.log("選擇的顏色:", selectedColor);
-	    console.log("選擇的尺寸:", selectedSize);
-	    console.log("數量:", quantity);
-	    
-	    fetch(`/product-variants/product/${productId}`)
-	        .then(response => response.json())
-	        .then(variants => {
-	            let selectedVariant = variants.find(variant => variant.color.name === selectedColor && variant.size.name === selectedSize);
-	            if (selectedVariant) {
-	                // 加到購物車
-	                fetch('/cart/add', {
-	                    method: 'POST',
-	                    headers: {
-	                        'Content-Type': 'application/json'
-	                    },
-	                    body: JSON.stringify({
-	                        variantId: selectedVariant.id,
-	                        quantity: parseInt(quantity)   
-	                    })
-	                })
-	                .then(response => {
-	                	if (!response.ok) {
-	                        throw new Error('Network response was not ok');
-	                    }
-	                	
-	                	return response.json() // 後端提供購物車數據
-	                	
-	                })
-	                .then(cartData => { // 使用 cartData
-	                	console.log('Cart Data:', cartData);
-	                
-	                    if (cartData.success) {
-	                        alert('商品已成功添加到購物車！');
-	                    } else {
-	                        alert('添加到購物車失敗！請重試。');
-	                    }
-	                })
-	                .catch(error => {
-	                    console.error('Error adding to cart:', error);
-	                    alert('添加到購物車時出現錯誤，請稍後重試。');
-	                });
-	            } else {
-	                console.error('No variant found for the selected color and size.');
-	                alert('選擇的顏色或尺寸不正確，請重試。');
-	            }
-	        })
-	        .catch(error => {
-	            console.error('Error fetching product details:', error);
-	            alert('獲取商品詳情時出現錯誤，請稍後重試。');
-	        });
-	}
-
-	// 確保在點擊按鈕時調用 addToCart 函數
-	document.querySelector('.btn-add-to-cart').addEventListener('click', addToCart);
+	
 	
 	</script>
 
