@@ -108,30 +108,22 @@ window.onload = function() {
             ]
         };
 
-		 // 發送數據到後端
-		    fetch('/products/add', {
-		        method: 'POST',
-		        headers: {
-		            'Content-Type': 'application/json'
-		        },
-		        body: JSON.stringify(productData)
-		    })
-		    .then(response => {
-		        if (!response.ok) {
-		            throw new Error("上架失敗，狀態碼：" + response.status);
-		        }
-		        return response.json();
-		    })
-		    .then(data => {
-		        alert("商品上架成功！");
-		        isSubmitting = false;
-		    })
-		    .catch(err => {
-		        console.error("上架失敗：", err);
-		        alert("上架失敗：" + err.message);
-		        isSubmitting = false;
-		    });
-		});
+        // 發送數據到後端
+        fetch('/products/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("商品上架成功！");
+        })
+        .catch(err => {
+            console.error("上架失敗：", err);
+        });
+    });
 
 
 
