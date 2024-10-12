@@ -7,25 +7,26 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatWebSocketHandler extends TextWebSocketHandler {
-    // 存储连接的用户和管理员的映射
+    // 儲存連接的使用者與後台管理員 映射
     private Map<String, WebSocketSession> userSessions = new ConcurrentHashMap<>();
     private Map<WebSocketSession, String> adminSessions = new ConcurrentHashMap<>();
 
+    
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String query = session.getUri().getQuery();
 
         if (query != null && query.contains("admin=true")) {
-            // 将管理员的session存储
+            // 剛後台管理員的session儲存
             adminSessions.put(session, "admin");
-            System.out.println("管理员已连接: " + session.getId());
+            System.out.println("後台管理員已連接: " + session.getId());
         } else {
-            String userUUID = getUuidFromSession(session); // 获取用户 UUID
+            String userUUID = getUuidFromSession(session); // 獲取使用者的UUID
             if (userUUID != null) {
-                userSessions.put(userUUID, session); // 存储用户的session
-                System.out.println("用户已连接: " + userUUID);
+                userSessions.put(userUUID, session); // 儲存使用者的session
+                System.out.println("使用者連接: " + userUUID);
             } else {
-                System.out.println("警告: 用户 UUID 为 null，session: " + session.getId());
+                System.out.println("警告: 用户 UUID 是 null: " + session.getId());
             }
         }
     }
@@ -36,49 +37,41 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         String[] parts = payload.split(":");
 
         if (parts.length == 3 && parts[0].equals("admin")) {
-            // 管理员发送消息
-        	String targetUUID = parts[1]; // 目标用户的 UUID
-            String chatMessage = parts[2]; // 聊天内容
+            // 後臺管理員發送信息
+        	String targetUUID = parts[1]; // 目標使用者的 UUID
+            String chatMessage = parts[2]; // 聊天內容
 
-            // 发送消息给目标用户
+            // 發送信息給使用者 用UUID分辨是誰
             WebSocketSession userSession = userSessions.get(targetUUID);
             if (userSession != null && userSession.isOpen()) {
                 userSession.sendMessage(new TextMessage(chatMessage));
                 System.out.println("管理员发送消息给用户 " + targetUUID + ": " + chatMessage);
             } else {
-                System.out.println(targetUUID + " 不在线或不存在");
-                System.out.println("当前用户会话列表: " + userSessions.keySet()); 
+                System.out.println("使用者: "+ targetUUID + " 不在線或不存在");
             }
         } else if (parts.length == 2) {
-            // 用户发送消息
-            String targetUUID = parts[0]; // 目标用户的 UUID
+            // 使用者發送信息
+            String targetUUID = parts[0]; // 使用者的 UUID
             String chatMessage = parts[1]; // 聊天内容
 
-            // 发送消息给目标用户
-//            WebSocketSession userSession = userSessions.get(targetUUID);
-//            if (userSession != null && userSession.isOpen()) {
-//                userSession.sendMessage(new TextMessage(chatMessage));
-//                System.out.println("用户 " + targetUUID + " 发送消息: " + chatMessage);
-//            }
-
-            // 广播给所有管理员
+            // 廣播给所有後台((我只有一個後台
             for (WebSocketSession adminSession : adminSessions.keySet()) {
                 if (adminSession.isOpen()) {
                     adminSession.sendMessage(new TextMessage(targetUUID + ": " + chatMessage));
-                    System.out.println("广播消息给管理员: " + targetUUID + ": " + chatMessage);
+                    System.out.println("廣播给所有後台管理员: " + targetUUID + ": " + chatMessage);
                 }
             }
         } else {
-            System.out.println("收到的消息格式无效: " + payload);
+            System.out.println("收到的信息格式不正確: " + payload);
         }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        // 清理连接
+        // 移除連接
         userSessions.values().remove(session);
         adminSessions.remove(session);
-        System.out.println("连接已关闭: " + session.getId());
+        System.out.println("連接已關閉: " + session.getId());
     }
 
     private String getUuidFromSession(WebSocketSession session) {

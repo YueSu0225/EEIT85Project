@@ -31,16 +31,36 @@ function updatePassword(event) {
         body: JSON.stringify(data)
     })
     .then(response => response.json())
-    .then(data => {
-        if (data.success == true) {
-            alert("密碼修改成功");
-            $('#changePasswordModal').modal('hide');
-        } else if (data.success == false) {
-            document.getElementById("oldPasswordError").textContent = "舊密碼輸入錯誤";
-        } else {
-            alert("密碼修改失敗: " + result.message);
-        }
-    })
+	.then(data => {
+	    if (data.success === true) {
+	        Swal.fire({
+	            icon: 'success',
+	            title: '密碼修改成功',
+	            timer: 2000,  // 2秒後自動關閉
+	            showConfirmButton: false  // 不顯示確認按鈕
+	        }).then(() => {
+	            $('#changePasswordModal').modal('hide');
+	        });
+	    } else if (data.success === false) {
+	        // 舊密碼錯誤
+	        Swal.fire({
+	            icon: 'error',
+	            title: '舊密碼輸入錯誤',
+	            timer: 2000,  // 2秒後自動關閉
+	            showConfirmButton: false  // 不顯示確認按鈕
+	        });
+	    } else {
+	        // 密碼修改失敗
+	        Swal.fire({
+	            icon: 'error',
+	            title: '密碼修改失敗',
+	            text: '錯誤: ' + data.message,
+	            timer: 2000,  // 2秒後自動關閉
+	            showConfirmButton: false  // 不顯示確認按鈕
+	        });
+	    }
+	})
+
     .catch(error => {
         console.error('Error:', error);
         alert('提交时出现问题，请稍后再试');

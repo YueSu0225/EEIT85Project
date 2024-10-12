@@ -76,21 +76,34 @@ function updateMember(event) {
         body: JSON.stringify(userInfo)
     })
     .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("資料已提交！");
-            console.log('用戶資料更新成功:', data);
-            $('#updateModal').modal('hide');
-            // 更新顯示的用戶資料（可選）
-            document.getElementById('userInfoName2').innerText = userInfo.name;
-            document.getElementById('userInfoAddress2').innerText = userInfo.address;
-            document.getElementById('userInfoPhone').innerText = userInfo.phone;
-            document.getElementById('userInfoBirthday').innerText = userInfo.birthday;
-        } else {
-            console.error('更新用戶資料時發生錯誤:', data.message);
-            alert('更新失敗: ' + data.message);
-        }
-    })
+	.then(data => {
+	    if (data.success) {
+	        Swal.fire({
+	            icon: 'success',
+	            title: '提交成功！',
+	            text: '會員信息更新成功',
+	            timer: 2000,  // 2秒鐘後自動關閉
+	            showConfirmButton: false  // 不顯示確認按鈕
+	        }).then(() => {
+	            console.log('用戶資料更新成功:', data);
+	            $('#updateModal').modal('hide');
+	            // 更新顯示的用戶資料（可選）
+	            document.getElementById('userInfoName2').innerText = userInfo.name;
+	            document.getElementById('userInfoAddress2').innerText = userInfo.address;
+	            document.getElementById('userInfoPhone').innerText = userInfo.phone;
+	            document.getElementById('userInfoBirthday').innerText = userInfo.birthday;
+	        });
+	    } else {
+	        console.error('更新用戶資料時發生錯誤:', data.message);
+	        Swal.fire({
+	            icon: 'error',
+	            title: '更新失敗',
+	            text: '錯誤: ' + data.message,
+	            timer: 2000,  // 2秒鐘後自動關閉
+	            showConfirmButton: false  // 不顯示確認按鈕
+	        });
+	    }
+	})
     .catch(error => {
         console.error('Fetch 錯誤:', error);
         alert('更新失敗: ' + error.message);

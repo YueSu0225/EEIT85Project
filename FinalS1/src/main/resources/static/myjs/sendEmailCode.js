@@ -1,16 +1,26 @@
 document.getElementById("sendEmailCode").addEventListener("click", function(event) {
-    event.preventDefault(); // 阻止表单的默认提交行为
+    event.preventDefault(); // 阻止表單的默認提交行為
 
-    // 获取输入的邮箱地址
+    // 獲取輸入的信箱
     const email = document.getElementById("email").value;
 
-    // 验证邮箱格式（可选）
-    if (!validateEmail(email)) {
-        alert("請輸入有效的信箱");
-        return;
-    }
-
-    // 发送 POST 请求到后端
+    // 驗證信箱格式
+	if (!validateEmail(email)) {
+	     Swal.fire({
+	         icon: 'error',
+	         title: '請輸入有效信箱',
+	         timer: 2000,  // 2秒後關閉
+	         showConfirmButton: false
+	     });
+	     return;
+	 }
+	 Swal.fire({
+	                icon: 'success',
+	                title: '驗證碼已發送，請檢查您的信箱。',
+	                timer: 2000,  // 2秒後關閉
+	                showConfirmButton: false  // 顯示確認按鈕，立即可操作
+	            });
+    // 發送 POST 請求到後端
     fetch("/final/sendCode", {
         method: "POST",
         headers: {
@@ -27,14 +37,14 @@ document.getElementById("sendEmailCode").addEventListener("click", function(even
     .then(data => {
         if (data.success) {
 			// 顯示輸入框和按鈕
-			localStorage.setItem("jwtToken", data.jwtToken); // 将JWT存储在localStorage
+			localStorage.setItem("jwtToken", data.jwtToken); // 將JWT儲存在localStorage
 
 			document.getElementById("confirmationSection").style.display = "inline-block";
-			alert("驗證碼已發送，請檢察您的信箱。");
+
 			
-			// 禁用按钮并设置计时器
+			// 禁止按鈕並設置計時器
 			          const sendEmailButton = document.getElementById("sendEmailCode");
-			          sendEmailButton.disabled = true; // 禁用按钮
+			          sendEmailButton.disabled = true; // 禁止按鈕
 			          let countdown = 60; // 倒數計時60秒
 
 			          const countdownInterval = setInterval(() => {
@@ -43,20 +53,32 @@ document.getElementById("sendEmailCode").addEventListener("click", function(even
 
 			              if (countdown < 0) {
 			                  clearInterval(countdownInterval); // 清除計時器
-			                  sendEmailButton.disabled = false; // 一分钟后启用按钮
-			                  sendEmailButton.innerText = "發送驗證碼"; // 重置按鈕文字
+			                  sendEmailButton.disabled = false; // 一分鐘後啟用按鈕
+			                  sendEmailButton.innerText = "發送驗證碼"; // 重製按鈕文字
 			              }
 			          }, 1000); // 每秒更新一次
         } else {
-            alert("發送失敗: " + data.message);
+			Swal.fire({
+			               icon: 'error',
+			               title: '發送失敗',
+			               text: '請聯繫客服',
+			               timer: 3000,
+			               showConfirmButton: false
+			           });
         }
     })
     .catch(error => {
-        alert("發生錯誤: " + error.message);
+		Swal.fire({
+		           icon: 'error',
+		           title: '發送錯誤',
+		           text: '請聯繫客服中心',
+		           timer: 2000,
+		           showConfirmButton: false
+		       });
     });
 });
 
-// 验证邮箱格式的简单函数
+// 驗證信箱格式簡易版
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());

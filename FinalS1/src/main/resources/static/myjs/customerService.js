@@ -14,10 +14,17 @@ function checkSession() {
         method: 'GET',
         credentials: 'include' // 確保攜帶cookies
     })
-    .then(response => response.json())
+	.then(response => {
+	    if (response.status === 401) {
+	        showModal();  // 如果是未授權，顯示登入模態框
+	        return; // 中斷後續處理
+	    }
+	    return response.json();  // 只有在 status 不是 401 的情況下繼續處理
+	})
     .then(data => {
         userUUID = data.userUUID;
         if (!userUUID) {
+			showModal();
             throw new Error('User UUID is undefined');
         }
         openChat(); // 連接 WebSocket
@@ -27,7 +34,23 @@ function checkSession() {
         console.error('Error:', error);
     });
 }
+function showModal() {
+	        const modal = document.getElementById('loginModal');
+	        modal.style.display = 'flex';  
+	    }
 
+    
+    function closeModal() {
+        const modal = document.getElementById('loginModal');
+        modal.style.display = 'none';
+    }
+
+    
+    document.getElementById('loginButton').addEventListener('click', function() {
+        window.location.href = '/Signin.html';  // 跳轉到登入頁面
+    });
+
+    document.getElementById('closeModalButton').addEventListener('click', closeModal);
 // 打開聊天視窗并連接 WebSocket
 function openChat() {
     if (isChatOpen) {
@@ -99,3 +122,10 @@ function closeChat() {
 
     }
 }
+// 鍵盤事件：按下 Enter 發送消息
+document.getElementById("messageInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();  // 防止換行
+        sendMessage();  // 發送消息
+    }
+});

@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
       <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+      <link rel="stylesheet" href="css/loginmodal.css">
   </head>
   <style>
         /* 先隱藏聊天室 */
@@ -86,14 +87,14 @@
         .btn-no-padding {
     padding: 0 ; 
 }
-/* 使用者的消息样式（靠左显示） */
+/* 使用者的信息樣式（靠左顯示） */
 .user-message {
     text-align: left;
     color: blue;
     margin: 5px;
 }
 
-/* 管理员的消息样式（靠右显示） */
+/* 管理員的信息樣式（靠右顯示） */
 .admin-message {
     text-align: right;
     color: green;
@@ -224,7 +225,13 @@
           </div>
         </div>
       </div>
-
+		<div id="loginModal" class="modal">
+			<div class="modal-content">
+				<p>請先登入後再進行操作，謝謝。</p>
+				<button class="btn btn-danger1" id="loginButton">登入</button>
+				<button class="btn btn-secondary1" id="closeModalButton">關閉</button>
+			</div>
+		</div>
 
         <!-- 圓形浮動圖標 -->
 <button type="button" class="btn btn-primary rounded-circle fixed-bottom m-3 btn-no-padding" 

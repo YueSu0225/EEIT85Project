@@ -5,15 +5,15 @@ let isEmailVerified = false;  // 全局變量，用於追蹤信箱是否已驗�
 document.getElementById("confirmCode").addEventListener("click", function() {
        const verificationCode = document.getElementById("verificationCode").value;
 	   const resultElement = document.getElementById("result");
-       // 獲取JWT token（可以通过其他方式获取，比如从后端响应中获取）
-       const jwtToken = localStorage.getItem("jwtToken"); // 假設你將tokenh儲存在localStorage中
+       // 獲取JWT token 從localStorage中
+       const jwtToken = localStorage.getItem("jwtToken"); // 將tokenh儲存在localStorage中
 		
        if (!verificationCode) {
            document.getElementById("result").innerText = "請輸入驗證碼";
            return;
        }
 
-       // 发送AJAX请求到后端验证验证码
+       // 發送請求到後端驗證
        fetch('/final/verifyCode', {
            method: 'POST',
            headers: {
@@ -36,7 +36,6 @@ document.getElementById("confirmCode").addEventListener("click", function() {
 			   document.getElementById("sendEmailCode").style.display = "none";
 			   isEmailVerified = true;  // 設置信箱已驗證成功
            } else {
-			//console.log("erro1");
 			resultElement.innerText = "驗證失敗，請檢查驗證碼。";
 
            }
@@ -55,7 +54,13 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault(); // 防止默認的表單提交行為
 		
 		if (!isEmailVerified) { // 檢查信箱是否已驗證
-		    alert('請先完成信箱驗證');
+			Swal.fire({
+			    icon: 'error',
+			    title: '信箱未驗證',
+			    text: '請先完成信箱驗證',
+			    showConfirmButton: true,  // 顯示確認按鈕
+			    timer: 2000  // 2秒後自動關閉
+			});
 		    return;  // 阻止註冊表單提交
 		}
 		
@@ -67,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const phone = document.querySelector('input[placeholder="請輸入手機號碼"]').value;
         const street = document.getElementById('street').value;
         const birthday = document.querySelector('input[type="date"]').value;
-		//const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)?(?:號(?:之(\d+)?)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
 		const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)號(?:之(\d+)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
 
 		const phonePattern = /^09\d{8}$/; // 驗證手機號碼格式：09開頭，後面8個數字
@@ -123,19 +127,40 @@ document.addEventListener('DOMContentLoaded', function () {
             })
         })
         .then(response => response.json())
-        .then(data => {
-			if (data.success) {
-			        console.log("註冊成功1");
-			        alert('註冊成功');
-			        window.location.href = '/Home.html';
-			    } else {
-			        console.log("註冊失敗2");
-			        alert(data.message || '註冊失敗');
-			    }
-        })
-        .catch(error => {
-            console.error('錯誤:', error);
-            alert('註冊失敗1');
-        });
+		.then(data => {
+		    if (data.success) {
+		        console.log("註冊成功1");
+		        Swal.fire({
+		            icon: 'success',
+		            title: '註冊成功',
+		            text: '您已成功註冊',
+		            timer: 2000,  // 2秒後自動關閉
+		            showConfirmButton: false
+		        }).then(() => {
+		            window.location.href = '/Home.html';  // 確保在提示框後才跳轉
+		        });
+		    } else {
+		        console.log("註冊失敗2");
+		        Swal.fire({
+		            icon: 'error',
+		            title: '註冊失敗',
+		            text: data.message || '註冊失敗',
+		            timer: 2000,  // 2秒後自動關閉
+		            showConfirmButton: false
+		        });
+		    }
+		})
+		.catch(error => {
+		    console.error('錯誤:', error);
+		    Swal.fire({
+		        icon: 'error',
+		        title: '註冊失敗',
+		        text: '發生錯誤，請稍後再試',
+		        timer: 2000,  // 2秒後自動關閉
+		        showConfirmButton: false
+		    });
+		});
+
+
     });
 });

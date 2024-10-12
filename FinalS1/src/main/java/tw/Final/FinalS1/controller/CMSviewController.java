@@ -34,6 +34,7 @@ import tw.Final.FinalS1.model.OrderItems;
 import tw.Final.FinalS1.model.OrderModel;
 
 import tw.Final.FinalS1.model.UserModel;
+import tw.Final.FinalS1.repository.UserRepository;
 import tw.Final.FinalS1.service.CMSuserService;
 import tw.Final.FinalS1.service.CategoryService;
 import tw.Final.FinalS1.service.ColorService;
@@ -72,6 +73,9 @@ public class CMSviewController {
 	
 	@Autowired
 	private OrderService orderService; // 注入 OrderService
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	// 这是信箱验证码的信件内容（与后台无关，勿动）
 	@RequestMapping("/emailCode")

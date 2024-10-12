@@ -6,63 +6,126 @@
 <body>
 <title>後台管理員聊天</title>
 
-<!-- 通知按鈕 -->
-<button id="adminChatButton" class="btn btn-warning" style="position: fixed; bottom: 20px; right: 20px;">新訊息，點擊查看</button>
 
-<div id="adminChatContainer" class="container mt-5"></div> <!-- 管理员聊天窗口容器 -->
+<div id="adminChatContainer" class="container mt-5"></div> <!-- 管理員聊天視窗Container -->
 
 <script>
+let isChatWindowOpen = false;  // 是否已經打開聊天視窗
+
 document.addEventListener("DOMContentLoaded", function() {
     var adminSocket = new WebSocket("ws://localhost:8080/chat?admin=true");
+
     adminSocket.onopen = function() {
-        console.log("管理员 WebSocket 连接已建立");
+        console.log("管理員 WebSocket 上線");
     };
 
     adminSocket.onclose = function() {
-        console.log("管理员 WebSocket 连接已关闭");
+        console.log("管理員 WebSocket 下線");
     };
+
     adminSocket.onmessage = function(event) {
         console.log("收到消息:", event.data);
         var data = event.data.split(":");
-        
+
         if (data.length === 2) {
             var userUUID = data[0];
             var message = data[1];
-            openAdminChatWindow(userUUID, message);
-            flashNewMessageButton();
+            
+            // 創建新的按鈕帶UUID+mesg
+            createNewMessageButton(userUUID, message);
+            // 觸發按鈕閃爍
+            flashNewMessageButton(userUUID);
+
         } else {
-            console.error("消息格式不正确:", event.data);
+            console.error("信息格式不正確:", event.data);
         }
     };
 
-    function flashNewMessageButton() {
-        var button = document.getElementById("adminChatButton");
-        button.classList.add("btn-flashing");
-        setTimeout(() => {
+    function createNewMessageButton(userUUID, message) {
+        // 假查是否已經有這顆按鈕了
+        var existingButton = document.querySelector(`[data-userUUID="${userUUID}"]`);
+        if (existingButton) {
+            return;  // 如果按鈕已經存在，直接返回
+        }
+
+        // 創建新按鈕元素在右下角
+        var button = document.createElement("button");
+        button.className = "btn btn-warning";  
+        button.style.position = "fixed";
+        button.style.bottom = "20px";
+        button.style.right = "20px";
+        button.setAttribute("data-userUUID", userUUID);  // 加 userUUID 屬性
+        button.innerHTML = "新訊息";
+
+        // 點擊按鈕後打開聊天視窗
+        button.addEventListener("click", function() {
+            openAdminChatWindow(userUUID, message);
+            button.style.display = "none";  // 點擊後隱藏按鈕
+            // 點擊後移除閃爍
             button.classList.remove("btn-flashing");
-        }, 3000);
+        });
+
+        // 將按鈕添加到頁面上
+        document.body.appendChild(button);
+    }
+
+    // 觸發閃爍效果事件
+    function flashNewMessageButton(userUUID) {
+        var button = document.querySelector(`[data-userUUID="${userUUID}"]`);
+
+        if (button) {
+            button.classList.add("btn-flashing");  // 添加閃爍效果
+
+        }
     }
 
     function openAdminChatWindow(userUUID, message) {
         let chatWindow = document.getElementById("adminChatContainer").querySelector(`#chatWindow-${userUUID}`);
-        
+
         if (!chatWindow) {
+            // 建新的聊天室窗
             chatWindow = document.createElement("div");
             chatWindow.className = "chat-window";
             chatWindow.id = `chatWindow-${userUUID}`;
             chatWindow.innerHTML = `
-                <div class="chat-header d-flex justify-content-between">
-                    <span>用戶 ${userUUID}</span>
-                    <button type="button" class="close" onclick="closeAdminChat('${userUUID}')">&times;</button>
+                <div class="chat-header d-flex justify-content-between" id="chatHeader-${userUUID}">
+                    <span>用戶  ${userUUID}</span>
+                    <button type="button" class="close" id="closeButton-${userUUID}">&times;</button>
                 </div>
                 <div class="chat-body" id="chatBox-${userUUID}"></div>
                 <div class="chat-footer d-flex">
-                    <input type="text" id="adminMessageInput-${userUUID}" class="form-control" placeholder="输入消息...">
-                    <button type="button" class="btn btn-primary ml-2" onclick="sendAdminMessage('${userUUID}')">发送</button>
-                </div>`;
+                    <input type="text" id="adminMessageInput-${userUUID}" class="form-control" placeholder="輸入消息...">
+                    <button type="button" class="btn btn-primary ml-2" id="sendButton-${userUUID}">發送</button>
+                    <div class="resize-handle"></div>
+                </div>`; 
+
             document.getElementById("adminChatContainer").appendChild(chatWindow);
+
+            // 關閉按鈕事件
+            document.getElementById(`closeButton-${userUUID}`).addEventListener("click", function() {
+                closeAdminChat(userUUID);
+            });
+
+            // 發送按鈕事件
+            document.getElementById(`sendButton-${userUUID}`).addEventListener("click", function() {
+                sendAdminMessage(userUUID);
+            });
+            
+            // 監聽輸入框的Enter按鍵事件
+            document.getElementById(`adminMessageInput-${userUUID}`).addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();  // 阻止默認行為
+                    sendAdminMessage(userUUID);  // 調用發送信息的函數
+                }
+            });
+
+            // 啟用拖曳
+            makeDraggable(chatWindow.id, `chatHeader-${userUUID}`); 
+            // 啟用縮放
+            makeResizable(chatWindow);
         }
 
+        //顯示聊天內容
         var chatBox = document.getElementById(`chatBox-${userUUID}`);
         chatBox.innerHTML += `<p>${message}</p>`;
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -72,9 +135,15 @@ document.addEventListener("DOMContentLoaded", function() {
         var input = document.getElementById(`adminMessageInput-${userUUID}`);
         var message = input.value;
         if (message.trim() !== "") {
-        	console.log(`发送消息给: ${userUUID}: ${message}`);
+            console.log(`发消息给: ${userUUID}: ${message}`);
             adminSocket.send("admin:" + userUUID + ":" + message);
-            input.value = "";
+
+            // 顯示管理員發送的信息
+            var chatBox = document.getElementById(`chatBox-${userUUID}`);
+            chatBox.innerHTML += `<p><strong>管理员:</strong> ${message}</p>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            input.value = "";  // 清空輸入框
         }
     }
 
@@ -83,8 +152,81 @@ document.addEventListener("DOMContentLoaded", function() {
         chatWindow.parentNode.removeChild(chatWindow);
     }
 
-    window.sendAdminMessage = sendAdminMessage; // 暴露到全局
+    window.closeAdminChat = closeAdminChat;
+    window.sendAdminMessage = sendAdminMessage;
 });
+
+function makeDraggable(el, handle) {
+    const dragElement = document.getElementById(el);
+    const dragHandle = document.getElementById(handle);
+    
+    if (!dragHandle || !dragElement) {
+        console.error(`找不到元素: ${el} 或 ${handle}`);
+        return;
+    }
+
+    // 設置為絕對位置，確保能被拖曳
+    dragElement.style.position = "absolute";
+
+    let offsetX = 0, offsetY = 0, mouseX = 0, mouseY = 0;
+
+    dragHandle.onmousedown = function (e) {
+        e.preventDefault();
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        document.onmousemove = onDrag;
+        document.onmouseup = stopDrag;
+    };
+
+    function onDrag(e) {
+        e.preventDefault();
+        offsetX = mouseX - e.clientX;
+        offsetY = mouseY - e.clientY;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        dragElement.style.top = (dragElement.offsetTop - offsetY) + "px";
+        dragElement.style.left = (dragElement.offsetLeft - offsetX) + "px";
+    }
+
+    function stopDrag() {
+        document.onmousemove = null;
+        document.onmouseup = null;
+    }
+}
+
+function makeResizable(el) {
+    const resizeHandle = el.querySelector('.resize-handle');
+    let isResizing = false;
+    let startX, startY, startWidth, startHeight;
+
+    resizeHandle.addEventListener('mousedown', function (e) {
+        isResizing = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = el.offsetWidth;
+        startHeight = el.offsetHeight;
+
+        document.addEventListener('mousemove', resizeElement);
+        document.addEventListener('mouseup', stopResize);
+    });
+
+    function resizeElement(e) {
+        if (isResizing) {
+            const newWidth = startWidth + (e.clientX - startX);
+            const newHeight = startHeight + (e.clientY - startY);
+            el.style.width = newWidth + 'px';
+            el.style.height = newHeight + 'px';
+        }
+    }
+
+    function stopResize() {
+        isResizing = false;
+        document.removeEventListener('mousemove', resizeElement);
+        document.removeEventListener('mouseup', stopResize);
+    }
+}
+
 
 </script>
 

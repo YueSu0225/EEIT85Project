@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class UserSessionManager {
 
-    // 使用 UUID 作为用户标识
+    // 使用 UUID 做分辨哪個人使用
     private final Map<String, String> userSessions = new ConcurrentHashMap<>();
 
     public void addUser(String userUUID, String sessionId) {
