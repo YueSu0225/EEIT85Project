@@ -311,6 +311,11 @@ public class ProductController {
 		}
 	}
 	
+	 @GetMapping("/search")
+	    public List<Product> searchProducts(@RequestParam(required = false) String key) {
+	        return productService.searchProductsByName(key);
+	    }
+	
 	
 	
 	
