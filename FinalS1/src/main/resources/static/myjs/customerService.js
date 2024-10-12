@@ -1,8 +1,8 @@
-let socket = null; // 声明全局变量
-let isChatOpen = false; // 标记聊天窗口是否打开
-let userUUID = null; // 用户 UUID
+let socket = null; // 全域變量
+let isChatOpen = false; // 聊天已關閉
+let userUUID = null; 
 
-// 检查会话并获取用户 UUID
+// 檢查 UUID
 function checkSession() {
     if (isChatOpen) {
         console.log("Chat is already open.");
@@ -12,7 +12,7 @@ function checkSession() {
     console.log('Checking session...');
     fetch('/final/checksession', {
         method: 'GET',
-        credentials: 'include' // 确保携带 cookies
+        credentials: 'include' // 確保攜帶cookies
     })
     .then(response => response.json())
     .then(data => {
@@ -20,7 +20,7 @@ function checkSession() {
         if (!userUUID) {
             throw new Error('User UUID is undefined');
         }
-        openChat(); // 连接 WebSocket
+        openChat(); // 連接 WebSocket
 		console.log("Attempting to open chat...");
     })
     .catch(error => {
@@ -28,34 +28,41 @@ function checkSession() {
     });
 }
 
-// 打开聊天窗口并连接 WebSocket
+// 打開聊天視窗并連接 WebSocket
 function openChat() {
     if (isChatOpen) {
-        return; // 如果已经打开，直接返回
+        return; // 如果已經打開，直接返回
     }
 
-    $("#chatWindow").show();  // 显示聊天窗口
-    $(".btn-primary").hide(); // 隐藏圆形按钮
+    $("#chatWindow").show();  // show聊天窗口
+    $(".btn-primary").hide(); // 隱藏按鈕
+	// 確保只應用於聊天窗口的外層容器
+	  $("#chatWindow").draggable().resizable();  // 使窗口可拖動可縮放
 	console.log("Connecting WebSocket with UUID:", userUUID);
 
-    // 创建 WebSocket 连接
+    // 創建 WebSocket 
     socket = new WebSocket("ws://localhost:8080/chat?uuid=" + userUUID);
 
-    // 监控 WebSocket 连接状态
+    // 監控 WebSocket 連接狀態
     socket.onopen = function() {
         console.log("WebSocket connection established.");
-        isChatOpen = true; // 标记聊天已打开
+        isChatOpen = true; // 聊天視窗已打開
     };
 
     socket.onmessage = function(event) {
         var chatBox = document.getElementById("chatBox");
-        chatBox.innerHTML += "<p>" + event.data + "</p>"; // 显示收到的消息
-        chatBox.scrollTop = chatBox.scrollHeight; // 保持滚动到底部
+		var message = event.data;
+console.log(message);
+
+		   // 所有收到的消息都是來自管理員
+		   chatBox.innerHTML += "<p class='admin-message'>客服: " + message + "</p>"; // 客服消息靠右
+
+		   chatBox.scrollTop = chatBox.scrollHeight; // 保持聊天內容最底部
     };
 
     socket.onclose = function() {
         console.log("WebSocket connection closed.");
-        isChatOpen = false; // 标记聊天已关闭
+        isChatOpen = false; // 聊天已關閉
     };
 
     socket.onerror = function(event) {
@@ -64,24 +71,31 @@ function openChat() {
 }
 
 function sendMessage() {
-    var input = document.getElementById("messageInput");
-    var message = input.value;
-    if (message.trim() !== "") {
-		var formattedMessage = userUUID + ":" + message;
-		       console.log("Sending message:", formattedMessage); // 打
-        socket.send(userUUID + ":" + message); // 发送给管理员
-        input.value = ""; // 清空输入框
-    }		else {
-		        console.log("Chat is not open or message is empty.");
-		    }
+	var input = document.getElementById("messageInput");
+	var message = input.value;
+	if (message.trim() !== "") {
+	    var formattedMessage = userUUID + ":" + message;
+	    console.log("Sending message:", formattedMessage);
+
+	    // 在發送前，直接在前端顯示“我: 消息内容”
+	    var chatBox = document.getElementById("chatBox");
+	    chatBox.innerHTML += "<p class='user-message'>我: " + message + "</p>"; // 使用者消息靠左
+	    chatBox.scrollTop = chatBox.scrollHeight; // 保持聊天内容最底部
+
+	    // 發送消息給後台
+	    socket.send(formattedMessage); 
+	    input.value = ""; // 清空输入框
+	} else {
+	    console.log("Chat is not open or message is empty.");
+	}
 }
 
 function closeChat() {
-    $("#chatWindow").hide(); // 隐藏聊天窗口
-    $(".btn-primary").show(); // 显示按钮
+    $("#chatWindow").hide(); // 隱藏聊天視窗
+    $(".btn-primary").show(); // 顯示紐
     if (socket) {
-        socket.close(); // 关闭 WebSocket 连接
-        isChatOpen = false; // 标记聊天为关闭
+        socket.close(); // 關閉 WebSocket 連接
+        isChatOpen = false; // 聊天已關閉
 
     }
 }

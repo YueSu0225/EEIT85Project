@@ -55,11 +55,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             String chatMessage = parts[1]; // 聊天内容
 
             // 发送消息给目标用户
-            WebSocketSession userSession = userSessions.get(targetUUID);
-            if (userSession != null && userSession.isOpen()) {
-                userSession.sendMessage(new TextMessage(chatMessage));
-                System.out.println("用户 " + targetUUID + " 发送消息: " + chatMessage);
-            }
+//            WebSocketSession userSession = userSessions.get(targetUUID);
+//            if (userSession != null && userSession.isOpen()) {
+//                userSession.sendMessage(new TextMessage(chatMessage));
+//                System.out.println("用户 " + targetUUID + " 发送消息: " + chatMessage);
+//            }
 
             // 广播给所有管理员
             for (WebSocketSession adminSession : adminSessions.keySet()) {

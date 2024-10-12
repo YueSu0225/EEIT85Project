@@ -30,7 +30,7 @@
       <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   </head>
   <style>
-        /* 隐藏聊天窗口初始状态 */
+        /* 先隱藏聊天室 */
         #chatWindow {
             display: none;
             position: fixed;
@@ -85,6 +85,19 @@
         }
         .btn-no-padding {
     padding: 0 ; 
+}
+/* 使用者的消息样式（靠左显示） */
+.user-message {
+    text-align: left;
+    color: blue;
+    margin: 5px;
+}
+
+/* 管理员的消息样式（靠右显示） */
+.admin-message {
+    text-align: right;
+    color: green;
+    margin: 5px;
 }
 
         /* 響應式設計 */
