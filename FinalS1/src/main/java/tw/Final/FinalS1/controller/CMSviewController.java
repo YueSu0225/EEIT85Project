@@ -116,12 +116,12 @@ public class CMSviewController {
 	
 	//--------------------------------------------
 	// 產品清單頁面
-	@RequestMapping("/productlist")
-	public String productlist(@RequestParam(value = "key", required = false) String key, Model model) {
-		List<Product> products = productService.searchProductsByName(key);  // 查詢產品
-		model.addAttribute("products", products);  // 將查詢結果放入模型
-		return "productlist";
-	}
+
+	
+	 @GetMapping("/productlist")
+	    public String showProductList(	Model model) {
+	        return "productlist"; // 返回模板的名称，即 productlist.html
+	    }
 	
 	@GetMapping("/product/{productId}")
 	public Product getProductById(@PathVariable Long productId, Model model) {

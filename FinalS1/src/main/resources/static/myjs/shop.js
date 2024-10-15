@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
             data.forEach(product => {
                 let inWishlist = wishlistItems.includes(product.id); // 檢查該商品是否在願望清單中
                 let heartClass = inWishlist ? 'added-to-wishlist' : ''; // 設置愛心樣式
+				noProductsMessage.style.display = 'none';
 
                 const productHTML = `
                     <div class="col-md-6 col-lg-3 ftco-animate1">
