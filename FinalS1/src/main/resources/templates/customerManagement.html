@@ -11,8 +11,10 @@
 
 <script>
 let isChatWindowOpen = false;  // 是否已經打開聊天視窗
+let messageStore = {};   // 用來儲存每個 userUUID 的消息
 
 document.addEventListener("DOMContentLoaded", function() {
+	 // 創建 WebSocket (如果使用ngrok要使用wss://xxxxxxx.ngrok-free.app/)
     var adminSocket = new WebSocket("ws://localhost:8080/chat?admin=true");
 
     adminSocket.onopen = function() {
@@ -30,24 +32,61 @@ document.addEventListener("DOMContentLoaded", function() {
         if (data.length === 2) {
             var userUUID = data[0];
             var message = data[1];
+            // 儲存消息到 messageStore
+            if (!messageStore[userUUID]) {
+                messageStore[userUUID] = [];
+            }
+            messageStore[userUUID].push(message);
             
             // 創建新的按鈕帶UUID+mesg
             createNewMessageButton(userUUID, message);
+            
+            // 即使按鈕隱藏了，也要重新顯示它
+            var button = document.querySelector(`[data-userUUID="${userUUID}"]`);
+            if (button) {
+                button.style.display = "block";  // 確保按鈕重新顯示
+            }
+            
             // 觸發按鈕閃爍
             flashNewMessageButton(userUUID);
+            // 使用 fetch ，通過 UUID 獲取使用者名字
+            fetchUserNameByUUID(userUUID);
+            // 更新聊天室窗內容
+            updateChatBox(userUUID, message);
 
         } else {
             console.error("信息格式不正確:", event.data);
         }
     };
 
+    function updateChatBox(userUUID, message) {
+        var chatBox = document.getElementById(`chatBox-${userUUID}`);
+        if (chatBox) {
+            chatBox.innerHTML += `<p>${message}</p>`;
+            chatBox.scrollTop = chatBox.scrollHeight;  // 滾到最新消息
+            // 如果視窗隱藏,顯示按鈕
+            var chatWindow = document.getElementById(`chatWindow-${userUUID}`);
+            if (chatWindow && chatWindow.style.display === "none") {
+                var button = document.querySelector(`[data-userUUID="${userUUID}"]`);
+                if (button) {
+                    button.style.display = "block";
+                }
+            }
+        } else {
+            console.error(`聊天框未找到: chatBox-${userUUID}`);
+        }
+    }
+
+    
     function createNewMessageButton(userUUID, message) {
-        // 假查是否已經有這顆按鈕了
+        // 檢查是否已經有這顆按鈕了
         var existingButton = document.querySelector(`[data-userUUID="${userUUID}"]`);
         if (existingButton) {
+            if (existingButton.style.display === "none") {
+                existingButton.style.display = "block";  // 如果按鈕存在且隱藏，重新顯示
+            }
             return;  // 如果按鈕已經存在，直接返回
         }
-
         // 創建新按鈕元素在右下角
         var button = document.createElement("button");
         button.className = "btn btn-warning";  
@@ -79,6 +118,37 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    function fetchUserNameByUUID(userUUID) {
+        // 使用 fetch 到後端
+        fetch(`/final/getUserNameByUUID?uuid=${userUUID}`)
+            .then(response => response.json()) // 解析 JSON 
+            .then(data => {
+                if (data.success) {
+                    const userName = data.userName; // 獲取使用者名字
+                    // 更新界面                   
+                	const userNameSpan = document.getElementById(`userNameSpan-${userUUID}`);
+                  //console.log("使用者名字" + userName);
+                   if (userNameSpan) {
+                    userNameSpan.innerText = `用戶 ${userName}`;
+                }
+                } else {
+                    console.error("无法获取用户信息:", data.message);
+                }
+            })
+            .catch(error => console.error("获取用户姓名时出错:", error));
+    }
+
+    function updateUserNameInUI(userUUID, userName) {
+        // 設置顯示使用者信息的元素
+        const userElement = document.getElementById(`user-${userUUID}`);
+        if (userElement) {
+            userElement.innerText = userName; // 將使用者名字顯示在視窗上
+        }
+    }
+
+    
+    
+    
     function openAdminChatWindow(userUUID, message) {
         let chatWindow = document.getElementById("adminChatContainer").querySelector(`#chatWindow-${userUUID}`);
 
@@ -89,16 +159,19 @@ document.addEventListener("DOMContentLoaded", function() {
             chatWindow.id = `chatWindow-${userUUID}`;
             chatWindow.innerHTML = `
                 <div class="chat-header d-flex justify-content-between" id="chatHeader-${userUUID}">
-                    <span>用戶  ${userUUID}</span>
+                    <span id="userNameSpan-${userUUID}">用戶  ${userUUID}</span>
                     <button type="button" class="close" id="closeButton-${userUUID}">&times;</button>
                 </div>
-                <div class="chat-body" id="chatBox-${userUUID}"></div>
+                <div class="chat-body" id="chatBox-${userUUID}" style="height: 300px;"></div>
                 <div class="chat-footer d-flex">
                     <input type="text" id="adminMessageInput-${userUUID}" class="form-control" placeholder="輸入消息...">
                     <button type="button" class="btn btn-primary ml-2" id="sendButton-${userUUID}">發送</button>
                     <div class="resize-handle"></div>
                 </div>`; 
-
+			
+             // 調用獲取userName的函數
+            fetchUserNameByUUID(userUUID);    
+                
             document.getElementById("adminChatContainer").appendChild(chatWindow);
 
             // 關閉按鈕事件
@@ -125,32 +198,58 @@ document.addEventListener("DOMContentLoaded", function() {
             makeResizable(chatWindow);
         }
 
-        //顯示聊天內容
-        var chatBox = document.getElementById(`chatBox-${userUUID}`);
-        chatBox.innerHTML += `<p>${message}</p>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
+        // 顯示所有儲存的消息
+        displayStoredMessages(userUUID);
+    
     }
 
+    function displayStoredMessages(userUUID) {
+        const chatBox = document.getElementById(`chatBox-${userUUID}`);
+        if (messageStore[userUUID]) {
+            messageStore[userUUID].forEach(message => {
+                chatBox.innerHTML += `<p>${message}</p>`;
+            });
+            chatBox.scrollTop = chatBox.scrollHeight;  // 滾動到最新消息
+        }
+    }
+    
+    
+    
     function sendAdminMessage(userUUID) {
         var input = document.getElementById(`adminMessageInput-${userUUID}`);
         var message = input.value;
         if (message.trim() !== "") {
-            console.log(`发消息给: ${userUUID}: ${message}`);
+            console.log(`發消息给: ${userUUID}: ${message}`);
             adminSocket.send("admin:" + userUUID + ":" + message);
 
             // 顯示管理員發送的信息
             var chatBox = document.getElementById(`chatBox-${userUUID}`);
-            chatBox.innerHTML += `<p><strong>管理员:</strong> ${message}</p>`;
+            chatBox.innerHTML += `<p><strong>管理員:</strong> ${message}</p>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
             input.value = "";  // 清空輸入框
+            // 儲存消息
+            if (!messageStore[userUUID]) {
+                messageStore[userUUID] = [];
+            }
+            messageStore[userUUID].push(`<p><strong>管理員:</strong> ${message}</p>`);
+
         }
     }
 
     function closeAdminChat(userUUID) {
         var chatWindow = document.getElementById(`chatWindow-${userUUID}`);
-        chatWindow.parentNode.removeChild(chatWindow);
+        if (chatWindow) {
+            chatWindow.parentNode.removeChild(chatWindow);
+        }
+
+        // 重新顯示按鈕
+        var button = document.querySelector(`[data-userUUID="${userUUID}"]`);
+        if (button) {
+            button.style.display = "block";  // 重新顯示按鈕
+        }
     }
+
 
     window.closeAdminChat = closeAdminChat;
     window.sendAdminMessage = sendAdminMessage;

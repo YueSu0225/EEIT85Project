@@ -2,10 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <style>
 .product-image {
-	width: 50px ;
-	height: 50px ;
+	width: 50px;
+	height: 50px;
 	object-fit: cover; /* 確保圖片被裁剪成合適的比例，不會拉伸 */
-	border: 1px solid #ddd; /* 增加邊框，讓圖片更清晰 */
+	border: 1px solid #ddd;
+	height: 50px; /* 增加邊框，讓圖片更清晰 */
 }
 </style>
 
@@ -17,26 +18,24 @@
 
 	<div class="container">
 		<h1 class="text-center">商品管理</h1>
-		
-		 <div class="select-category mb-4">
-            <label for="category" class="form-label">選擇分類:</label>
-            <select class="form-select" id="category" onchange="loadProductsByCategory()">
-                <option value="1">男裝</option>
-                <option value="2">女裝</option>
-                <option value="3">童裝</option>
-                
-            </select>
-        </div>
+
+		<div class="select-category mb-4">
+			<label for="category" class="form-label">選擇分類:</label> <select
+				class="form-select" id="category"
+				onchange="loadProductsByCategory()">
+				<option value="1">男裝</option>
+				<option value="2">女裝</option>
+				<option value="3">童裝</option>
+
+			</select>
+		</div>
 
 		<!-- 查詢表單 -->
 		<div class="search-bar mb-4">
-			<form action="#" th:action="@{/productlist}" method="get">
-				<div class="input-group">
-					<input type="text" class="form-control" id="search" name="key"
-						placeholder="輸入商品名稱">
-					<div class="input-group-append">
-						<button class="btn btn-primary" type="submit">搜尋</button>
-					</div>
+			<form action="#" class="search-form" onsubmit="return false;">
+				<div class="form-group">
+					<span class="icon ion-ios-search"></span> <input type="text"
+						class="form-control" id="search-input" placeholder="搜尋...">
 				</div>
 			</form>
 		</div>
@@ -53,38 +52,16 @@
 					<th></th>
 				</tr>
 			</thead>
-			<tbody id = "product-list" th:each="product : ${products}">
-				<tr>
-					<td style="width: 50px; height: 50px;"><img
-						th:src="'data:image/jpeg;base64,' + ${product.image}" alt="商品圖片"
-						class="product-image"></td>
-					<td th:text="${product.name}">產品名稱</td>
-					<td th:text="${product.type.name}">版型</td>
-					<td th:text="${product.category.name}">種類</td>
-					<td th:text="${product.price}">價格</td>
-					<td>
-						<button class="btn btn-primary btn-sm"
-							th:onclick="'toggleVariants(' + ${product.id} + ')'">查看</button>
-						<button class="btn btn-danger btn-sm"
-							th:onclick="'deleteProduct(' + ${product.id} + ')'">刪除</button>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="5">
-						<div th:id="'variant-container-' + ${product.id}"
-							class="variant-container">
-							<!-- 變體內容將在這裡動態加載 -->
-						</div>
-					</td>
-				</tr>
+			<tbody id="product-list">
+				<!-- 商品列表將通過 JavaScript 動態加載 -->
 			</tbody>
 		</table>
 	</div>
 
-	
-	
-	
-	
+
+
+
+
 	<script th:inline="javascript">
     function toggleVariants(productId) {
         const variantContainer = document.getElementById(`variant-container-${productId}`);
@@ -139,6 +116,69 @@
     }
     
  // 顯示編輯彈窗
+  const searchInput = document.getElementById('search-input');
+   searchInput.addEventListener('input', function() {
+       const query = searchInput.value;
+       searchProducts(query);
+   });
+   
+   function searchProducts(query) {
+	        const productList = document.getElementById('product-list');
+	    fetch(`/products/search?key=${encodeURIComponent(query)}`, {
+	        method: 'GET',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        }
+	    })
+	    .then(response => response.json())
+	    .then(products => {
+	        productList.innerHTML = ''; 
+	        
+	        if (products.length === 0) {
+                productList.innerHTML = '<tr><td colspan="5">沒有找到商品。</td></tr>';
+                return;
+            }
+
+            products.forEach(product => {
+               
+               
+                
+
+                let productRow = `<tr>
+                                    <td style="width: 50px; height: 50px;">
+                                        <img src="data:image/jpeg;base64,${product.image}" alt="商品圖片" class="product-image">
+                                    </td>
+                                    <td>${product.name}</td>
+                                    <td>${product.type.name}</td>
+                                    <td>${product.category.name}</td>
+                                    <td>${product.price}</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" onclick="toggleVariants(${product.id})">查看</button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">刪除</button>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="5">
+                                        <div id="variant-container-${product.id}" class="variant-container" style="display: none;">
+                                            <!-- 變體內容將在這裡動態加載 -->
+                                        </div>
+                                    </td>
+                                  </tr>`;
+
+                productList.innerHTML += productRow;
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching products:', error);
+            productList.innerHTML = '<tr><td colspan="5">加載商品時發生錯誤。</td></tr>';
+        });
+}
+
+	        
+	        
+	        
+ 
+ 
    function submitVariantUpdate(variantId) {
     	 const newStock = document.getElementById(`stock-${variantId}`).value;
     	 const newPrice = document.getElementById(`price-${variantId}`).value;
@@ -188,11 +228,9 @@
 	            }
 
 	            products.forEach(product => {
-	                // 檢查每個商品的分類ID是否與選擇的categoryId一致
-	                if (product.category.id !== parseInt(categoryId)) {
-	                    console.warn(`商品 ${product.name} 的分類ID與選擇的不一致`);
-	                    return; // 跳過這個不符合的商品
-	                }
+	               
+	               
+	                
 
 	                let productRow = `<tr>
 	                                    <td style="width: 50px; height: 50px;">
@@ -223,6 +261,12 @@
 	            productList.innerHTML = '<tr><td colspan="5">加載商品時發生錯誤。</td></tr>';
 	        });
 	}
+  
+   
+// 页面加载完成后，加载默认分类的商品列表
+   document.addEventListener('DOMContentLoaded', function() {
+       loadProductsByCategory();
+   });
 
 
     </script>
