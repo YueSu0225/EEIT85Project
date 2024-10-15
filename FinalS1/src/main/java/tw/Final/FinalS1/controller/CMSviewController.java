@@ -1,6 +1,7 @@
 package tw.Final.FinalS1.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.web.bind.annotation.*;
 
-
 import tw.Final.FinalS1.dto.RegisterRequest;
-
 import tw.Final.FinalS1.model.Product;
 import tw.Final.FinalS1.model.ProductVariant;
 import tw.Final.FinalS1.model.Category;
@@ -76,6 +75,8 @@ public class CMSviewController {
 	
 	@Autowired
 	private UserRepository userRepository;
+
+
 	
 	// 这是信箱验证码的信件内容（与后台无关，勿动）
 	@RequestMapping("/emailCode")
@@ -227,8 +228,7 @@ public class CMSviewController {
 	    public String showcmsHomePage() {
 	        return "index";  
 	    }
-	
-	
+	 
 	@GetMapping("/loadPageContent")
 	public String loadPageContent(@RequestParam String page) {
 		 if ("productlist".equals(page)) {
@@ -249,7 +249,9 @@ public class CMSviewController {
 	     // 其他頁面邏輯
 	     return "fragments/default :: content";
 			}
-		}
+	
+	
+}
 	
 	
 	

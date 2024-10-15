@@ -115,31 +115,8 @@
 
 
 </head>
-
 <body class="goto-here">
-	<!-- <div class="py-1 bg-primary">
-		<div class="container">
-			<div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
-				<div class="col-lg-12 d-block">
-					<div class="row d-flex">
-						<div class="col-md pr-4 d-flex topper align-items-center">
-							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
-									class="icon-phone2"></span></div>
-							<span class="text">+ 1235 2355 98</span>
-						</div>
-						<div class="col-md pr-4 d-flex topper align-items-center">
-							<div class="icon mr-2 d-flex justify-content-center align-items-center"><span
-									class="icon-paper-plane"></span></div>
-							<span class="text">youremail@email.com</span>
-						</div>
-						<div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
-							<span class="text">3-5 Business days delivery &amp; Free Returns</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> -->
+
 	<div class="container">
 		<div>
 			<form action="./AboutUs.html" class="search-form">
@@ -201,8 +178,11 @@
 						</div></li>
 					<li class="nav-item cta cta-colored"><a href="wishlist.html"
 						class="nav-link" id="icon-wish"><span class="icon-heart"></span></a></li>
-					<li class="nav-item cta cta-colored"><a href="cart.html"
-						class="nav-link" id="cart-icon"><span class="icon-shopping_cart"></span>[0]</a></li>
+					<li class="nav-item cta cta-colored">
+						<a href="cart.html"class="nav-link" id="cart-icon">
+							<span class="icon-shopping_cart"></span>[<span id="cart-count">0</span>]
+						</a>
+					</li>
 
 				</ul>
 			</div>
@@ -583,7 +563,7 @@
 	<script src="myjs/logout.js"></script>
 	<script src="myjs/leo.js"></script>
 	<script src="myjs/home.js"></script>
-	
+	<script src="myjs/cartCount.js"></script>
 </body>
 
 </html>

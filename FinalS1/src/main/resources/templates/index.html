@@ -14,13 +14,15 @@
 <!-- 分頁 -->
 <div id="tabs">
 	<ul id="tabs-container">
-	<!-- 動態分頁生成位置 -->
+		<li th:each="tab, stat : ${tabs}" th:classappend="${stat.index == 0} ? 'active'" 
+            	th:text="${tab.title}" th:data-url="${tab.url}"></li>
 	</ul>
 </div>
 
 <!-- 分頁內容 -->
 <div id="tab-content">
 	<!-- 分頁內容生成位置 -->
+	<h1>hi</h1>
 </div>
 
 <script th:inline="javascript">
