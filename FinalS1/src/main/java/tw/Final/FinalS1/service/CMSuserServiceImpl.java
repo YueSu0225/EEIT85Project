@@ -58,4 +58,11 @@ public class CMSuserServiceImpl implements CMSuserService{
         userRepository.deleteById(id); 
     
 	}
+
+	@Override
+	public String findUserNameByUUID(String uuid) {
+		UserModel users = userRepository.findByUuid(uuid);
+		String userName = users.getUserInfoMedel().getName();
+		return userName;
+	}
 }

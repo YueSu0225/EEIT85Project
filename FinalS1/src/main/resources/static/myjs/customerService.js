@@ -63,7 +63,7 @@ function openChat() {
 	  $("#chatWindow").draggable().resizable();  // 使窗口可拖動可縮放
 	console.log("Connecting WebSocket with UUID:", userUUID);
 
-    // 創建 WebSocket 
+    // 創建 WebSocket (如果使用ngrok要使用wss://xxxxxxx.ngrok-free.app/)
     socket = new WebSocket("ws://localhost:8080/chat?uuid=" + userUUID);
 
     // 監控 WebSocket 連接狀態

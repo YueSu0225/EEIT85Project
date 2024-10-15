@@ -10,4 +10,6 @@ public interface CMSuserService {
 	public void updateUser(RegisterRequest request);
 	
 	public void deleteUserById(Long id);
+	
+	public String findUserNameByUUID(String uuid);
 }
