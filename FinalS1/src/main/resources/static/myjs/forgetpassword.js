@@ -49,14 +49,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.getElementById("sendEmailCode").addEventListener("click", function(event) {
-    event.preventDefault(); // 阻止表单的默认提交行为
+    event.preventDefault(); // 阻止表單默認提交行為
 
-    // 获取输入的邮箱地址
+    // 獲取使用者輸入的信箱
     const email = document.getElementById("email").value;
 
+	Swal.fire({
+	                icon: 'success',
+	                title: '驗證碼已發送，請檢查您的信箱。',
+	                timer: 3000,  // 2秒後關閉
+	                showConfirmButton: false  // 顯示確認按鈕，立即可操作
+	            });
 
-
-    // 发送 POST 请求到后端
+   
     fetch("/final/sendCode", {
         method: "POST",
         headers: {
@@ -73,14 +78,14 @@ document.getElementById("sendEmailCode").addEventListener("click", function(even
     .then(data => {
         if (data.success) {
 			// 顯示輸入框和按鈕
-			localStorage.setItem("jwtToken", data.jwtToken); // 将JWT存储在localStorage
+			localStorage.setItem("jwtToken", data.jwtToken); // 將JWT儲存在localStorage
 
 			document.getElementById("confirmationSection").style.display = "inline-block";
-			alert("驗證碼已發送，請檢察您的信箱。");
+
 			
-			// 禁用按钮并设置计时器
+			// 禁止按鈕並設置計時器
 			          const sendEmailButton = document.getElementById("sendEmailCode");
-			          sendEmailButton.disabled = true; // 禁用按钮
+			          sendEmailButton.disabled = true; // 禁止按鈕
 			          let countdown = 60; // 倒數計時60秒
 
 			          const countdownInterval = setInterval(() => {
@@ -89,7 +94,7 @@ document.getElementById("sendEmailCode").addEventListener("click", function(even
 
 			              if (countdown < 0) {
 			                  clearInterval(countdownInterval); // 清除計時器
-			                  sendEmailButton.disabled = false; // 一分钟后启用按钮
+			                  sendEmailButton.disabled = false; // 一分後啟用按鈕
 			                  sendEmailButton.innerText = "發送驗證碼"; // 重置按鈕文字
 			              }
 			          }, 1000); // 每秒更新一次
@@ -107,15 +112,15 @@ let isEmailVerified = false;  // 全局變量，用於追蹤信箱是否已驗�
 document.getElementById("confirmCode").addEventListener("click", function() {
        const verificationCode = document.getElementById("verificationCode").value;
 	   const resultElement = document.getElementById("result");
-       // 獲取JWT token（可以通过其他方式获取，比如从后端响应中获取）
-       const jwtToken = localStorage.getItem("jwtToken"); // 假設你將tokenh儲存在localStorage中
+       // 獲取JWT token
+       const jwtToken = localStorage.getItem("jwtToken"); // 將jwtToken從localStorage中拿出
 		
        if (!verificationCode) {
            document.getElementById("result").innerText = "請輸入驗證碼";
            return;
        }
 
-       // 发送AJAX请求到后端验证验证码
+       
        fetch('/final/verifyCode', {
            method: 'POST',
            headers: {
@@ -155,7 +160,7 @@ document.getElementById("confirmCode").addEventListener("click", function() {
 
 	
    document.querySelector('input[type="submit"]').addEventListener('click', function(event) {
-       event.preventDefault(); // 阻止默认提交行为
+       event.preventDefault(); // 阻止表單默認提交行為
 
        const email = document.getElementById('email').value; // 从前面已经輸入的 email 
        const password = document.getElementById('password').value;
@@ -186,19 +191,31 @@ document.getElementById("confirmCode").addEventListener("click", function() {
                "Content-Type": "application/json",
            },
            body: JSON.stringify({
-               account: email,       // 傳送输入的信箱
-               password: password    // 傳送输入的新密码
+               account: email,       // 傳送輸入的信箱
+               password: password    // 傳送輸入的新密碼
            })
        })
        .then(response => response.json())
-       .then(data => {
-           if (data.success) {
-               alert("密碼更新成功！");
-			   window.location.href = '/SignIn.html';
-           } else {
-               alert("密碼更新失敗: " + data.message);
-           }
-       })
+	   .then(data => {
+	       if (data.success) {
+	           Swal.fire({
+	               icon: 'success',
+	               title: '密碼更新成功',
+	               timer: 2000,  // 2秒後自動關閉
+	               showConfirmButton: false
+	           }).then(() => {
+	               window.location.href = '/SignIn.html';  // 提示框關閉後進行跳轉
+	           });
+	       } else {
+	           Swal.fire({
+	               icon: 'error',
+	               title: '密碼更新失敗',
+	               text: data.message || '請再試一次',
+	               timer: 2000,  // 2秒後自動關閉
+	               showConfirmButton: false
+	           });
+	       }
+	   })
        .catch(error => {
            alert("發生錯誤: " + error.message);
        });

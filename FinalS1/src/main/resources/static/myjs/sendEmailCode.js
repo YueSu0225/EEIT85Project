@@ -17,7 +17,7 @@ document.getElementById("sendEmailCode").addEventListener("click", function(even
 	 Swal.fire({
 	                icon: 'success',
 	                title: '驗證碼已發送，請檢查您的信箱。',
-	                timer: 2000,  // 2秒後關閉
+	                timer: 3000,  // 3秒後關閉
 	                showConfirmButton: false  // 顯示確認按鈕，立即可操作
 	            });
     // 發送 POST 請求到後端
