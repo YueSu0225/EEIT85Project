@@ -45,7 +45,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             WebSocketSession userSession = userSessions.get(targetUUID);
             if (userSession != null && userSession.isOpen()) {
                 userSession.sendMessage(new TextMessage(chatMessage));
-                System.out.println("管理员发送消息给用户 " + targetUUID + ": " + chatMessage);
+                System.out.println("管理員發送消息给使用者 " + targetUUID + ": " + chatMessage);
             } else {
                 System.out.println("使用者: "+ targetUUID + " 不在線或不存在");
             }
@@ -58,7 +58,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             for (WebSocketSession adminSession : adminSessions.keySet()) {
                 if (adminSession.isOpen()) {
                     adminSession.sendMessage(new TextMessage(targetUUID + ": " + chatMessage));
-                    System.out.println("廣播给所有後台管理员: " + targetUUID + ": " + chatMessage);
+                    System.out.println("廣播给所有後台管理員: " + targetUUID + ": " + chatMessage);
                 }
             }
         } else {
