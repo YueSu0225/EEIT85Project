@@ -58,7 +58,7 @@ function openChat() {
     }
 
     $("#chatWindow").show();  // show聊天窗口
-    $(".btn-primary").hide(); // 隱藏按鈕
+    $("#chatButton").hide(); // 隱藏按鈕
 	// 確保只應用於聊天窗口的外層容器
 	  $("#chatWindow").draggable().resizable();  // 使窗口可拖動可縮放
 	console.log("Connecting WebSocket with UUID:", userUUID);
