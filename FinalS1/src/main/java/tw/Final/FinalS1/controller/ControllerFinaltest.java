@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import tw.Final.FinalS1.dto.RegisterRequest;
 import tw.Final.FinalS1.model.*;
+import tw.Final.FinalS1.service.CMSuserService;
 import tw.Final.FinalS1.service.UserService;
 import tw.Final.FinalS1.service.emailCodeService;
 
@@ -32,6 +33,9 @@ public class ControllerFinaltest {
 	
 	@Autowired
 	private emailCodeService emailCodeService;
+	
+	@Autowired
+	private CMSuserService cmSuserService;
 	
 	
 	@PostMapping("/register")
@@ -115,5 +119,17 @@ public class ControllerFinaltest {
     @GetMapping("/orderdetails")
     public ResponseEntity<Map<String, Object>> orderDetails(HttpSession session){
     	return finalUserService.userOrderDetails(session);
+    }
+    
+    
+    @GetMapping("/getUserNameByUUID")
+    public ResponseEntity<?> getUserNameByUUID(@RequestParam String uuid) {     
+            String userName = cmSuserService.findUserNameByUUID(uuid); // 查詢使用者名字
+            if (userName != null) {
+                return ResponseEntity.ok(Map.of("success", true, "userName", userName));
+            } else {
+                return ResponseEntity.ok(Map.of("success", false, "message", "使用者不存在"));
+            }
+
     }
 }
