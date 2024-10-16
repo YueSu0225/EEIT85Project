@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 	
 	passwordInput.addEventListener('input', function () {
-	       errorPasswordMsg.textContent = ''; // 當用戶輸入時清空錯誤訊息
+	       errorPasswordMsg.textContent = ''; // 當用戶輸入時,清空錯誤訊息
 	   });
 	
     function login() {
@@ -57,13 +57,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		            icon: 'success',
 		            title: '登入成功',
 		            text: '歡迎回來!',
-		            timer: 2300,  // 设置弹窗显示时间，2秒后跳转
+		            timer: 2300,  //設置談窗時間,2.3秒跳轉
 		            showConfirmButton: false  // 不显示确认按钮
 		        }).then(() => {
-		            window.location.href = '/Home.html';  // 弹窗动画结束后跳转
+		            window.location.href = '/Home.html';  // 動畫結束後跳轉
 		        });
 		    } else {
-		        // 如果登入失败，显示密码错误信息
+		        // 如果登入失敗,顯示密碼錯誤
 		        errorPasswordMsg.textContent = '密碼錯誤';
 		    }
 		})

@@ -102,7 +102,7 @@ public class ControllerFinaltest {
     public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody Map<String, String> request) {
         System.out.println("Request: " + request); // 打印請求信息
 
-        return emailCodeService.processVerification(request); // 确保调用了processVerification
+        return emailCodeService.processVerification(request);
     }
     
     @PostMapping("/forgetpassword")

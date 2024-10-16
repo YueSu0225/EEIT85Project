@@ -1,6 +1,7 @@
 package tw.Final.FinalS1.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.web.bind.annotation.*;
 
-
 import tw.Final.FinalS1.dto.RegisterRequest;
-
 import tw.Final.FinalS1.model.Product;
 import tw.Final.FinalS1.model.ProductVariant;
 import tw.Final.FinalS1.model.Category;
@@ -76,6 +75,8 @@ public class CMSviewController {
 	
 	@Autowired
 	private UserRepository userRepository;
+
+
 	
 	// 这是信箱验证码的信件内容（与后台无关，勿动）
 	@RequestMapping("/emailCode")
@@ -222,19 +223,50 @@ public class CMSviewController {
 
 
 	
+	//-----------------------------------------------------------------
+	// 頁面管理
+	
+	 @GetMapping("/CM")
+	    public String showMangent(Model model) {
+	        return "contentManagement";
+	    }
+	 
+	 @GetMapping("/CM2")
+	    public String showMangent2(Model model) {
+	        return "contentManagement2";
+	    }
+	
+	
 //page功能 測試
-@GetMapping("/loadPageContent")
-public String loadPageContent(@RequestParam("page") String page,Model model) {
-	switch(page) {
-	case"user":
-		return "fragments/userManagemant :: content";
-	case"productlist":
-		return "fragments/productlist :: content";
-	 default:
-         // 如果沒有匹配的情況，返回 "not found" 頁面
-         return "fragments/notFound :: content";	
-		}
-	}
+	 @GetMapping("/cmshome")  // 設定路由
+	    public String showcmsHomePage() {
+	        return "index";  
+	    }
+	 
+	@GetMapping("/loadPageContent")
+	public String loadPageContent(@RequestParam String page) {
+		 if ("productlist".equals(page)) {
+	         return "fragments/productlist :: content"; // 返回指定頁面的 Thymeleaf 片段
+	     } else if ("dashboard".equals(page)) {
+	         return "fragments/dashboard :: content";
+	     } else if("overview".equals(page)) {
+	    	 return "fragments/overview :: overview";
+	     } else if("users".equals(page)) {
+	    	 return "fragments/users :: users";
+	     } else if("products/add}".equals(page)) {
+	    	 return "fragments/products/add} :: products/add}";
+	     } else if("orders".equals(page)) {
+	    	 return "fragments/orders :: orders";
+	     } else if("pagemanagement".equals(page)) {
+	    	 return "fragments/pagemanagement :: pagemanagement";
+	     }
+	     // 其他頁面邏輯
+	     return "fragments/default :: content";
+			}
+	
+	
+
+	
 }
 	
 	

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		
         const emailInputValue = this.value;
 
-        // 简单的 email 正则表达式检查
+        // email簡化版驗證格式
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailPattern.test(emailInputValue)) {

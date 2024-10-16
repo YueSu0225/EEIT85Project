@@ -5,7 +5,8 @@
 <title>後台管理系统</title>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-	
+
+<link rel="stylesheet" href="../static/css/custom.css">
 <style>
 body {
 	background-color: #f8f9fa;
@@ -121,75 +122,31 @@ body {
 				<li class="nav-item"><a class="nav-link" th:href="@{/products/add}">商品上架</a></li>
 				<li class="nav-item"><a class="nav-link" href="/productlist">商品管理</a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/orders}">訂單管理</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/content}">內容管理</a></li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle"
+					 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+					 th:href="@{/content}">內容管理</a>
+					 <div class="dropdown-menu-cms" aria-labelledby="dropdown04">
+							<a class="dropdown-item" th:href="@{/CM}">主頁橫幅管理</a> 
+							<a class="dropdown-item" th:href="@{/CM2}">主頁類別管理</a> 
+							<a class="dropdown-item" href="#">其他</a> 
+						</div>
+					 
+				</li>
 				<li class="nav-item"><a class="nav-link"
 					th:href="@{/payment-services}">支付與服務管理</a></li>
 				<li class="nav-item"><a class="nav-link"
 					th:href="@{/customer-support}">客服管理</a></li>
 			</ul>
 		</div>
+	
+	
+
 		
 		
 		
 		
-		
-		
-		
-		 <!-- 分頁測試 先勿動 -->
-		 <!-- 分頁容器 -->
-    <div id="tabs">
-        <ul id="tabs-container">
-            <!-- 動態生成的分頁標籤會插入這裡 -->
-        </ul>
-    </div>
+	
     
-     <!-- 分頁內容容器 -->
-    <div id="tab-content">
-        <!-- 分頁對應的內容將顯示在這裡 -->
-    </div>
-    
-     <script th:inline="javascript">
-        /* 這段 Javascript 將會處理 Thymeleaf 與動態分頁的結合 */
-        document.querySelectorAll('#sidebar a').forEach(item => {
-            item.addEventListener('click', function(event) {
-                event.preventDefault();
-                const pageName = this.getAttribute('data-page'); // 獲取點擊的頁面名稱
-
-                // 檢查分頁是否已經存在
-                const existingTab = document.querySelector(`#tabs-container li[data-page="${pageName}"]`);
-
-                if (!existingTab) {
-                    // 創建新分頁
-                    const newTab = document.createElement('li');
-                    newTab.setAttribute('data-page', pageName);
-                    newTab.innerHTML = `<a href="#">${this.textContent} <span class="close-tab">x</span></a>`;
-                    document.getElementById('tabs-container').appendChild(newTab);
-
-                    // 添加關閉分頁功能
-                    newTab.querySelector('.close-tab').addEventListener('click', function(event) {
-                        event.stopPropagation(); // 阻止點擊冒泡
-                        newTab.remove();
-                        document.getElementById('tab-content').innerHTML = ''; // 清空內容區域
-                    });
-
-                    // 切換到該分頁並加載頁面內容
-                    switchTab(pageName);
-                } else {
-                    switchTab(pageName); // 切換到已存在的分頁
-                }
-            });
-        });
-
-        function switchTab(pageName) {
-            // 發送請求到 Thymeleaf 後端，動態加載內容
-            fetch(`/loadPageContent?page=${pageName}`)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('tab-content').innerHTML = html;
-                })
-                .catch(error => {
-                    console.error('Error loading page content:', error);
-                });
-        }
-    </script>
+     
     
