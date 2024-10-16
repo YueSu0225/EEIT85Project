@@ -19,16 +19,16 @@ public class WebSocketEventListener {
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectEvent event) {
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
-        String userId = headerAccessor.getUser().getName(); // 获取用户 ID
+        String userId = headerAccessor.getUser().getName(); // 獲取使用者ID
         String sessionId = headerAccessor.getSessionId();
-        userSessionManager.addUser(userId, sessionId); // 添加用户
+        userSessionManager.addUser(userId, sessionId); // 添加使用者
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.wrap(event.getMessage());
         String userId = headerAccessor.getUser().getName();
-        userSessionManager.removeUser(userId); // 移除用户
+        userSessionManager.removeUser(userId); // 移除使用者
     }
 }
 

@@ -44,16 +44,16 @@ document.getElementById('sessionCheck').addEventListener('click', function(event
   })
   .then(response => {
     if (!response.ok) {
-      // 用户未登录，重定向到 SignIn.html
+      // 使用者未登錄，重定向到 SignIn.html
       window.location.href = '/SignIn.html';
       return;
     }
-    // 用户已登录，直接跳转到会员中心
+    // 使用者已登錄，直接跳轉到會員中心
     window.location.href = '/Account.html';
   })
   .catch(error => {
     console.error('Error checking session:', error);
-    // 出错时，重定向到登录页面
+    // 出錯時，重定向到登陸頁面
     window.location.href = '/SignIn.html';
   });
 });
