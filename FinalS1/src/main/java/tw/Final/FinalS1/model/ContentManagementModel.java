@@ -6,14 +6,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="content_management")
 public class ContentManagementModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "name", nullable = false)
+	@Column(name = "name")
  	private String name;
  	
  	@Column(name = "description")
@@ -23,7 +25,7 @@ public class ContentManagementModel {
  	private String description2;
  	
 	@Lob
-	@Column(name = "image", columnDefinition = "LONGTEXT", nullable = true)
+	@Column(name = "image", columnDefinition = "LONGTEXT")
 	private String image;
 
 	public Long getId() {
