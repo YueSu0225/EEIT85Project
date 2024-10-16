@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	    let selectedCategoryId = null;
 	    let selectedTypeId = null;
 	    let offset = 0; // 僅用于 loadAllProducts
-	    const limit = 10; // 每次加载的商品数量
-	    let totalProducts = 0; // 商品总数（仅用于 loadAllProducts）
+	    const limit = 10; 
+	    let totalProducts = 0; // 商品总数（僅用于 loadAllProducts）
 	    let isLoading = false; // 是否正在加载中
 	    let wishlistItems = []; // 保存當前用戶的願望清單商品 ID
 	    
@@ -71,13 +71,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	    
 	    
 
-	    // 获取 URL 查询参数的函数
+	    // 獲取 URL 
 	    function getQueryParam(param) {
 	        let urlParams = new URLSearchParams(window.location.search);
 	        return urlParams.get(param);
 	    }
-
-	    // 获取 category 和 type 参数的值
+		
 	    selectedCategoryId = getQueryParam('category');
 	    selectedTypeId = getQueryParam('type');
 
@@ -118,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	        });
 	    }
 
-	    // 心形按鈕點擊處理函數
+	    
 	   // 心形按鈕點擊處理函數
     function toggleWishlist(event) {
         event.preventDefault();  // 防止預設的跳轉行為
@@ -203,9 +202,9 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
         document.body.appendChild(notification);
 
-        setTimeout(() => {
+       setTimeout(() => {
             notification.remove();
-        }, 1000);
+        }, 9000);
     }
     
 
@@ -485,7 +484,7 @@ document.head.appendChild(style);
 	        });
 	        this.classList.add('active');
 
-	        // 显示“加载更多”按钮
+	      
 	        document.getElementById('load-more-button').style.display = 'none';
 
 	        loadAllProducts(true);          // 重新載入所有商品
