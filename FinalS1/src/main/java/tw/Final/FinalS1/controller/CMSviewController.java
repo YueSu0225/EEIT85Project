@@ -223,6 +223,20 @@ public class CMSviewController {
 
 
 	
+	//-----------------------------------------------------------------
+	// 頁面管理
+	
+	 @GetMapping("/CM")
+	    public String showMangent(Model model) {
+	        return "contentManagement";
+	    }
+	 
+	 @GetMapping("/CM2")
+	    public String showMangent2(Model model) {
+	        return "contentManagement2";
+	    }
+	
+	
 //page功能 測試
 	 @GetMapping("/cmshome")  // 設定路由
 	    public String showcmsHomePage() {
@@ -250,6 +264,8 @@ public class CMSviewController {
 	     return "fragments/default :: content";
 			}
 	
+	
+
 	
 }
 	
