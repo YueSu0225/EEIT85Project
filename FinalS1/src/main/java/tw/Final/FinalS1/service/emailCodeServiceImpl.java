@@ -66,24 +66,24 @@ public class emailCodeServiceImpl implements emailCodeService {
         
         // 發送信件
         javaMailSender.send(message);
-        // 设置响应
+       
         response.put("success", true);
         response.put("message", "发送成功");
-        response.put("jwtToken", jwtToken); // 可选: 如果需要返回JWT令牌
+        response.put("jwtToken", jwtToken);
         return ResponseEntity.ok(response);
   
         
 		} catch (MessagingException e) {
-	        e.printStackTrace(); // 打印异常堆栈信息
+	        e.printStackTrace(); 
 	        response.put("success", false);
-	        response.put("message", "发送邮件失败: " + e.getMessage());
+	        response.put("message", "發送失敗: " + e.getMessage());
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 
 		}
     }
 	
-    // 加密密钥
-    private final String secret = "your-very-secret-key-that-should-be-32-characters";
+    // 加密
+    private final String secret = "i-am-a-supper-handsome-man-ilovemywifeandson";
     private final SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
 	

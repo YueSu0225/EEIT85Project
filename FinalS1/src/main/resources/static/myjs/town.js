@@ -152,7 +152,7 @@
 		        if (addressInput.value && !addressPattern.test(addressInput.value)) {
 		            errorMessageSpan.textContent = '請輸入有效的地址("-"請使用"之")，例如：台北市中正區中山路1之1號';
 		        } else {
-		            errorMessageSpan.textContent = ''; // 清除错误信息
+		            errorMessageSpan.textContent = ''; // 清除錯誤信息
 		        }
 		    }
 		};

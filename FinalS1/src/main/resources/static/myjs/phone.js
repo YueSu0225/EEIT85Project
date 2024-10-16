@@ -23,7 +23,7 @@ const phonePattern = /^09\d{8}$/;
 phoneInput.addEventListener('blur', function() {
 	const phoneValue = phoneInput.value;
 
-	// 验证手机号码格式
+	//驗證手機格式
 	if (phonePattern.test(phoneValue)) {
 		phoneError.textContent = ''; // 格式正確,清空錯誤信息
 	} else {
