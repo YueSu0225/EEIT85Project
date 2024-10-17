@@ -131,7 +131,7 @@ public class finalUserServiceImpl implements UserService{
 	        HttpSession session = servletRequest.getSession();
 	        session.setAttribute("userUUID", uuid); // 將 UUID 存儲在 session 中
 
-	    	
+
 	        response.put("success", true);
 	        response.put("message", "登入成功");
 	        response.put("userUUID", uuid);
@@ -376,39 +376,39 @@ public class finalUserServiceImpl implements UserService{
 	    String userUUID = (String) session.getAttribute("userUUID");
 	    UserModel user = userRepository.findByUuid(userUUID);
 	    
-	    // 检查用户是否存在
+	    // 檢查user是否存在
 	    if (user == null) {
 	        Map<String, Object> errorResponse = new HashMap<>();
 	        errorResponse.put("message", "User not found");
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 	    }
 
-	    // 查询与用户关联的所有订单
+	    // 查詢與user所有訂單
 	    List<OrderModel> orders = orderRepository.findByUserId(user.getId());
 	    
-	    // 如果没有订单，返回错误响应
+	    // 如果沒有訂單回傳錯誤
 	    if (orders.isEmpty()) {
 	        Map<String, Object> errorResponse = new HashMap<>();
 	        errorResponse.put("message", "No orders found for this user");
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
 	    }
 
-	    // 构建响应数据
+	    
 	    Map<String, Object> response = new HashMap<>();
 	    List<Map<String, Object>> orderList = new ArrayList<>();
 
-	    // 遍历每个订单
+	    // 尋訪每個訂單
 	    for (OrderModel order : orders) {
 	        Map<String, Object> orderData = new HashMap<>();
 	        orderData.put("orderNumber", order.getEcpayNumber());
 	        orderData.put("totalPrice", order.getTotalPrice());
 	        orderData.put("orderStatus", order.getStatus());
 
-	        // 查询与该订单相关的所有订单项
+	        // 查詢訂單內的details
 	        List<OrderItems> orderDetailsList = orderItemsRepository.findByOrderId(order.getId());
 	        List<Map<String, Object>> orderDetails = new ArrayList<>();
 
-	        // 将每个订单项的详情添加到列表中
+	        // 尋訪每個訂單details加入map
 	        for (OrderItems orderItem : orderDetailsList) {
 	            Map<String, Object> itemDetails = new HashMap<>();
 	            itemDetails.put("detailsQuantity", orderItem.getQuantity());
@@ -417,16 +417,16 @@ public class finalUserServiceImpl implements UserService{
 	            orderDetails.add(itemDetails);
 	        }
 
-	        // 如果订单项存在，添加到订单数据
+	        // 如果訂單存在加入訂單details
 	        if (!orderDetails.isEmpty()) {
 	            orderData.put("orderItems", orderDetails);
 	        }
 
-	        // 将订单数据添加到订单列表
+	        // 將訂單加入訂單列表
 	        orderList.add(orderData);
 	    }
 
-	    // 将所有订单及其详情添加到响应中
+	    // 放進response回傳到前端
 	    response.put("orders", orderList);
 
 	    return ResponseEntity.ok(response);

@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		            title: '登入成功',
 		            text: '歡迎回來!',
 		            timer: 2300,  //設置談窗時間,2.3秒跳轉
-		            showConfirmButton: false  // 不显示确认按钮
+		            showConfirmButton: false  
 		        }).then(() => {
 		            window.location.href = '/Home.html';  // 動畫結束後跳轉
 		        });
