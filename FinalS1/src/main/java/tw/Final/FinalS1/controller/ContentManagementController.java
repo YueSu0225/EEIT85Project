@@ -1,5 +1,6 @@
 package tw.Final.FinalS1.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Optional;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.Valid;
 import tw.Final.FinalS1.dto.ContentManagementDto;
 import tw.Final.FinalS1.model.ContentManagementModel;
 import tw.Final.FinalS1.service.ContentManagementService;
@@ -32,17 +36,31 @@ public class ContentManagementController {
 			content = new ContentManagementModel();
 		}
 		
+		System.out.println("step1");
+		
 		content.setName(contentDto.getName());
 		content.setDescription(contentDto.getDescription());
 		content.setDescription2(contentDto.getDescription2());
 		
-		if(!contentDto.getImage().isEmpty()) {
-			String encodeImage = Base64.getEncoder().encodeToString(contentDto.getImage().getBytes());
-			content.setImage(encodeImage);		
-		}
+//		if(contentDto.getImage() != null && !contentDto.getImage().isEmpty()) {
+//			String encodeImage = Base64.getEncoder().encodeToString(contentDto.getImage().getBytes());
+//			content.setImage(encodeImage);		
+//		} else {
+//			content.setImage(null);
+//		}
+		
+		 if (contentDto.getImage() != null && !contentDto.getImage().isEmpty()) {
+		        byte[] bytes = contentDto.getImage().getBytes();
+		        String encodeImage = Base64.getEncoder().encodeToString(bytes);
+		        content.setImage(encodeImage);
+		    } else {
+		        content.setImage(null);
+		    }
+		
+		System.out.println("step2");
 		
 		contentService.addContent(content);
-		return "redirect:/content-management/list";
+		return "redirect:/cm";
 
 	}
 	

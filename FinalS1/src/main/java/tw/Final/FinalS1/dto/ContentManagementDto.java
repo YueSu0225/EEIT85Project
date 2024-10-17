@@ -3,11 +3,12 @@ package tw.Final.FinalS1.dto;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ContentManagementDto {
-	 private Long id;
-	 private String name;
-	 private String description;
-	 private String description2;
-	 private MultipartFile image;
+	private Long id;
+	private String name;
+	private String description;
+	private String description2;
+	private MultipartFile image;
+	 
 	public Long getId() {
 		return id;
 	}
@@ -38,6 +39,7 @@ public class ContentManagementDto {
 	public void setImage(MultipartFile image) {
 		this.image = image;
 	}
+
 	    
 	 
 }

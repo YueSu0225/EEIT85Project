@@ -22,7 +22,7 @@ public class ContentManagementService {
 		content.setDescription2(content.getDescription2());		
 		
 		return CMRepository.save(content);
-	}
+	} 
 	
 	public Optional<ContentManagementModel> getContentById(Long id){
 		 return CMRepository.findById(id);
@@ -31,6 +31,10 @@ public class ContentManagementService {
 	public List<ContentManagementModel> getAllContent() {
         return CMRepository.findAll();
     }
+	
+	public void saveContent(ContentManagementModel content) {
+		CMRepository.save(content);
+	}
 
 
 }

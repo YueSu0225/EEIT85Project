@@ -1,5 +1,7 @@
 package tw.Final.FinalS1.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -67,6 +69,8 @@ public class ContentManagementModel {
 	public void setImage(String image) {
 		this.image = image;
 	}
+
+
 	
 	
 }

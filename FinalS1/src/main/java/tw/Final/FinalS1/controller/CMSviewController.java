@@ -1,5 +1,7 @@
 package tw.Final.FinalS1.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.*;
 
 import tw.Final.FinalS1.dto.RegisterRequest;
@@ -29,6 +32,7 @@ import tw.Final.FinalS1.model.Category;
 import tw.Final.FinalS1.model.Type;
 import tw.Final.FinalS1.model.Size;
 import tw.Final.FinalS1.model.Color;
+import tw.Final.FinalS1.model.ContentManagementModel;
 import tw.Final.FinalS1.model.OrderItems;
 import tw.Final.FinalS1.model.OrderModel;
 
@@ -37,6 +41,7 @@ import tw.Final.FinalS1.repository.UserRepository;
 import tw.Final.FinalS1.service.CMSuserService;
 import tw.Final.FinalS1.service.CategoryService;
 import tw.Final.FinalS1.service.ColorService;
+import tw.Final.FinalS1.service.ContentManagementService;
 import tw.Final.FinalS1.service.ProductService;
 import tw.Final.FinalS1.service.ProductVariantService;
 import tw.Final.FinalS1.service.SizeService;
@@ -75,6 +80,9 @@ public class CMSviewController {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ContentManagementService contentService;
 
 
 	
@@ -226,45 +234,67 @@ public class CMSviewController {
 	//-----------------------------------------------------------------
 	// 頁面管理
 	
-	 @GetMapping("/CM")
+	 @GetMapping("/cm")
 	    public String showMangent(Model model) {
+		 	List<ContentManagementModel> contents = contentService.getAllContent();
+		 	if (contents.isEmpty()) {
+		        model.addAttribute("content", new ContentManagementModel());
+		    } else {
+		        model.addAttribute("content", contents.get(0));
+		    }
 	        return "contentManagement";
 	    }
 	 
-	 @GetMapping("/CM2")
+	 @PostMapping("/cm")
+	    public String uploadContent(ContentManagementModel content) {
+	        contentService.saveContent(content); // 將內容保存到資料庫
+	        return "redirect:/cm"; // 表單提交後重定向回顯示內容的頁面
+	    }
+	 
+	 @GetMapping("/cm2")
 	    public String showMangent2(Model model) {
 	        return "contentManagement2";
 	    }
-	
-	
-//page功能 測試
-	 @GetMapping("/cmshome")  // 設定路由
-	    public String showcmsHomePage() {
-	        return "index";  
-	    }
 	 
-	@GetMapping("/loadPageContent")
-	public String loadPageContent(@RequestParam String page) {
-		 if ("productlist".equals(page)) {
-	         return "fragments/productlist :: content"; // 返回指定頁面的 Thymeleaf 片段
-	     } else if ("dashboard".equals(page)) {
-	         return "fragments/dashboard :: content";
-	     } else if("overview".equals(page)) {
-	    	 return "fragments/overview :: overview";
-	     } else if("users".equals(page)) {
-	    	 return "fragments/users :: users";
-	     } else if("products/add}".equals(page)) {
-	    	 return "fragments/products/add} :: products/add}";
-	     } else if("orders".equals(page)) {
-	    	 return "fragments/orders :: orders";
-	     } else if("pagemanagement".equals(page)) {
-	    	 return "fragments/pagemanagement :: pagemanagement";
-	     }
-	     // 其他頁面邏輯
-	     return "fragments/default :: content";
-			}
-	
-	
+	 @GetMapping("/cm/add")
+	 public String showContentAddPage(@ModelAttribute ContentManagementModel content, @RequestParam("image") MultipartFile imageFile) {
+//		 
+//		 contentService.saveContent(content);
+//		 redirectAttributes.addFlashAttribute("message", "內容已成功上傳!");
+//		 return "redirect:/cm"; // 重新導向到內容管理頁面
+		 try {
+		        // 檢查是否上傳了文件
+		        if (!imageFile.isEmpty()) {
+		            // 獲取上傳的檔案名稱
+		            String fileName = imageFile.getOriginalFilename();
+		            System.out.println("文件名: " + fileName);
+		            
+		            // 定義保存路徑
+		            String filePath = "/FinalS1/src/main/resources/static/Picture/pagepic" + fileName;
+
+		            // 創建一個檔案物件
+		            File dest = new File(filePath);
+		            if (!dest.getParentFile().exists()) {
+		                dest.getParentFile().mkdirs();
+		            }
+		            
+		            // 將上傳的圖片保存到指定的路徑
+		            imageFile.transferTo(dest);
+		            System.out.println("文件已成功上傳至: " + filePath);
+		            // 將檔案名稱或路徑存儲到實體中
+		            content.setImage(fileName);  // 這裡存檔案名稱，或存儲 filePath 表示完整路徑
+		        } else {
+		        	 System.out.println("沒有上傳圖片");
+		        }
+
+		        // 保存內容到資料庫
+		        contentService.saveContent(content);
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    }
+		    return "contentManagement";
+	 }
+
 
 	
 }

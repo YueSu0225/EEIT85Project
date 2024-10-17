@@ -11,35 +11,36 @@
 	<div class="container">
 		<div class="section">
 			<h2 class="text-center mb-4">頁面管理</h2>
-				<form id="#product-form" action="/cm/add" method="post" enctype="multipart/form-data">
-					 <input type="hidden" name="id" value="${content.id}" />
-					<!-- 描述 -->
-					<h6>主頁橫幅圖A-1:</h6>
-					<input type="hidden" name="name" value="主頁橫幅圖A-1">
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label for="name">描述1:</label> 
-							<input type="text" class="form-control" id="description1" name="description1" value="${content.description}">
-						</div>
-						<div class="form-group col-md-6">
-							<label for="name">描述2:</label> 
-							<input type="text" class="form-control" id="description2" name="description2" value="${content.description2}">
-						</div>
-					</div>
-					<!-- 圖片 -->
-					<div class="form-row">
-						<div class="form-group col-md-6">
-							<label for="image">當前圖片:</label>
-							 <div>
-                				<img src="data:image/jpeg;base64,${content.image}" alt="Current Image" style="max-width: 100%;">
-            				</div>
-							<input type="file"
-								class="form-control-file" id="image" name="image*"
-								accept="image/*">
-						</div>
-						<button type="submit" class="btn btn-primary btn-block">上傳</button>
-					</div>
-					
+				<form action="#" th:action="@{/cm/add}" method="post" enctype="multipart/form-data">
+				    <input type="hidden" th:name="id" th:value="${content.id != null ? content.id : ''}" />
+				
+				    <!-- 描述 -->
+				    <h6>主頁橫幅圖A-1:</h6>
+				    <input type="hidden" th:name="name" th:value="'主頁橫幅圖A-1'" />
+				
+				    <div class="form-row">
+				        <div class="form-group col-md-6">
+				            <label for="description">描述1:</label>
+				            <input type="text" class="form-control" id="description" th:name="description" th:value="${content.description}" />
+				        </div>
+				        <div class="form-group col-md-6">
+				            <label for="description2">描述2:</label>
+				            <input type="text" class="form-control" id="description2" th:name="description2" th:value="${content.description2}" />
+				        </div>
+				    </div>
+				
+				    <!-- 圖片 -->
+				    <div class="form-row">
+				        <div class="form-group col-md-6">
+				            <label for="image">圖片:</label>
+				            <input type="file" class="form-control-file" id="imageFile" th:name="image" accept="image/*" />
+				        	<span id="fileName" th:if="${content.image != null}">當前圖片: <span th:text="${content.image}"></span></span>
+				        </div>
+				        <div class="form-group col-md-6">			            
+				         	<button type="submit" class="btn btn-primary btn-block">上傳</button>
+				        </div>
+				    </div>
+
 					<h6>主頁橫幅圖A-2:</h6>
 					<div class="form-row">
 						<div class="form-group col-md-6">
@@ -102,9 +103,23 @@
 						</div>
 						<button type="submit" class="btn btn-primary btn-block">上傳</button>
 					</div>
+				</form>
 					
 				
 			
 
 
-	<footer th:include="CMSfooter"></footer >
+<footer th:include="CMSfooter"></footer >
+
+<script>
+    function updateFileName() {
+        const input = document.getElementById('image');
+        const fileNameDisplay = document.getElementById('fileName');
+        if (input.files.length > 0) {
+            fileNameDisplay.textContent = `當前檔案: ${input.files[0].name}`;
+            fileNameDisplay.style.display = 'inline'; // 顯示檔名
+        } else {
+            fileNameDisplay.style.display = 'none'; // 隱藏檔名
+        }
+    }
+</script>
