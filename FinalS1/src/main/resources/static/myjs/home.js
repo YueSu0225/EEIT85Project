@@ -5,6 +5,68 @@ document.addEventListener("DOMContentLoaded", function () {
 	    // 初始化頁面，載入願望清單和商品
 	    initializeWishlist();
 	    loadRandomProducts();
+		
+		 const searchInput = document.getElementById('search-input');
+			    searchInput.addEventListener('input', function() {
+			        const query = searchInput.value;
+			        searchProducts(query);
+			    });
+			    
+			    // 搜尋產品的函數
+			    function searchProducts(query) {
+		    fetch(`/products/search?key=${encodeURIComponent(query)}`, {
+		        method: 'GET',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        }
+		    })
+		    .then(response => response.json())
+		    .then(data => {
+		        const productList = document.getElementById('product-list');
+		        productList.innerHTML = ''; // 清空現有的商品列表
+		        document.getElementById('load-more-button').style.display = 'none'; // 隱藏「加載更多」按鈕
+		        let noProductsMessage = document.getElementById('no-products-message');
+
+		        if (data.length > 0) {
+		            data.forEach(product => {
+		                let inWishlist = wishlistItems.includes(product.id); // 檢查該商品是否在願望清單中
+		                let heartClass = inWishlist ? 'added-to-wishlist' : ''; // 設置愛心樣式
+						noProductsMessage.style.display = 'none';
+
+		                const productHTML = `
+		                    <div class="col-md-6 col-lg-3 ftco-animate1">
+		                        <div class="product">
+		                            <a href="product-single.html?productId=${product.id}" class="img-prod">
+		                                <img class="img-fluid" src="data:image/jpeg;base64,${product.image}" alt="${product.name}">
+		                                <div class="overlay"></div>
+		                            </a>
+		                            <div class="text py-3 pb-4 px-3 text-center">
+		                                <h3><a href="product-single.html?productId=${product.id}">${product.name}</a></h3>
+		                                <div class="pricing">
+		                                    <p class="price"><span class="price-sale">NT$${product.price}</span></p>
+		                                </div>
+		                                <div class="bottom-area d-flex px-3">
+		                                    <div class="m-auto d-flex">
+		                                        <a href="#" class="heart d-flex justify-content-center align-items-center ${heartClass}" 
+		                                           data-product-id="${product.id}" data-product-name="${product.name}"
+		                                           data-product-price="${product.price}" data-product-image="${product.image}" 
+		                                           data-in-wishlist="${inWishlist}">
+		                                            <span><i class="ion-ios-heart"></i></span>
+		                                        </a>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>`;
+		                productList.innerHTML += productHTML;
+		            });
+		            bindWishlistEvents(); // 綁定願望清單按鈕事件
+		        } else {
+		        	 noProductsMessage.style.display = 'block';
+		        }
+		    })
+		    .catch(error => console.error('Error fetching products:', error));
+		}
 
 	    // 初始化願望清單，保存商品 ID
 	    function initializeWishlist() {
