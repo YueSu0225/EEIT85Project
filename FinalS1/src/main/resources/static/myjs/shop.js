@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
        setTimeout(() => {
             notification.remove();
-        }, 9000);
+        }, 1000);
     }
     
 
