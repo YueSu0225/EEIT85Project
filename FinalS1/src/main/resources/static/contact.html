@@ -162,8 +162,7 @@
 			</form>
 		</div>
 	</div>
-	<nav
-		class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
+	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
 		id="ftco-navbar">
 		<div class="container">
 
@@ -176,8 +175,7 @@
 
 			<div class="collapse navbar-collapse col" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a href="Home.html"
-						class="nav-link">首頁</a></li>
+					<li class="nav-item"><a href="Home.html" class="nav-link">首頁</a></li>
 					<li class="nav-item"><a href="AboutUs.html" class="nav-link">關於我們</a></li>
 
 					<li class="nav-item dropdown"><a
@@ -189,13 +187,32 @@
 								class="dropdown-item" href="shop.html?category=2">女裝</a> <a
 								class="dropdown-item" href="shop.html?category=3">童裝</a>
 						</div></li>
+
+
+
 					<!-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
 					<li class="nav-item"><a href="contact.html" class="nav-link">聯繫我們</a></li>
 
-					<li class="nav-item cta cta-colored"><a href=""
-						class="nav-link"><span class="icon-person"></span></a></li>
+					<!-- <li class="nav-item dropdown cta cta-colored"><a href="#"
+						class="nav-link" id="sessionCheck"><span class="icon-person"></span></a>
+						<div class="dropdown-menu dropdown-menu-center"
+							aria-labelledby="sessionCheck">
+							<a class="dropdown-item" href="#">會員中心</a> <a
+								class="dropdown-item" href="#">登出</a>
+						</div></li> -->
+
+					<li class="nav-item dropdown cta cta-colored"><a href="#"
+						class="nav-link " id="sessionCheck" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> <span
+							class="icon-person"></span>
+					</a>
+						<div class="dropdown-menu" id="userDropdown"
+							style="display: none;">
+							<a class="dropdown-item" href="/Account.html">會員中心</a> <a
+								class="dropdown-item" href="#" id="logoutButton">登出</a>
+						</div></li>
 					<li class="nav-item cta cta-colored"><a href="wishlist.html"
-						class="nav-link"><span class="icon-heart"></span></a></li>
+						class="nav-link" id="icon-wish"><span class="icon-heart"></span></a></li>
 					<li class="nav-item cta cta-colored">
 						<a href="cart.html"class="nav-link" id="cart-icon">
 							<span class="icon-shopping_cart"></span>[<span id="cart-count">0</span>]
@@ -434,6 +451,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<script src="myjs/cartCount.js"></script>
+	<script src="myjs/session.js"></script>
 
 </body>
 </html>

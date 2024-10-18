@@ -46,8 +46,7 @@
 			</form>
 		</div>
 	</div>
-	<nav
-		class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
+	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
 		id="ftco-navbar">
 		<div class="container">
 
@@ -60,8 +59,7 @@
 
 			<div class="collapse navbar-collapse col" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active"><a href="Home.html"
-						class="nav-link">首頁</a></li>
+					<li class="nav-item"><a href="Home.html" class="nav-link">首頁</a></li>
 					<li class="nav-item"><a href="AboutUs.html" class="nav-link">關於我們</a></li>
 
 					<li class="nav-item dropdown"><a
@@ -74,13 +72,31 @@
 								class="dropdown-item" href="shop.html?category=3">童裝</a>
 						</div></li>
 
+
+
 					<!-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
 					<li class="nav-item"><a href="contact.html" class="nav-link">聯繫我們</a></li>
 
-					<li class="nav-item cta cta-colored"><a href=""
-						class="nav-link"><span class="icon-person"></span></a></li>
+					<!-- <li class="nav-item dropdown cta cta-colored"><a href="#"
+						class="nav-link" id="sessionCheck"><span class="icon-person"></span></a>
+						<div class="dropdown-menu dropdown-menu-center"
+							aria-labelledby="sessionCheck">
+							<a class="dropdown-item" href="#">會員中心</a> <a
+								class="dropdown-item" href="#">登出</a>
+						</div></li> -->
+
+					<li class="nav-item dropdown cta cta-colored"><a href="#"
+						class="nav-link " id="sessionCheck" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> <span
+							class="icon-person"></span>
+					</a>
+						<div class="dropdown-menu" id="userDropdown"
+							style="display: none;">
+							<a class="dropdown-item" href="/Account.html">會員中心</a> <a
+								class="dropdown-item" href="#" id="logoutButton">登出</a>
+						</div></li>
 					<li class="nav-item cta cta-colored"><a href="wishlist.html"
-						class="nav-link"><span class="icon-heart"></span></a></li>
+						class="nav-link" id="icon-wish"><span class="icon-heart"></span></a></li>
 					<li class="nav-item cta cta-colored">
 						<a href="cart.html"class="nav-link" id="cart-icon">
 							<span class="icon-shopping_cart"></span>[<span id="cart-count">0</span>]
@@ -114,11 +130,12 @@
 				<div class="col-xl-7 ftco-animate">
 					<form action="#" class="billing-form">
 						<h3 class="mb-4 billing-heading">付款資訊</h3>
+							
 						<div class="row align-items-end">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="firstname">姓名</label> <input type="text"
-										class="form-control" placeholder="">
+										class="form-control" placeholder="" id="userInfoName">
 								</div>
 							</div>
 
@@ -130,7 +147,7 @@
 											<div class="icon">
 												<span class="ion-ios-arrow-down"></span>
 											</div>
-											<select name="" id="" class="form-control">
+											<select name="" id="country" class="form-control">
 												<option value="">臺灣</option>
 												<option value="">中華人民共和國</option>
 												<option value="">日本</option>
@@ -144,7 +161,7 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="towncity">城市</label> <input type="text"
-											class="form-control" placeholder="">
+											class="form-control" placeholder="" id="towncity">
 									</div>
 								</div>
 							</div>
@@ -152,8 +169,8 @@
 							<div class="w-100">
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="streetaddress">街道</label> <input type="text"
-										class="form-control" placeholder="巷、弄、路、號">
+									<label for="streetaddress">地址</label> <input type="text"
+										class="form-control" placeholder="" id="userInfoAddress">
 								</div>
 							</div>
 							</div>
@@ -164,18 +181,25 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="phone">電話</label> <input type="text"
-										class="form-control" placeholder="">
+										class="form-control" placeholder="" id="userInfoPhone">
 								</div>
 							</div>
 							
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="emailaddress">信箱</label> <input type="text"
-										class="form-control" placeholder="">
+										class="form-control" placeholder="" id="userEmail">
 								</div>
 							</div>
 							</div>
 						</div>
+						<div class="form-group">
+									<div class="col-md-12">
+										<div class="checkbox">
+											<label><input type="checkbox" value="" class="mr-2" id="checkboxmember">同會員資料</label>
+										</div>
+									</div>
+								</div>
 					</form>
 					<!-- END -->
 				</div>
@@ -363,7 +387,8 @@
 	<script src="js/google-map.js"></script>
 	<script src="js/main.js"></script>
 	<script src="myjs/cartCount.js"></script>
-
+<script src="myjs/checkoutmember.js"></script>
+<script src="myjs/session.js"></script>
 	<script>
 		$(document).ready(function() {
 
