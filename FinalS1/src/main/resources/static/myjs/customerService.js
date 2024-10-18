@@ -64,7 +64,7 @@ function openChat() {
 	console.log("Connecting WebSocket with UUID:", userUUID);
 
     // 創建 WebSocket (如果使用ngrok要使用wss://xxxxxxx.ngrok-free.app/)
-    socket = new WebSocket("wss://c802-218-32-102-243.ngrok-free.app/chat?uuid=" + userUUID);
+    socket = new WebSocket("ws://localhost:8080/chat?uuid=" + userUUID);
 
     // 監控 WebSocket 連接狀態
     socket.onopen = function() {

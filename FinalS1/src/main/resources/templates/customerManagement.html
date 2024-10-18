@@ -15,7 +15,7 @@ let messageStore = {};   // 用來儲存每個 userUUID 的消息
 
 document.addEventListener("DOMContentLoaded", function() {
 	 // 創建 WebSocket (如果使用ngrok要使用wss://xxxxxxx.ngrok-free.app/)
-    var adminSocket = new WebSocket("wss://c802-218-32-102-243.ngrok-free.app/chat?admin=true");
+    var adminSocket = new WebSocket("ws://localhost:8080/chat?admin=true");
 
     adminSocket.onopen = function() {
         console.log("管理員 WebSocket 上線");
