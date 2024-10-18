@@ -108,9 +108,7 @@
 		    const districtSelect = document.getElementById('district');
 		    const addressInput = document.querySelector('input[placeholder="請輸入街道名門牌號"]');
 		    const errorMessageSpan = document.getElementById('streeterrormesg');
-		    //const addressPattern = /.+[路街].+號/; // 至少包含“XX路X號”的格式
-			//const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)?(?:號(?:之(\d+)?)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
-			const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)號(?:之(\d+)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
+			const addressPattern = /^(?:(.+?(?:縣|市|區|鄉|鎮))\s+)?(.+?(路|街|巷|弄|段))\s*(\d+)?(?:巷\s*(\d+))?\s*(?:弄\s*(\d+))?\s*(\d+(?:之\d+)?)號(?:之(\d+)?)?\s*(\d+(?:樓(?:-\d+)?|\d*)?)?\s*(\d*)?$/;
 
 		    // 縣市選項
 		    for (const city in taiwanCities) {
