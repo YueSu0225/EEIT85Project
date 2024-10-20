@@ -126,6 +126,7 @@ public class ShoppingCartController {
 	public ResponseEntity<Integer> getTotalPrice(@PathVariable Long id){		
 		 String userUUID = (String) session.getAttribute("userUUID");
 //		 UserModel user = userRepository.findByUuid(userUUID);
+		 
 		 if(userUUID == null) {
 			 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		 }
