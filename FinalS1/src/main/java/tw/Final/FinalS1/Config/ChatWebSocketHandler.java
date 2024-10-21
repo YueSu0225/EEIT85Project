@@ -68,12 +68,16 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        // 移除連接
-        userSessions.values().remove(session);
-        adminSessions.remove(session);
-        System.out.println("連接已關閉: " + session.getId());
-    }
+        // 如果是管理員，只會移除使用者，不從管理員對話移除
+        if (adminSessions.containsKey(session)) {
+            System.out.println("管理員連線關閉: " + session.getId());
+            return;
+        }
 
+        // 如果是使用者，移除連線
+        userSessions.values().remove(session);
+        System.out.println("使用者連線關閉: " + session.getId());
+    }
     private String getUuidFromSession(WebSocketSession session) {
         // 从session中提取UUID
         String[] queryParams = session.getUri().getQuery().split("&");
