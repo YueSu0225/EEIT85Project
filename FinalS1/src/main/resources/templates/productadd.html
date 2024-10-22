@@ -22,16 +22,19 @@
 	object-fit: contain;
 }
 </style>
-	<div class="container">
+<div class="container">
 	<div class="section">
-	<h2 class="text-center mb-4">商品上架</h2>
-	<form id="product-form" method="post" enctype="multipart/form-data">
+		<h2 class="text-center mb-4">商品上架</h2>
+		<form id="product-form" method="post" enctype="multipart/form-data">
 			<!-- 第一行: 商品名稱 和 類別 -->
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<label for="name">商品名稱:</label> <input type="text"
 						class="form-control" id="name" name="name" required
 						onblur="checkProductName();">
+					
+					<div id="feedbackMessage"
+						style="margin-top: 10px; font-weight: bold;"></div>
 				</div>
 				<div class="form-group col-md-6">
 					<label for="category">類別:</label> <select class="form-control"
@@ -190,6 +193,8 @@ function checkProductName() {
             })
             .then(data => {
                 console.log("後端返回的產品資料: ", data);
+                
+                document.getElementById("feedbackMessage").innerText = "產品已存在，相關資訊已自動填入。";
 
                 // 自動填入 type, category, price 和 description，並鎖定它們
                 if (data.type && data.type.id) {
@@ -219,6 +224,8 @@ function checkProductName() {
             .catch(err => {
                 console.error("檢查商品時發生錯誤:", err);
                 // 如果產品不存在，清空相關欄位並解鎖（允許編輯）
+                
+                document.getElementById("feedbackMessage").innerText = "產品不存在，請輸入新的產品資訊。";
                 document.getElementById("type").value = '';
                 document.getElementById("type").disabled = false; // 解鎖 type
 
@@ -234,8 +241,11 @@ function checkProductName() {
                 document.getElementById("size").value = '';
                 document.getElementById("color").value = '';
             });
+       }else{
+    	   document.getElementById("feedbackMessage").innerText = "";
+       }
     }
-}
+
 
 
 

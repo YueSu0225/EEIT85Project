@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	        setTimeout(() => {
 	            notification.remove();
-	        }, 1000);
+	        }, 3000);
 	    }
 	});
 
