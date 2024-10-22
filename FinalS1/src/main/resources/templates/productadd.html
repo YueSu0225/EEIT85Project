@@ -194,7 +194,7 @@ function checkProductName() {
             .then(data => {
                 console.log("後端返回的產品資料: ", data);
                 
-                document.getElementById("feedbackMessage").innerText = "產品已存在，相關資訊已自動填入。";
+                document.getElementById("feedbackMessage").innerText = "產品已存在，相關資訊已自動填入，請輸入空欄位。";
 
                 // 自動填入 type, category, price 和 description，並鎖定它們
                 if (data.type && data.type.id) {
