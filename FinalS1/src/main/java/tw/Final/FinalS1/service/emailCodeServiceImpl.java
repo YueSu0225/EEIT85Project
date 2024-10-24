@@ -92,7 +92,7 @@ public class emailCodeServiceImpl implements emailCodeService {
         return Jwts.builder()
                 .setSubject(email)
                 .claim("code", verificationCode)
-                .setExpiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 5分钟过期
+                .setExpiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 5分鐘過期
                 .signWith(secretKey, SignatureAlgorithm.HS256) // 使用SecretKey加密
                 .compact();
 	}
@@ -110,19 +110,19 @@ public class emailCodeServiceImpl implements emailCodeService {
 
 	        System.out.println("Token Code: " + tokenCode); // 打印从token中提取的驗證碼
 	        System.out.println("User Input Code: " + code);   // 打印用戶輸入的驗證碼
-	        // 打印剩余有效期
+	        // 打印剩下有效時間
 	        if (remainingTime > 0) {
-	            System.out.println("Remaining time until expiration: " + remainingTime / 1000 + " seconds"); // 剩余时间（秒）
+	            System.out.println("Remaining time until expiration: " + remainingTime / 1000 + " seconds"); // 剩餘的時間（秒）
 	        } else {
-	            System.out.println("Token has expired."); // 如果过期
+	            System.out.println("Token has expired."); // 如果過期
 	        }
 	        
-	        boolean isValid = code.equals(tokenCode) && !claims.getExpiration().before(new Date());  // 校验验证码和过期时间
+	        boolean isValid = code.equals(tokenCode) && !claims.getExpiration().before(new Date());  // 驗證驗證碼和過期時間
        
-	        System.out.println("Validation Result: " + isValid); // 打印验证结果
+	        System.out.println("Validation Result: " + isValid); // 打印驗證结果
 	        return isValid;
 	    } catch (Exception e) {
-	        return false;  // 如果token无效或过期
+	        return false;  // 如果token無效或過期
 	    }
     
 	}
@@ -131,12 +131,12 @@ public class emailCodeServiceImpl implements emailCodeService {
 
 	@Override
 	public ResponseEntity<Map<String, Object>> processVerification(Map<String, String> request) {
-	        String token = request.get("token"); // 获取请求中的JWT token
-	        String code = request.get("code");   // 获取用户输入的验证码
+	        String token = request.get("token"); // 獲取請求中的JWT token
+	        String code = request.get("code");   // 獲取使用者輸入的驗證碼
 	        System.out.println("inin");
 	        Map<String, Object> response = new HashMap<>();
 	        
-	        // 调用validateToken方法验证验证码
+	        // 調用validateToken方法驗證碼驗證
 	        if (validateToken(token, code)) {
 	            response.put("success", true);
 	            response.put("message", "驗證成功！");
